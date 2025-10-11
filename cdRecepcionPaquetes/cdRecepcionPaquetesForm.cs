@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace GrupoA.cdRecepcionPaquetes
+namespace CAI_GrupoA_.cdRecepcionPaquetes
 {
     public partial class cdRecepcionPaquetesForm : Form
     {

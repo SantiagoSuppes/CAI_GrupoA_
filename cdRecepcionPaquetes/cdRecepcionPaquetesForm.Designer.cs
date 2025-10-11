@@ -1,4 +1,4 @@
-﻿namespace GrupoA.cdRecepcionPaquetes
+﻿namespace CAI_GrupoA_.cdRecepcionPaquetes
 {
     partial class cdRecepcionPaquetesForm
     {
