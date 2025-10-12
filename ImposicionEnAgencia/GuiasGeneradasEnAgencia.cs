@@ -80,17 +80,24 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
         public Dictionary<string, Encomienda> Guias { get; } = new();
 
         public Encomienda CrearGuia(
-            string cuitR, string nomR, string telR,
-            string nomD, string apeD, string dniD, string telD,
-            string domicilio, string altura, string provincia, string cp,
-            string tamanio, int cantidad, string modalidad)
+    string cuitR, string nomR, string telR,
+    string nomD, string apeD, string dniD, string telD,
+    string domicilio, string localidad, string provincia, string cp,
+    string tamanio, int cantidad, string modalidad,
+    bool omitirValidacionCaja = false,
+    bool soloValidar = false)
         {
             string errores = ValidarCampos(
                 cuitR, nomR, nomD, dniD, telD,
-                domicilio, provincia, cp, tamanio, cantidad, modalidad);
+                domicilio, localidad, provincia, cp,
+                tamanio, cantidad, modalidad, omitirValidacionCaja);
 
             if (!string.IsNullOrEmpty(errores))
                 throw new ArgumentException(errores);
+
+        
+            if (soloValidar)
+                return null;
 
             var g = new Encomienda
             {
@@ -116,11 +123,12 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
             return g;
         }
 
-        // ----------------- Validaciones -----------------
+
         private string ValidarCampos(
-            string cuitR, string nomR, string nomD, string dniD, string telD,
-            string domicilio, string provincia, string cp,
-            string tamanio, int cantidad, string modalidad)
+           string cuitR, string nomR, string nomD, string dniD, string telD,
+    string domicilio, string localidad, string provincia, string cp,
+    string tamanio, int cantidad, string modalidad,
+    bool omitirValidacionCaja = false)
         {
             var sb = new StringBuilder();
 
@@ -150,9 +158,16 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
             if (!string.IsNullOrWhiteSpace(telD) && !SoloDigitos(telD))
                 sb.AppendLine("- El teléfono debe contener solo números.");
 
+            // --- Provincia y Localidad ---
             if (string.IsNullOrWhiteSpace(provincia))
                 sb.AppendLine("- Debe seleccionar una provincia.");
 
+            if (string.IsNullOrWhiteSpace(localidad))
+                sb.AppendLine("- La localidad es obligatoria.");
+            else if (ContieneNumeros(localidad))
+                sb.AppendLine("- La localidad no puede contener números.");
+
+            // --- Código Postal ---
             if (string.IsNullOrWhiteSpace(cp))
                 sb.AppendLine("- El código postal es obligatorio.");
             else if (!SoloDigitos(cp))
@@ -161,19 +176,25 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
                 sb.AppendLine("- El código postal debe tener entre 4 y 5 dígitos.");
 
             // --- Envío ---
-            if (string.IsNullOrWhiteSpace(tamanio))
-                sb.AppendLine("- Debe seleccionar el tipo de caja.");
-            if (cantidad <= 0)
-                sb.AppendLine("- La cantidad debe ser mayor que cero.");
+            if (!omitirValidacionCaja)
+            {
+                if (string.IsNullOrWhiteSpace(tamanio))
+                    sb.AppendLine("- Debe seleccionar el tipo de caja.");
+                if (cantidad <= 0)
+                    sb.AppendLine("- La cantidad debe ser mayor que cero.");
+            }
+
             if (string.IsNullOrWhiteSpace(modalidad))
                 sb.AppendLine("- Debe seleccionar la modalidad de entrega.");
 
-            // --- Modalidad específica ---
             if (modalidad == "Envío a Domicilio" && string.IsNullOrWhiteSpace(domicilio))
                 sb.AppendLine("- Debe ingresar la dirección para envío a domicilio.");
 
             return sb.ToString();
         }
+
+
+
 
         // ----------------- Auxiliares -----------------
         private string GenerarNumeroGuia(string prefijo)
@@ -182,6 +203,7 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
         private static bool SoloDigitos(string v) => !string.IsNullOrWhiteSpace(v) && v.All(char.IsDigit);
         private static bool ContieneNumeros(string v) => !string.IsNullOrWhiteSpace(v) && v.Any(char.IsDigit);
         private static bool EsCUITValido(string cuit) => Regex.IsMatch(cuit ?? "", @"^\d{2}-?\d{8}-?\d{1}$");
+
     }
 }
 
