@@ -255,7 +255,6 @@
             // cmbAgencia
             // 
             cmbAgencia.FormattingEnabled = true;
-            cmbAgencia.Items.AddRange(new object[] { "Domicilio", "Agencia", "CD" });
             cmbAgencia.Location = new Point(413, 274);
             cmbAgencia.Margin = new Padding(3, 4, 3, 4);
             cmbAgencia.Name = "cmbAgencia";
