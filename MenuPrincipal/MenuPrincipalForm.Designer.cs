@@ -1,4 +1,4 @@
-﻿namespace GrupoA_Pantallas_MenuPrincipal_FacturacionClientes.MenuPrincipal
+﻿namespace CAI_GrupoA_.MenuPrincipal
 {
     partial class MenuPrincipalForm
     {

@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace CAI_GrupoA_.cdRecepcionPaquetes
+namespace CAI_GrupoA_.CdRecepcionPaquetes
 {
-    public partial class cdRecepcionPaquetesForm : Form
+    public partial class CdRecepcionPaquetesForm : Form
     {
         // ========= Modelos y datos =========
         private sealed class Cliente
@@ -49,10 +49,10 @@ namespace CAI_GrupoA_.cdRecepcionPaquetes
         };
         private readonly Dictionary<string, int> _secuenciaPorCD = new(); // prefijo -> último número
 
-        public cdRecepcionPaquetesForm() => InitializeComponent();
-
         // ========= Load =========
-        private void cdRecepcionPaquetesForm_Load(object sender, EventArgs e)
+        public CdRecepcionPaquetesForm() => InitializeComponent();
+
+        private void CdRecepcionPaquetesForm_Load(object sender, EventArgs e)
         {
             InitListView();
             InitCajas();
@@ -237,6 +237,7 @@ namespace CAI_GrupoA_.cdRecepcionPaquetes
         {
             if (string.IsNullOrWhiteSpace(cmbModalidad.Text)) { Msg("Seleccioná la modalidad de entrega."); return false; }
             if (string.IsNullOrWhiteSpace(cmbProvincia.Text)) { Msg("Seleccioná la provincia."); return false; }
+            if (string.IsNullOrWhiteSpace(txtLocalidad.Text)) { Msg("Ingresá la localidad de destino."); return false; }
 
             switch (cmbModalidad.Text)
             {

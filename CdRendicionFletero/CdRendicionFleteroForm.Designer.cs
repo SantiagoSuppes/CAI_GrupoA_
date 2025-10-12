@@ -1,6 +1,6 @@
 ﻿namespace CAI_GrupoA_.CdRendicionFletero
 {
-    partial class CdRendicionFleteroForms
+    partial class CdRendicionFleteroForm
     {
         /// <summary>
         /// Required designer variable.

@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace CAI_GrupoA_.CdRendicionFletero
 {
-    public partial class CdRendicionFleteroForms : Form
+    public partial class CdRendicionFleteroForm : Form
     {
-        public CdRendicionFleteroForms()
+        public CdRendicionFleteroForm()
         {
             InitializeComponent();
         }

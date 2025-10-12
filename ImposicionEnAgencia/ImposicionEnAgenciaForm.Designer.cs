@@ -1,6 +1,6 @@
 ﻿namespace CAI_GrupoA_.ImposicionEnAgencia
 {
-    partial class ImposicionEnAgencia
+    partial class ImposicionEnAgenciaForm
     {
         /// <summary>
         /// Required designer variable.

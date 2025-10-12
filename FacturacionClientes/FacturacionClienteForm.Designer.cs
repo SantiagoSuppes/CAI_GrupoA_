@@ -1,4 +1,4 @@
-﻿namespace GrupoA_Pantallas_MenuPrincipal_FacturacionClientes.FacturacionClientes
+﻿namespace CAI_GrupoA_.FacturacionClientes
 {
     partial class FacturacionClienteForm
     {
@@ -108,7 +108,7 @@
             this.txtDomicilio.Location = new System.Drawing.Point(453, 126);
             this.txtDomicilio.Name = "txtDomicilio";
             this.txtDomicilio.ReadOnly = true;
-            this.txtDomicilio.Size = new System.Drawing.Size(134, 20);
+            this.txtDomicilio.Size = new System.Drawing.Size(148, 20);
             this.txtDomicilio.TabIndex = 6;
             // 
             // txtIVA
@@ -116,7 +116,7 @@
             this.txtIVA.Location = new System.Drawing.Point(487, 150);
             this.txtIVA.Name = "txtIVA";
             this.txtIVA.ReadOnly = true;
-            this.txtIVA.Size = new System.Drawing.Size(100, 20);
+            this.txtIVA.Size = new System.Drawing.Size(114, 20);
             this.txtIVA.TabIndex = 7;
             // 
             // txtRazonSocial
@@ -124,7 +124,7 @@
             this.txtRazonSocial.Location = new System.Drawing.Point(444, 103);
             this.txtRazonSocial.Name = "txtRazonSocial";
             this.txtRazonSocial.ReadOnly = true;
-            this.txtRazonSocial.Size = new System.Drawing.Size(143, 20);
+            this.txtRazonSocial.Size = new System.Drawing.Size(157, 20);
             this.txtRazonSocial.TabIndex = 8;
             // 
             // btmBuscar
@@ -135,6 +135,7 @@
             this.btmBuscar.TabIndex = 9;
             this.btmBuscar.Text = "Buscar";
             this.btmBuscar.UseVisualStyleBackColor = true;
+            this.btmBuscar.Click += new System.EventHandler(this.btmBuscar_Click);
             // 
             // lstGuiasCliente
             // 
@@ -151,6 +152,7 @@
             this.lstGuiasCliente.TabIndex = 10;
             this.lstGuiasCliente.UseCompatibleStateImageBehavior = false;
             this.lstGuiasCliente.View = System.Windows.Forms.View.Details;
+            this.lstGuiasCliente.SelectedIndexChanged += new System.EventHandler(this.lstGuiasCliente_SelectedIndexChanged);
             // 
             // colGuia
             // 
@@ -193,6 +195,7 @@
             this.btnGenerarFactura.TabIndex = 13;
             this.btnGenerarFactura.Text = "Generar Factura";
             this.btnGenerarFactura.UseVisualStyleBackColor = true;
+            this.btnGenerarFactura.Click += new System.EventHandler(this.btnGenerarFactura_Click);
             // 
             // btnVolverMenu
             // 

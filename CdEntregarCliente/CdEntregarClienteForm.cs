@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace GrupoA.cdEntregarCliente
+namespace CAI_GrupoA_.CdEntregarCliente
 {
-    public partial class cdEntregarClienteForms : Form
+    public partial class CdEntregarClienteForm : Form
     {
-        public cdEntregarClienteForms()
+        public CdEntregarClienteForm()
         {
             InitializeComponent();
         }

@@ -7,7 +7,7 @@ using System.Windows.Forms;
 
 namespace CAI_GrupoA_.ImposicionEnAgencia
 {
-    public partial class ImposicionEnAgencia : Form
+    public partial class ImposicionEnAgenciaForm : Form
     {
         public GuiasGeneradasEnAgencia modelo = new();
 
@@ -20,7 +20,7 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
             { "5500", (new List<string>{ "Agencia Mendoza Norte" }, new List<string>{ "CD Cuyo" }) },
         };
 
-        public ImposicionEnAgencia()
+        public ImposicionEnAgenciaForm()
         {
             InitializeComponent();
         }

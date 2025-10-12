@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace GrupoA.logIn
+namespace CAI_GrupoA_.LogIn
 {
-    public partial class logInForm : Form
+    public partial class LogInForm : Form
     {
-        public logInForm()
+        public LogInForm()
         {
             InitializeComponent();
         }

@@ -1,6 +1,6 @@
-﻿namespace GrupoA.cdEntregarCliente
+﻿namespace CAI_GrupoA_.CdEntregarCliente
 {
-    partial class cdEntregarClienteForms
+    partial class CdEntregarClienteForm
     {
         /// <summary>
         /// Required designer variable.

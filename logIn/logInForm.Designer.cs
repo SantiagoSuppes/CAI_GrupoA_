@@ -1,6 +1,6 @@
-﻿namespace GrupoA.logIn
+﻿namespace CAI_GrupoA_.LogIn
 {
-    partial class logInForm
+    partial class LogInForm
     {
         /// <summary>
         /// Required designer variable.
