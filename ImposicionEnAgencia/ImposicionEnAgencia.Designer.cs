@@ -31,6 +31,7 @@
             lstGuiasGeneradas = new ListView();
             btnGenerarGuia = new Button();
             groupBox3 = new GroupBox();
+            button1 = new Button();
             label7 = new Label();
             numCantidad = new NumericUpDown();
             cmbTipoCaja = new ComboBox();
@@ -89,6 +90,7 @@
             // 
             // groupBox3
             // 
+            groupBox3.Controls.Add(button1);
             groupBox3.Controls.Add(label7);
             groupBox3.Controls.Add(numCantidad);
             groupBox3.Controls.Add(cmbTipoCaja);
@@ -99,6 +101,16 @@
             groupBox3.TabIndex = 30;
             groupBox3.TabStop = false;
             groupBox3.Text = "Detalle de Envío";
+            // 
+            // button1
+            // 
+            button1.Location = new Point(616, 31);
+            button1.Name = "button1";
+            button1.Size = new Size(102, 23);
+            button1.TabIndex = 36;
+            button1.Text = "Agregar";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click;
             // 
             // label7
             // 
@@ -450,5 +462,6 @@
         private Label label13;
         private GroupBox groupBox4;
         private Label label6;
+        private Button button1;
     }
 }

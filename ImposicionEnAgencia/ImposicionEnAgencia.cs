@@ -19,6 +19,7 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
             { "5000", (new List<string>{ "Agencia Córdoba Centro" }, new List<string>{ "CD Córdoba" }) },
             { "5500", (new List<string>{ "Agencia Mendoza Norte" }, new List<string>{ "CD Cuyo" }) },
         };
+        private List<(string Tamanio, int Cantidad)> cajasTemporales = new();
 
         public ImposicionEnAgencia()
         {
@@ -66,15 +67,18 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
         // --- Buscar remitente ---
         private void btnBuscarRemitente_Click(object sender, EventArgs e)
         {
+
             string cuit = txtCUIT.Text.Trim();
 
-            if (!Regex.IsMatch(cuit, @"^\\d{2}-?\\d{8}-?\\d{1}$"))
+            // 1️⃣ Verificar formato de CUIT
+            if (!Regex.IsMatch(cuit, @"^\d{2}-?\d{8}-?\d{1}$"))
             {
-                MessageBox.Show("Formato de CUIT inválido (ej: 20-35123456-7).", "Aviso",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Formato de CUIT inválido. Ejemplo correcto: 20-35123456-7",
+                    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
+            // 2️⃣ Buscar cliente
             if (modelo.TryGetCliente(cuit, out var cli))
             {
                 txtRazonSocial.Text = cli.Nombre;
@@ -83,9 +87,9 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
             }
             else
             {
-                MessageBox.Show($"El cliente con CUIT {cuit} no existe en el sistema.",
-                    "Cliente no encontrado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtRazonSocial.Clear();
+                MessageBox.Show($"El cliente con CUIT {cuit} no existe en el sistema.",
+                    "Cliente no encontrado", MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -137,41 +141,10 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
         {
             try
             {
-                string modalidad = cmbModalidadEntrega.Text.Trim();
-
-                // 🔹 Validaciones adicionales
-                if (string.IsNullOrWhiteSpace(modalidad))
+                if (cajasTemporales.Count == 0)
                 {
-                    MessageBox.Show("Debe seleccionar una modalidad de entrega.",
-                        "Campos obligatorios", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                if (string.IsNullOrWhiteSpace(cmbTipoCaja.Text))
-                {
-                    MessageBox.Show("Debe seleccionar un tipo de caja.",
-                        "Campos obligatorios", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                if (modalidad == "Entrega en Agencia" && string.IsNullOrWhiteSpace(cmbAgencia.Text))
-                {
-                    MessageBox.Show("Debe seleccionar una agencia para la entrega.",
-                        "Campos obligatorios", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                if (modalidad == "Entrega en CD" && string.IsNullOrWhiteSpace(cmbCD.Text))
-                {
-                    MessageBox.Show("Debe seleccionar un centro de distribución (CD).",
-                        "Campos obligatorios", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    return;
-                }
-
-                if (modalidad == "Envío a Domicilio" && string.IsNullOrWhiteSpace(txtDomicilio.Text))
-                {
-                    MessageBox.Show("Debe ingresar la dirección de entrega para envío a domicilio.",
-                        "Campos obligatorios", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Debe agregar al menos una caja antes de generar la guía.",
+                        "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
@@ -180,27 +153,32 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
                     txtRazonSocial.Text,
                     "",
                     txtNombreDestinatario.Text,
-                    "",
+                    "", // apellido no se usa
                     txtDNIDest.Text,
                     txtTelefonoDest.Text,
                     txtDomicilio.Text,
                     "",
                     cmbProvincia.Text,
                     txtCP.Text,
-                    cmbTipoCaja.Text,
-                    (int)numCantidad.Value,
-                    modalidad
+                    "", // tamaño no se usa aquí, se agregan varias
+                    0,
+                    cmbModalidadEntrega.Text
                 );
 
-                // Mostrar en ListView
-                var item = new ListViewItem(g.Numero);
-                item.SubItems.Add(g.Cantidad.ToString());
-                item.SubItems.Add(g.Tamanio);
-                lstGuiasGeneradas.Items.Insert(0, item);
+                // Agregar todas las cajas registradas
+                foreach (var c in cajasTemporales)
+                {
+                    var item = new ListViewItem(g.Numero);
+                    item.SubItems.Add(c.Cantidad.ToString());
+                    item.SubItems.Add(c.Tamanio);
+                    lstGuiasGeneradas.Items.Insert(0, item);
+                }
 
                 MessageBox.Show($"Guía generada correctamente.\n\nN° {g.Numero}",
                     "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
+                // Limpiar
+                cajasTemporales.Clear();
                 LimpiarCampos();
             }
             catch (ArgumentException ex)
@@ -232,6 +210,42 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
             cmbAgencia.Enabled = false;
             cmbCD.Enabled = false;
             txtDomicilio.Enabled = false;
+        }
+
+        private void button1_Click(object sender, EventArgs e)
+        {
+            // Validar selección de tamaño
+            if (string.IsNullOrWhiteSpace(cmbTipoCaja.Text))
+            {
+                MessageBox.Show("Debe seleccionar un tamaño de caja antes de agregar.",
+                    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Validar cantidad
+            int cantidad = (int)numCantidad.Value;
+            if (cantidad <= 0)
+            {
+                MessageBox.Show("La cantidad debe ser mayor que cero.",
+                    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Agregar a la lista temporal
+            cajasTemporales.Add((cmbTipoCaja.Text, cantidad));
+
+            // Mostrar en ListView
+            var item = new ListViewItem($"(Pendiente)"); // aún no tiene número de guía
+            item.SubItems.Add(cantidad.ToString());
+            item.SubItems.Add(cmbTipoCaja.Text);
+            lstGuiasGeneradas.Items.Add(item);
+
+            // Limpiar los campos de caja
+            cmbTipoCaja.SelectedIndex = -1;
+        
+
+            MessageBox.Show("Caja agregada correctamente.",
+                "Confirmación", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
 }
