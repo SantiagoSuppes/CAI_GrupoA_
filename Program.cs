@@ -6,7 +6,7 @@ using CAI_GrupoA_.CdRecepcionPaquetes;
 using CAI_GrupoA_.CdEntregarCliente;
 using CAI_GrupoA_.FacturacionClientes;
 using CAI_GrupoA_.CdRendicionFletero;
-//using CAI_GrupoA_.EstimacionCostosvsVentas;
+using CAI_GrupoA_.EstimacionCostosvsVentas;
 using CAI_GrupoA_.GuiaEstadoHistorial;
 
 namespace CAI_GrupoA_
@@ -35,7 +35,7 @@ namespace CAI_GrupoA_
             Application.Run(new FacturacionClienteForm());
 
             Application.Run(new CdRendicionFleteroForm());
-            //Application.Run(new EstimacionCostosvsVentasForms());
+            Application.Run(new EstimacionCostosvsVentasForms());
             Application.Run(new GuiaEstadoHistorialForm());
 
         }
