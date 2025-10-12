@@ -1,6 +1,6 @@
 ﻿namespace CAI_GrupoA_.CdEntregarCliente
 {
-    partial class CdEntregarClienteForm
+    partial class CdEntregarClienteForms
     {
         /// <summary>
         /// Required designer variable.
@@ -28,18 +28,13 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ListViewItem listViewItem6 = new ListViewItem("FR001");
-            ListViewItem listViewItem7 = new ListViewItem("FR002");
-            ListViewItem listViewItem8 = new ListViewItem("FR003");
-            ListViewItem listViewItem9 = new ListViewItem("FR004");
-            ListViewItem listViewItem10 = new ListViewItem("FR005");
             label2 = new Label();
             groupBox1 = new GroupBox();
             btnBuscarEncomiendaDestinatario = new Button();
             txtDniDestinatario = new TextBox();
             label1 = new Label();
             btnConfirmarEntrega = new Button();
-            listViewEncomiendas = new ListView();
+            lvEncomiendas = new ListView();
             columnHeader1 = new ColumnHeader();
             columnHeader2 = new ColumnHeader();
             columnHeader3 = new ColumnHeader();
@@ -107,23 +102,17 @@
             btnConfirmarEntrega.UseVisualStyleBackColor = true;
             btnConfirmarEntrega.Click += btnConfirmarEntrega_Click;
             // 
-            // listViewEncomiendas
+            // lvEncomiendas
             // 
-            listViewEncomiendas.CheckBoxes = true;
-            listViewEncomiendas.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3, columnHeader4, columnHeader5 });
-            listViewItem6.StateImageIndex = 0;
-            listViewItem7.StateImageIndex = 0;
-            listViewItem8.StateImageIndex = 0;
-            listViewItem9.StateImageIndex = 0;
-            listViewItem10.StateImageIndex = 0;
-            listViewEncomiendas.Items.AddRange(new ListViewItem[] { listViewItem6, listViewItem7, listViewItem8, listViewItem9, listViewItem10 });
-            listViewEncomiendas.Location = new Point(56, 224);
-            listViewEncomiendas.Margin = new Padding(3, 4, 3, 4);
-            listViewEncomiendas.Name = "listViewEncomiendas";
-            listViewEncomiendas.Size = new Size(653, 142);
-            listViewEncomiendas.TabIndex = 43;
-            listViewEncomiendas.UseCompatibleStateImageBehavior = false;
-            listViewEncomiendas.View = View.Details;
+            lvEncomiendas.CheckBoxes = true;
+            lvEncomiendas.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3, columnHeader4, columnHeader5 });
+            lvEncomiendas.Location = new Point(56, 224);
+            lvEncomiendas.Margin = new Padding(3, 4, 3, 4);
+            lvEncomiendas.Name = "lvEncomiendas";
+            lvEncomiendas.Size = new Size(653, 142);
+            lvEncomiendas.TabIndex = 43;
+            lvEncomiendas.UseCompatibleStateImageBehavior = false;
+            lvEncomiendas.View = View.Details;
             // 
             // columnHeader1
             // 
@@ -165,7 +154,7 @@
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(772, 472);
             Controls.Add(button3);
-            Controls.Add(listViewEncomiendas);
+            Controls.Add(lvEncomiendas);
             Controls.Add(btnConfirmarEntrega);
             Controls.Add(groupBox1);
             Controls.Add(label2);
@@ -185,7 +174,7 @@
         private Label label1;
         private Button btnBuscarEncomiendaDestinatario;
         private Button btnConfirmarEntrega;
-        private ListView listViewEncomiendas;
+        private ListView lvEncomiendas;
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader2;
         private ColumnHeader columnHeader3;
