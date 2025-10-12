@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace GrupoA_Pantallas_MenuPrincipal_FacturacionClientes.MenuPrincipal
+namespace CAI_GrupoA_.MenuPrincipal
 {
     public partial class MenuPrincipalForm : Form
     {

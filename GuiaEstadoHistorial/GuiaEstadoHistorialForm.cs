@@ -8,9 +8,9 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace GrupoA.guiaEstadoHistorial
+namespace CAI_GrupoA_.GuiaEstadoHistorial
 {
-    public partial class guiaEstadoHistorialForm : Form
+    public partial class GuiaEstadoHistorialForm : Form
     {
         // Modelos
         private sealed class Movimiento
@@ -67,7 +67,7 @@ namespace GrupoA.guiaEstadoHistorial
             }
         };
 
-        public guiaEstadoHistorialForm() { InitializeComponent(); }
+        public GuiaEstadoHistorialForm() { InitializeComponent(); }
 
         // Load: configurar ListView
         private void guiaEstadoHistorialForm_Load(object sender, EventArgs e)

@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace GrupoA.cdRecepcionPaquetes
+namespace CAI_GrupoA_.CdRecepcionPaquetes
 {
-    public partial class cdRecepcionPaquetesForm : Form
+    public partial class CdRecepcionPaquetesForm : Form
     {
         // ========= Modelos y datos =========
         private sealed class Cliente
         {
-            public string Cuit { get; init; } = string.Empty;
+            public string Cuit { get; init; } = string.Empty;   // almacenado sin guiones, 11 dígitos
             public string RazonSocial { get; init; } = string.Empty;
         }
 
@@ -39,14 +39,27 @@ namespace GrupoA.cdRecepcionPaquetes
             ["Santa Fe"] = new() { "CD Rosario" }
         };
 
-        public cdRecepcionPaquetesForm() => InitializeComponent();
+        // ===== Numeración por CD origen =====
+        private readonly Dictionary<string, string> _codigoPorCD = new()
+        {
+            ["CD Norte"] = "CD01",
+            ["CD Sur"] = "CD02",
+            ["CD Córdoba 1"] = "CD03",
+            ["CD Rosario"] = "CD04"
+        };
+        private readonly Dictionary<string, int> _secuenciaPorCD = new(); // prefijo -> último número
 
         // ========= Load =========
-        private void cdRecepcionPaquetesForm_Load(object sender, EventArgs e)
+        public CdRecepcionPaquetesForm() => InitializeComponent();
+
+        private void CdRecepcionPaquetesForm_Load(object sender, EventArgs e)
         {
             InitListView();
             InitCajas();
             InitDestino();
+
+            // permitir dígitos y guiones en CUIT
+            txtCuit.KeyPress += txtCuit_KeyPress;
         }
 
         private void InitListView()
@@ -89,21 +102,14 @@ namespace GrupoA.cdRecepcionPaquetes
         {
             txtCliente.Clear();
 
-            string cuit = DigitsOnly(txtCuit.Text);
+            string cuit = NormalizarCuit(txtCuit.Text); // admite "20-12345678-0"
             if (!EsCuitBasico(cuit))
-            {
-                Msg("CUIT inválido. Debe tener 11 dígitos.");
-                txtCuit.Focus();
-                return;
-            }
+            { Msg("CUIT inválido. Debe tener 11 dígitos."); txtCuit.Focus(); return; }
 
             var cli = _clientes.FirstOrDefault(x => x.Cuit == cuit);
             if (cli is null)
-            {
-                Msg("No se encontró ningún cliente con ese CUIT.");
-                txtCuit.Clear();
-                return;
-            }
+            { Msg("No se encontró ningún cliente con ese CUIT."); txtCuit.Clear(); return; }
+
             txtCliente.Text = cli.RazonSocial;
         }
 
@@ -173,12 +179,39 @@ namespace GrupoA.cdRecepcionPaquetes
         {
             if (!ValidarTodo()) return;
 
-            // Simular envío OK
-            Msg("Envío registrado correctamente.");
+            var cdNombre = ObtenerCDOrigenPreferido();
+            var nroGuia = GenerarNumeroGuia(cdNombre);
+
+            Msg($"Envío registrado correctamente.\nN° de guía: {nroGuia}");
 
             LimpiarControles(this);
             nudCantidad.Value = 1;
             txtCuit.Focus();
+            InitCajas();
+            InitDestino();
+        }
+
+        // ========= Numeración =========
+        private string GenerarNumeroGuia(string cdNombre)
+        {
+            var prefijo = _codigoPorCD.TryGetValue(cdNombre, out var cod) ? cod : "CD00";
+            int next = _secuenciaPorCD.TryGetValue(prefijo, out var cur) ? cur + 1 : 1;
+            _secuenciaPorCD[prefijo] = next;
+            return $"{prefijo}-{next:0000}";
+        }
+
+        private string ObtenerCDOrigenPreferido()
+        {
+            if (cmbModalidad.Text == "CD" && cmbCD.SelectedIndex >= 0)
+                return cmbCD.Text;
+
+            return cmbProvincia.Text switch
+            {
+                "Córdoba" => "CD Córdoba 1",
+                "Santa Fe" => "CD Rosario",
+                "Buenos Aires" => "CD Norte",
+                _ => "CD Norte"
+            };
         }
 
         private bool ValidarTodo()
@@ -205,6 +238,7 @@ namespace GrupoA.cdRecepcionPaquetes
         {
             if (string.IsNullOrWhiteSpace(cmbModalidad.Text)) { Msg("Seleccioná la modalidad de entrega."); return false; }
             if (string.IsNullOrWhiteSpace(cmbProvincia.Text)) { Msg("Seleccioná la provincia."); return false; }
+            if (string.IsNullOrWhiteSpace(txtLocalidad.Text)) { Msg("Ingresá la localidad de destino."); return false; }
 
             switch (cmbModalidad.Text)
             {
@@ -241,8 +275,15 @@ namespace GrupoA.cdRecepcionPaquetes
             }
         }
 
-        private static string DigitsOnly(string s) => new string((s ?? "").Where(char.IsDigit).ToArray());
-        private static bool EsCuitBasico(string cuit) => !string.IsNullOrWhiteSpace(cuit) && cuit.Length == 11;
+        // Acepta 20-12345678-0 o 20123456780
+        private static string NormalizarCuit(string s)
+            => new string((s ?? "").Where(char.IsDigit).ToArray());
+
+        private static bool EsCuitBasico(string cuitSinSeparadores)
+            => !string.IsNullOrWhiteSpace(cuitSinSeparadores) && cuitSinSeparadores.Length == 11;
+
+        private static string DigitsOnly(string s)
+            => new string((s ?? "").Where(char.IsDigit).ToArray());
 
         private static bool ReqTexto(TextBox tb, int minLen = 1)
             => tb != null && !string.IsNullOrWhiteSpace(tb.Text) && tb.Text.Trim().Length >= minLen;
@@ -267,7 +308,14 @@ namespace GrupoA.cdRecepcionPaquetes
 
         private static void Msg(string m) => MessageBox.Show(m, "Validación");
 
-        // ========= Stubs Designer (si el diseñador los requiere) =========
+        // Solo dígitos, backspace y guion para el CUIT
+        private void txtCuit_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '-')
+                e.Handled = true;
+        }
+
+        // ========= Stubs Designer =========
         private void groupBox1_Enter(object sender, EventArgs e) { }
         private void groupBox2_Enter(object sender, EventArgs e) { }
         private void groupBox3_Enter(object sender, EventArgs e) { }
@@ -279,7 +327,6 @@ namespace GrupoA.cdRecepcionPaquetes
         private void comboBox4_SelectedIndexChanged(object sender, EventArgs e) { }
         private void cuit_TextChanged(object sender, EventArgs e) { }
 
-        // Redirecciones si el Designer apunta a button1/2_Click
         private void button1_Click(object sender, EventArgs e) => btnBuscar_Click(sender, e);
         private void button2_Click(object sender, EventArgs e) => btnAgregar_Click(sender, e);
     }

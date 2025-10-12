@@ -11,17 +11,14 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
     {
         public GuiasGeneradasEnAgencia modelo = new();
 
-        // Diccionario simulado de agencias y CD por provincia
-        private readonly Dictionary<string, (List<string> Agencias, List<string> CDs)> zonasPorProvincia = new()
+        // Diccionario simulado de agencias y CD por código postal
+        private readonly Dictionary<string, (List<string> Agencias, List<string> CDs)> zonas = new()
         {
-            { "Ciudad Autónoma de Buenos Aires", (new List<string>{ "Agencia Retiro", "Agencia Palermo" }, new List<string>{ "CD Central" }) },
-            { "Buenos Aires", (new List<string>{ "Agencia Morón", "Agencia Ituzaingó" }, new List<string>{ "CD Oeste" }) },
-            { "Córdoba", (new List<string>{ "Agencia Córdoba Centro", "Agencia Nueva Córdoba" }, new List<string>{ "CD Córdoba" }) },
-            { "Mendoza", (new List<string>{ "Agencia Mendoza Norte" }, new List<string>{ "CD Cuyo" }) },
-            { "Santa Fe", (new List<string>{ "Agencia Rosario", "Agencia Santa Fe" }, new List<string>{ "CD Litoral" }) },
+            { "1000", (new List<string>{ "Agencia Retiro", "Agencia Palermo" }, new List<string>{ "CD Central" }) },
+            { "1708", (new List<string>{ "Agencia Morón", "Agencia Ituzaingó" }, new List<string>{ "CD Oeste" }) },
+            { "5000", (new List<string>{ "Agencia Córdoba Centro" }, new List<string>{ "CD Córdoba" }) },
+            { "5500", (new List<string>{ "Agencia Mendoza Norte" }, new List<string>{ "CD Cuyo" }) },
         };
-
-        private List<(string Tamanio, int Cantidad)> cajasTemporales = new();
 
         public ImposicionEnAgenciaForm()
         {
@@ -71,15 +68,13 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
         {
             string cuit = txtCUIT.Text.Trim();
 
-            // Validar formato de CUIT
-            if (!Regex.IsMatch(cuit, @"^\d{2}-?\d{8}-?\d{1}$"))
+            if (!Regex.IsMatch(cuit, @"^\\d{2}-?\\d{8}-?\\d{1}$"))
             {
-                MessageBox.Show("Formato de CUIT inválido. Ejemplo: 20-35123456-7",
-                    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Formato de CUIT inválido (ej: 20-35123456-7).", "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            // Buscar cliente
             if (modelo.TryGetCliente(cuit, out var cli))
             {
                 txtRazonSocial.Text = cli.Nombre;
@@ -88,9 +83,9 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
             }
             else
             {
-                txtRazonSocial.Clear();
                 MessageBox.Show($"El cliente con CUIT {cuit} no existe en el sistema.",
-                    "Cliente no encontrado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                    "Cliente no encontrado", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                txtRazonSocial.Clear();
             }
         }
 
@@ -99,7 +94,7 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
         {
             string modalidad = cmbModalidadEntrega.Text;
 
-            // Limpiar valores anteriores
+            // Limpiar campos previos al cambiar modalidad
             txtDomicilio.Clear();
             cmbAgencia.SelectedIndex = -1;
             cmbCD.SelectedIndex = -1;
@@ -109,7 +104,7 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
             cmbAgencia.Enabled = false;
             cmbCD.Enabled = false;
 
-            // Habilitar el correspondiente
+            // Habilitar solo lo correspondiente
             if (modalidad == "Entrega en Agencia")
                 cmbAgencia.Enabled = true;
             else if (modalidad == "Entrega en CD")
@@ -118,172 +113,100 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
                 txtDomicilio.Enabled = true;
         }
 
-        // --- Cambio de provincia ---
-        private void cmbProvincia_SelectedIndexChanged(object sender, EventArgs e)
+        // --- Código postal cambia: actualizar Agencias/CD ---
+        private void txtCP_TextChanged(object sender, EventArgs e)
         {
-            string provincia = cmbProvincia.Text.Trim();
-
+            string cp = txtCP.Text.Trim();
             cmbAgencia.Items.Clear();
             cmbCD.Items.Clear();
 
-            if (zonasPorProvincia.TryGetValue(provincia, out var datos))
+            if (cp.Length < 4) return;
+
+            // Buscar coincidencia parcial (ej: 5001, 5002 -> coincide con 5000)
+            var zona = zonas.FirstOrDefault(z => cp.StartsWith(z.Key));
+
+            if (!zona.Equals(default(KeyValuePair<string, (List<string>, List<string>)>)))
             {
-                cmbAgencia.Items.AddRange(datos.Agencias.ToArray());
-                cmbCD.Items.AddRange(datos.CDs.ToArray());
+                cmbAgencia.Items.AddRange(zona.Value.Agencias.ToArray());
+                cmbCD.Items.AddRange(zona.Value.CDs.ToArray());
             }
         }
 
-        // --- Agregar Caja ---
-        private void btnAgregarCaja_Click(object sender, EventArgs e)
-        {
-            // Validar selección de tamaño
-            if (string.IsNullOrWhiteSpace(cmbTipoCaja.Text))
-            {
-                MessageBox.Show("Debe seleccionar un tamaño de caja antes de agregar.",
-                    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // Validar cantidad
-            int cantidad = (int)numCantidad.Value;
-            if (cantidad <= 0)
-            {
-                MessageBox.Show("La cantidad debe ser mayor que cero.",
-                    "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // Agregar a la lista temporal
-            cajasTemporales.Add((cmbTipoCaja.Text, cantidad));
-
-            // Mostrar en ListView (como pendiente)
-            var item = new ListViewItem($"(Pendiente)");
-            item.SubItems.Add(cantidad.ToString());
-            item.SubItems.Add(cmbTipoCaja.Text);
-            lstGuiasGeneradas.Items.Add(item);
-
-            cmbTipoCaja.SelectedIndex = -1;
-            MessageBox.Show("Caja agregada correctamente.",
-                "Confirmación", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
-
+        // --- Generar Guía ---
         private void btnGenerarGuia_Click_1(object sender, EventArgs e)
         {
-            var errores = new System.Text.StringBuilder();
-
             try
             {
-                // ---  Validaciones del formulario ---
-                if (cajasTemporales.Count == 0)
-                    errores.AppendLine("- Debe agregar al menos una caja antes de generar la guía.");
+                string modalidad = cmbModalidadEntrega.Text.Trim();
 
-             
-                else if (!Regex.IsMatch(txtCUIT.Text, @"^\d{2}-?\d{8}-?\d{1}$"))
-                    errores.AppendLine("- El formato del CUIT es inválido (ejemplo: 20-35123456-7).");
-
-                
-
-                if (string.IsNullOrWhiteSpace(txtNombreDestinatario.Text))
-                    errores.AppendLine("- Debe ingresar el nombre del destinatario.");
-
-                if (string.IsNullOrWhiteSpace(txtDNIDest.Text))
-                    errores.AppendLine("- Debe ingresar el DNI del destinatario.");
-                else if (!txtDNIDest.Text.All(char.IsDigit))
-                    errores.AppendLine("- El DNI debe contener solo números.");
-
-                if (string.IsNullOrWhiteSpace(cmbProvincia.Text))
-                    errores.AppendLine("- Debe seleccionar una provincia.");
-
-                if (string.IsNullOrWhiteSpace(txtLocalidad.Text))
-                    errores.AppendLine("- Debe ingresar la localidad de destino.");
-                else if (txtLocalidad.Text.Any(char.IsDigit))
-                    errores.AppendLine("- La localidad no puede contener números.");
-
-                if (string.IsNullOrWhiteSpace(txtCP.Text))
-                    errores.AppendLine("- Debe ingresar el código postal.");
-                else if (!txtCP.Text.All(char.IsDigit))
-                    errores.AppendLine("- El código postal debe contener solo números.");
-
-                if (string.IsNullOrWhiteSpace(cmbModalidadEntrega.Text))
-                    errores.AppendLine("- Debe seleccionar la modalidad de entrega.");
-
-                string modalidad = cmbModalidadEntrega.Text;
-                if (modalidad == "Entrega en Agencia" && string.IsNullOrWhiteSpace(cmbAgencia.Text))
-                    errores.AppendLine("- Debe seleccionar una Agencia para la entrega.");
-                if (modalidad == "Entrega en CD" && string.IsNullOrWhiteSpace(cmbCD.Text))
-                    errores.AppendLine("- Debe seleccionar un Centro de Distribución (CD).");
-                if (modalidad == "Envío a Domicilio" && string.IsNullOrWhiteSpace(txtDomicilio.Text))
-                    errores.AppendLine("- Debe ingresar la dirección de envío a domicilio.");
-
-                // --- Validaciones de negocio (modelo) ---
-                try
+                // 🔹 Validaciones adicionales
+                if (string.IsNullOrWhiteSpace(modalidad))
                 {
-                    modelo.CrearGuia(
-                        txtCUIT.Text,
-                        txtRazonSocial.Text,
-                        "",
-                        txtNombreDestinatario.Text,
-                        "",
-                        txtDNIDest.Text,
-                        txtTelefonoDest.Text,
-                        txtDomicilio.Text,
-                        txtLocalidad.Text,
-                        cmbProvincia.Text,
-                        txtCP.Text,
-                        "",
-                        0,
-                        cmbModalidadEntrega.Text,
-                        true,  
-                        true   
-                    );
-                }
-                catch (ArgumentException ex)
-                {
-                    errores.AppendLine(ex.Message);
-                }
-
-                // --- Mostrar todo junto ---
-                if (errores.Length > 0)
-                {
-                    MessageBox.Show("Revisá los siguientes errores antes de continuar:\n\n" + errores.ToString(),
-                        "Campos incompletos o inválidos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show("Debe seleccionar una modalidad de entrega.",
+                        "Campos obligatorios", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // --- Si todo está bien, generar la guía ---
-                var g = modelo.CrearGuia(
-    txtCUIT.Text,
-    txtRazonSocial.Text,
-    "",
-    txtNombreDestinatario.Text,
-    "",
-    txtDNIDest.Text,
-    txtTelefonoDest.Text,
-    txtDomicilio.Text,
-    txtLocalidad.Text,
-    cmbProvincia.Text,
-    txtCP.Text,
-    "",
-    0,
-    cmbModalidadEntrega.Text,
-    true,   
-    false   
-);
-
-                lstGuiasGeneradas.Items.Clear();
-                foreach (var c in cajasTemporales)
+                if (string.IsNullOrWhiteSpace(cmbTipoCaja.Text))
                 {
-                    var item = new ListViewItem(g.Numero);
-                    item.SubItems.Add(c.Cantidad.ToString());
-                    item.SubItems.Add(c.Tamanio);
-                    lstGuiasGeneradas.Items.Insert(0, item);
+                    MessageBox.Show("Debe seleccionar un tipo de caja.",
+                        "Campos obligatorios", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
                 }
+
+                if (modalidad == "Entrega en Agencia" && string.IsNullOrWhiteSpace(cmbAgencia.Text))
+                {
+                    MessageBox.Show("Debe seleccionar una agencia para la entrega.",
+                        "Campos obligatorios", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (modalidad == "Entrega en CD" && string.IsNullOrWhiteSpace(cmbCD.Text))
+                {
+                    MessageBox.Show("Debe seleccionar un centro de distribución (CD).",
+                        "Campos obligatorios", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                if (modalidad == "Envío a Domicilio" && string.IsNullOrWhiteSpace(txtDomicilio.Text))
+                {
+                    MessageBox.Show("Debe ingresar la dirección de entrega para envío a domicilio.",
+                        "Campos obligatorios", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
+                var g = modelo.CrearGuia(
+                    txtCUIT.Text,
+                    txtRazonSocial.Text,
+                    "",
+                    txtNombreDestinatario.Text,
+                    "",
+                    txtDNIDest.Text,
+                    txtTelefonoDest.Text,
+                    txtDomicilio.Text,
+                    "",
+                    cmbProvincia.Text,
+                    txtCP.Text,
+                    cmbTipoCaja.Text,
+                    (int)numCantidad.Value,
+                    modalidad
+                );
+
+                // Mostrar en ListView
+                var item = new ListViewItem(g.Numero);
+                item.SubItems.Add(g.Cantidad.ToString());
+                item.SubItems.Add(g.Tamanio);
+                lstGuiasGeneradas.Items.Insert(0, item);
 
                 MessageBox.Show($"Guía generada correctamente.\n\nN° {g.Numero}",
                     "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
 
-                cajasTemporales.Clear();
                 LimpiarCampos();
+            }
+            catch (ArgumentException ex)
+            {
+                MessageBox.Show("Revisá los datos:\n\n" + ex.Message,
+                    "Campos inválidos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
             }
             catch (Exception ex)
             {
@@ -292,7 +215,6 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
             }
         }
 
-
         private void LimpiarCampos()
         {
             txtNombreDestinatario.Clear();
@@ -300,7 +222,6 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
             txtTelefonoDest.Clear();
             txtDomicilio.Clear();
             txtCP.Clear();
-            txtLocalidad.Clear();
             cmbProvincia.SelectedIndex = -1;
             cmbAgencia.Items.Clear();
             cmbCD.Items.Clear();

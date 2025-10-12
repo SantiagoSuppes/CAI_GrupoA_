@@ -1,6 +1,6 @@
-﻿namespace GrupoA.guiaEstadoHistorial
+﻿namespace CAI_GrupoA_.GuiaEstadoHistorial
 {
-    partial class guiaEstadoHistorialForm
+    partial class GuiaEstadoHistorialForm
     {
         /// <summary>
         /// Required designer variable.
@@ -246,7 +246,7 @@
             txtTipoCaja.Size = new Size(140, 23);
             txtTipoCaja.TabIndex = 49;
             // 
-            // guiaEstadoHistorialForm
+            // GuiaEstadoHistorialForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;

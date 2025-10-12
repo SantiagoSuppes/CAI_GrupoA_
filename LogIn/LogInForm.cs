@@ -8,11 +8,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace GrupoA.logIn
+namespace CAI_GrupoA_.LogIn
 {
-    public partial class logInForm : Form
+    public partial class LogInForm : Form
     {
-        public logInForm()
+        public LogInForm()
         {
             InitializeComponent();
         }
@@ -64,6 +64,16 @@ namespace GrupoA.logIn
             {
                 // Aca se va a abrir el formulario principal de la aplicación.}
             }
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void contraseñaTextBox_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 }
