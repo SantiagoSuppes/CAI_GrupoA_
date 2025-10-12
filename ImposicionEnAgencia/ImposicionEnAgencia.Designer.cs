@@ -1,6 +1,6 @@
 ﻿namespace CAI_GrupoA_.ImposicionEnAgencia
 {
-    partial class ImposicionEnAgencia
+    partial class ImposicionEnAgenciaForm
     {
         /// <summary>
         /// Required designer variable.
@@ -420,7 +420,7 @@
             label6.TabIndex = 35;
             label6.Text = "Registrar Pedido en Agencia";
             // 
-            // ImposicionEnAgencia
+            // ImposicionEnAgenciaForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
@@ -431,7 +431,7 @@
             Controls.Add(groupBox1);
             Controls.Add(groupBox2);
             Controls.Add(groupBox4);
-            Name = "ImposicionEnAgencia";
+            Name = "ImposicionEnAgenciaForm";
             Text = "ImposicionEnAgencia";
             Load += ImposicionEnAgencia_Load;
             groupBox3.ResumeLayout(false);
