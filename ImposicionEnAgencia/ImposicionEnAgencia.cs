@@ -173,7 +173,7 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
 
             try
             {
-                // --- 1️⃣ Validaciones del formulario ---
+                // ---  Validaciones del formulario ---
                 if (cajasTemporales.Count == 0)
                     errores.AppendLine("- Debe agregar al menos una caja antes de generar la guía.");
 
@@ -215,7 +215,7 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
                 if (modalidad == "Envío a Domicilio" && string.IsNullOrWhiteSpace(txtDomicilio.Text))
                     errores.AppendLine("- Debe ingresar la dirección de envío a domicilio.");
 
-                // --- 2️⃣ Validaciones de negocio (modelo) ---
+                // --- Validaciones de negocio (modelo) ---
                 try
                 {
                     modelo.CrearGuia(
@@ -233,8 +233,8 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
                         "",
                         0,
                         cmbModalidadEntrega.Text,
-                        true,  // omitir validación de caja
-                        true   // ✅ solo validar, no crear guía real
+                        true,  
+                        true   
                     );
                 }
                 catch (ArgumentException ex)
@@ -242,7 +242,7 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
                     errores.AppendLine(ex.Message);
                 }
 
-                // --- 3️⃣ Mostrar todo junto ---
+                // --- Mostrar todo junto ---
                 if (errores.Length > 0)
                 {
                     MessageBox.Show("Revisá los siguientes errores antes de continuar:\n\n" + errores.ToString(),
@@ -250,7 +250,7 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
                     return;
                 }
 
-                // --- 4️⃣ Si todo está bien, generar la guía ---
+                // --- Si todo está bien, generar la guía ---
                 var g = modelo.CrearGuia(
     txtCUIT.Text,
     txtRazonSocial.Text,
@@ -266,8 +266,8 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
     "",
     0,
     cmbModalidadEntrega.Text,
-    true,   // omitir validación de caja
-    false   // ✅ crear guía real
+    true,   
+    false   
 );
 
                 lstGuiasGeneradas.Items.Clear();

@@ -95,7 +95,7 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
             if (!string.IsNullOrEmpty(errores))
                 throw new ArgumentException(errores);
 
-            // ⚠️ Si solo estamos validando, no crear ni incrementar número
+        
             if (soloValidar)
                 return null;
 
