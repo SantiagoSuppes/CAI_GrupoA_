@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 
-namespace GrupoA.cdRecepcionPaquetes
+namespace CAI_GrupoA_.cdRecepcionPaquetes
 {
     public partial class cdRecepcionPaquetesForm : Form
     {
@@ -39,6 +39,16 @@ namespace GrupoA.cdRecepcionPaquetes
             ["Santa Fe"] = new() { "CD Rosario" }
         };
 
+        // ===== Numeración por CD origen =====
+        private readonly Dictionary<string, string> _codigoPorCD = new()
+        {
+            ["CD Norte"] = "CD01",
+            ["CD Sur"] = "CD02",
+            ["CD Córdoba 1"] = "CD03",
+            ["CD Rosario"] = "CD04"
+        };
+        private readonly Dictionary<string, int> _secuenciaPorCD = new(); // prefijo -> último número
+
         public cdRecepcionPaquetesForm() => InitializeComponent();
 
         // ========= Load =========
@@ -47,6 +57,7 @@ namespace GrupoA.cdRecepcionPaquetes
             InitListView();
             InitCajas();
             InitDestino();
+            InitCDOrigen();
         }
 
         private void InitListView()
@@ -84,6 +95,14 @@ namespace GrupoA.cdRecepcionPaquetes
             AplicarReglasModalidad();
         }
 
+        private void InitCDOrigen()
+        {
+            var todosCDs = _cdsPorProv.Values.SelectMany(v => v).Distinct().OrderBy(x => x).ToArray();
+            cdOrigen.Items.Clear();
+            cdOrigen.Items.AddRange(todosCDs);
+            if (cdOrigen.Items.Count > 0) cdOrigen.SelectedIndex = 0;
+        }
+
         // ========= Buscar cliente =========
         private void btnBuscar_Click(object sender, EventArgs e)
         {
@@ -93,16 +112,14 @@ namespace GrupoA.cdRecepcionPaquetes
             if (!EsCuitBasico(cuit))
             {
                 Msg("CUIT inválido. Debe tener 11 dígitos.");
-                txtCuit.Focus();
-                return;
+                txtCuit.Focus(); return;
             }
 
             var cli = _clientes.FirstOrDefault(x => x.Cuit == cuit);
             if (cli is null)
             {
                 Msg("No se encontró ningún cliente con ese CUIT.");
-                txtCuit.Clear();
-                return;
+                txtCuit.Clear(); return;
             }
             txtCliente.Text = cli.RazonSocial;
         }
@@ -173,16 +190,31 @@ namespace GrupoA.cdRecepcionPaquetes
         {
             if (!ValidarTodo()) return;
 
-            // Simular envío OK
-            Msg("Envío registrado correctamente.");
+            var nroGuia = GenerarNumeroGuia(cdOrigen.Text);
+
+            Msg($"Envío registrado correctamente.\nN° de guía: {nroGuia}");
 
             LimpiarControles(this);
             nudCantidad.Value = 1;
             txtCuit.Focus();
+            InitCajas();
+            InitDestino();
+            InitCDOrigen();
+        }
+
+        // ========= Numeración =========
+        private string GenerarNumeroGuia(string cdNombre)
+        {
+            var prefijo = _codigoPorCD.TryGetValue(cdNombre, out var cod) ? cod : "CD00";
+            int next = _secuenciaPorCD.TryGetValue(prefijo, out var cur) ? cur + 1 : 1;
+            _secuenciaPorCD[prefijo] = next;
+            return $"{prefijo}-{next:0000}";
         }
 
         private bool ValidarTodo()
         {
+            if (cdOrigen.SelectedIndex < 0) { Msg("Seleccioná el CD Origen."); cdOrigen.DroppedDown = true; return false; }
+
             if (string.IsNullOrWhiteSpace(txtCuit.Text)) { Msg("Ingrese CUIT."); txtCuit.Focus(); return false; }
             if (string.IsNullOrWhiteSpace(txtCliente.Text)) { Msg("Busque un cliente válido."); return false; }
 
@@ -279,7 +311,6 @@ namespace GrupoA.cdRecepcionPaquetes
         private void comboBox4_SelectedIndexChanged(object sender, EventArgs e) { }
         private void cuit_TextChanged(object sender, EventArgs e) { }
 
-        // Redirecciones si el Designer apunta a button1/2_Click
         private void button1_Click(object sender, EventArgs e) => btnBuscar_Click(sender, e);
         private void button2_Click(object sender, EventArgs e) => btnAgregar_Click(sender, e);
     }

@@ -1,4 +1,4 @@
-﻿namespace GrupoA.cdRecepcionPaquetes
+﻿namespace CAI_GrupoA_.cdRecepcionPaquetes
 {
     partial class cdRecepcionPaquetesForm
     {
@@ -66,6 +66,8 @@
             label13 = new Label();
             label2 = new Label();
             button3 = new Button();
+            cdOrigen = new ComboBox();
+            label15 = new Label();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -404,11 +406,11 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(36, 12);
+            label2.Location = new Point(36, 13);
             label2.Name = "label2";
-            label2.Size = new Size(255, 25);
+            label2.Size = new Size(215, 25);
             label2.TabIndex = 4;
-            label2.Text = "Registrar Nuevo Envío (CD)";
+            label2.Text = "Registrar Nuevo Envío ";
             label2.Click += label2_Click;
             // 
             // button3
@@ -421,11 +423,31 @@
             button3.UseVisualStyleBackColor = true;
             button3.Click += button3_Click;
             // 
+            // cdOrigen
+            // 
+            cdOrigen.FormattingEnabled = true;
+            cdOrigen.Items.AddRange(new object[] { "Domicilio", "Agencia", "CD" });
+            cdOrigen.Location = new Point(338, 18);
+            cdOrigen.Name = "cdOrigen";
+            cdOrigen.Size = new Size(152, 23);
+            cdOrigen.TabIndex = 36;
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(267, 21);
+            label15.Name = "label15";
+            label15.Size = new Size(65, 15);
+            label15.TabIndex = 37;
+            label15.Text = "CD Origen:";
+            // 
             // cdRecepcionPaquetesForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(630, 636);
+            Controls.Add(label15);
+            Controls.Add(cdOrigen);
             Controls.Add(button3);
             Controls.Add(label2);
             Controls.Add(groupBox3);
@@ -484,5 +506,7 @@
         private ComboBox cmbAgencia;
         private TextBox txtCuit;
         private Button btnAgregar;
+        private ComboBox cdOrigen;
+        private Label label15;
     }
 }
