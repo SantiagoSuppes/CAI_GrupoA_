@@ -8,6 +8,7 @@ using CAI_GrupoA_.FacturacionClientes;
 using CAI_GrupoA_.CdRendicionFletero;
 using CAI_GrupoA_.EstimacionCostosvsVentas;
 using CAI_GrupoA_.GuiaEstadoHistorial;
+using CAI_GrupoA_.CargasYDescargas;
 
 namespace CAI_GrupoA_
 {
