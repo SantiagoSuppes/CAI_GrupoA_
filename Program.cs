@@ -34,10 +34,10 @@ namespace CAI_GrupoA_
 
             Application.Run(new CargasYDescargasForm());
 
-            Application.Run(new CdEntregarClienteForm());
+            Application.Run(new CdEntregarClienteForms());
             Application.Run(new FacturacionClienteForm());
 
-            Application.Run(new CdRendicionFleteroForm());
+            Application.Run(new CdRendicionFleteroForms());
             Application.Run(new EstimacionCostosvsVentasForms());
             Application.Run(new GuiaEstadoHistorialForm());
 

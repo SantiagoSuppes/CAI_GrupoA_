@@ -28,9 +28,9 @@ namespace CAI_GrupoA_.MenuPrincipal
             btnRecepcionCD.Click += (s, e) => Abrir(() => new CdRecepcionPaquetesForm());
             btnRecepcionAg.Click += (s, e) => Abrir(() => new ImposicionEnAgenciaForm());
             btnCargaDescarga.Click += (s, e) => Abrir(() => new CargasYDescargasForm());
-            btnRendicion.Click += (s, e) => Abrir(() => new CdRendicionFleteroForm());
+            btnRendicion.Click += (s, e) => Abrir(() => new CdRendicionFleteroForms());
             btnEstado.Click += (s, e) => Abrir(() => new GuiaEstadoHistorialForm());
-            btnEntregaCD.Click += (s, e) => Abrir(() => new CdEntregarClienteForm());
+            btnEntregaCD.Click += (s, e) => Abrir(() => new CdRendicionFleteroForms());
             btnReportesCostos.Click += (s, e) => Abrir(() => new EstimacionCostosvsVentasForms());
             btnFacturacion.Click += (s, e) => Abrir(() => new FacturacionClienteForm());
 
