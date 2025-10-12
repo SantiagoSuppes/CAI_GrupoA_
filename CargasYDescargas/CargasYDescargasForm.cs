@@ -216,7 +216,9 @@ namespace CAI_GrupoA_.CargasYDescargas
             MessageBox.Show("Se deshicieron los cambios y se restauraron los estados originales.", "Deshacer completado", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
     }
-}
+} 
+
+
 
 
 
