@@ -166,27 +166,21 @@ namespace CAI_GrupoA_.CallCenter
         }
         private void AplicarReglasModalidad()
         {
-            // Obtiene la modalidad seleccionada
-            var modalidad = cmbModalidad.SelectedItem?.ToString();
+            string modalidad = cmbModalidad.Text;
 
-            // Deshabilita todos por defecto
-            txtCalleYAltura.Enabled = false;
-            cmbAgencia.Enabled = false;
-            cmbCD.Enabled = false;
+            bool esDom = modalidad == "Domicilio";
+            bool esAge = modalidad == "Agencia";
+            bool esCD = modalidad == "CD";
 
-            // Habilita según modalidad
-            if (modalidad == "Domicilio")
-            {
-                txtCalleYAltura.Enabled = true;
-            }
-            else if (modalidad == "Agencia")
-            {
-                cmbAgencia.Enabled = true;
-            }
-            else if (modalidad == "CD")
-            {
-                cmbCD.Enabled = true;
-            }
+            txtCalleYAltura.Enabled = esDom;
+            cmbAgencia.Enabled = esAge;
+            cmbCD.Enabled = esCD;
+
+            if (!esDom) txtCalleYAltura.Clear();
+            if (!esAge) { cmbAgencia.Items.Clear(); cmbAgencia.SelectedIndex = -1; cmbAgencia.Text = ""; }
+            if (!esCD) { cmbCD.Items.Clear(); cmbCD.SelectedIndex = -1; cmbCD.Text = ""; }
+
+            CargarDependientes();
         }
 
         private void CargarDependientes()
@@ -195,10 +189,10 @@ namespace CAI_GrupoA_.CallCenter
             if (string.IsNullOrWhiteSpace(prov)) { cmbAgencia.Items.Clear(); cmbCD.Items.Clear(); return; }
 
             cmbAgencia.Items.Clear();
-            if (_agenciasPorProv.TryGetValue(prov, out var ags)) cmbAgencia.Items.AddRange(ags.ToArray());
+            if (_agenciasPorProv.TryGetValue(prov, out var ags)) { cmbAgencia.Items.AddRange([.. ags]); }
 
             cmbCD.Items.Clear();
-            if (_cdsPorProv.TryGetValue(prov, out var cds)) cmbCD.Items.AddRange(cds.ToArray());
+            if (_cdsPorProv.TryGetValue(prov, out var cds)) { cmbCD.Items.AddRange([.. cds]); }
         }
 
         private bool ValidarDestinatario()
