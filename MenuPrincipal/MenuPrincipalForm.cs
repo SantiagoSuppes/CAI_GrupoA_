@@ -30,7 +30,7 @@ namespace CAI_GrupoA_.MenuPrincipal
             btnCargaDescarga.Click += (s, e) => Abrir(() => new CargasYDescargasForm());
             btnRendicion.Click += (s, e) => Abrir(() => new CdRendicionFleteroForms());
             btnEstado.Click += (s, e) => Abrir(() => new GuiaEstadoHistorialForm());
-            btnEntregaCD.Click += (s, e) => Abrir(() => new CdRendicionFleteroForms());
+            btnEntregaCD.Click += (s, e) => Abrir(() => new CdEntregarClienteForms());
             btnReportesCostos.Click += (s, e) => Abrir(() => new EstimacionCostosvsVentasForms());
             btnFacturacion.Click += (s, e) => Abrir(() => new FacturacionClienteForm());
 
