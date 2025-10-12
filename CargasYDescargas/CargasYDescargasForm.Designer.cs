@@ -28,247 +28,264 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.label1 = new System.Windows.Forms.Label();
-            this.panel1 = new System.Windows.Forms.Panel();
-            this.txtEmpresa = new System.Windows.Forms.TextBox();
-            this.label5 = new System.Windows.Forms.Label();
-            this.BuscarBtn = new System.Windows.Forms.Button();
-            this.txtPatente = new System.Windows.Forms.TextBox();
-            this.label2 = new System.Windows.Forms.Label();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.listView2 = new System.Windows.Forms.ListView();
-            this.Guia = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Destinatario2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Remitente2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.EstadoActual2 = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.listView1 = new System.Windows.Forms.ListView();
-            this.Destinatario = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.Remitente = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.EstadoActual = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.NDeGuia = ((System.Windows.Forms.ColumnHeader)(new System.Windows.Forms.ColumnHeader()));
-            this.label4 = new System.Windows.Forms.Label();
-            this.label3 = new System.Windows.Forms.Label();
-            this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
-            this.panel1.SuspendLayout();
-            this.panel2.SuspendLayout();
-            this.SuspendLayout();
+            label1 = new Label();
+            panel1 = new Panel();
+            txtEmpresa = new TextBox();
+            label5 = new Label();
+            BuscarBtn = new Button();
+            txtPatente = new TextBox();
+            label2 = new Label();
+            panel2 = new Panel();
+            listView2 = new ListView();
+            Guia = new ColumnHeader();
+            Destinatario2 = new ColumnHeader();
+            Remitente2 = new ColumnHeader();
+            EstadoActual2 = new ColumnHeader();
+            listView1 = new ListView();
+            Destinatario = new ColumnHeader();
+            Remitente = new ColumnHeader();
+            EstadoActual = new ColumnHeader();
+            NDeGuia = new ColumnHeader();
+            label4 = new Label();
+            label3 = new Label();
+            button2 = new Button();
+            button3 = new Button();
+            button1 = new Button();
+            panel1.SuspendLayout();
+            panel2.SuspendLayout();
+            SuspendLayout();
             // 
             // label1
             // 
-            this.label1.AutoSize = true;
-            this.label1.Font = new System.Drawing.Font("Microsoft YaHei UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label1.Location = new System.Drawing.Point(12, 23);
-            this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(335, 28);
-            this.label1.TabIndex = 0;
-            this.label1.Text = "Registro de cargas y descargas";
+            label1.AutoSize = true;
+            label1.Font = new Font("Microsoft YaHei UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Location = new Point(14, 27);
+            label1.Margin = new Padding(4, 0, 4, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(335, 28);
+            label1.TabIndex = 0;
+            label1.Text = "Registro de cargas y descargas";
             // 
             // panel1
             // 
-            this.panel1.Controls.Add(this.txtEmpresa);
-            this.panel1.Controls.Add(this.label5);
-            this.panel1.Controls.Add(this.BuscarBtn);
-            this.panel1.Controls.Add(this.txtPatente);
-            this.panel1.Controls.Add(this.label2);
-            this.panel1.Location = new System.Drawing.Point(17, 64);
-            this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(485, 57);
-            this.panel1.TabIndex = 1;
+            panel1.Controls.Add(txtEmpresa);
+            panel1.Controls.Add(label5);
+            panel1.Controls.Add(BuscarBtn);
+            panel1.Controls.Add(txtPatente);
+            panel1.Controls.Add(label2);
+            panel1.Location = new Point(20, 74);
+            panel1.Margin = new Padding(4, 3, 4, 3);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(566, 66);
+            panel1.TabIndex = 1;
             // 
             // txtEmpresa
             // 
-            this.txtEmpresa.Location = new System.Drawing.Point(343, 14);
-            this.txtEmpresa.Name = "txtEmpresa";
-            this.txtEmpresa.ReadOnly = true;
-            this.txtEmpresa.Size = new System.Drawing.Size(100, 20);
-            this.txtEmpresa.TabIndex = 4;
-            this.txtEmpresa.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
+            txtEmpresa.Location = new Point(400, 16);
+            txtEmpresa.Margin = new Padding(4, 3, 4, 3);
+            txtEmpresa.Name = "txtEmpresa";
+            txtEmpresa.ReadOnly = true;
+            txtEmpresa.Size = new Size(116, 23);
+            txtEmpresa.TabIndex = 4;
+            txtEmpresa.TextChanged += textBox1_TextChanged;
             // 
             // label5
             // 
-            this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(282, 19);
-            this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(48, 13);
-            this.label5.TabIndex = 3;
-            this.label5.Text = "Empresa";
+            label5.AutoSize = true;
+            label5.Location = new Point(329, 22);
+            label5.Margin = new Padding(4, 0, 4, 0);
+            label5.Name = "label5";
+            label5.Size = new Size(52, 15);
+            label5.TabIndex = 3;
+            label5.Text = "Empresa";
             // 
             // BuscarBtn
             // 
-            this.BuscarBtn.Location = new System.Drawing.Point(171, 14);
-            this.BuscarBtn.Name = "BuscarBtn";
-            this.BuscarBtn.Size = new System.Drawing.Size(75, 23);
-            this.BuscarBtn.TabIndex = 2;
-            this.BuscarBtn.Text = "Buscar";
-            this.BuscarBtn.UseVisualStyleBackColor = true;
-            this.BuscarBtn.Click += new System.EventHandler(this.button1_Click);
+            BuscarBtn.Location = new Point(200, 16);
+            BuscarBtn.Margin = new Padding(4, 3, 4, 3);
+            BuscarBtn.Name = "BuscarBtn";
+            BuscarBtn.Size = new Size(88, 27);
+            BuscarBtn.TabIndex = 2;
+            BuscarBtn.Text = "Buscar";
+            BuscarBtn.UseVisualStyleBackColor = true;
+            BuscarBtn.Click += button1_Click;
             // 
             // txtPatente
             // 
-            this.txtPatente.Location = new System.Drawing.Point(65, 14);
-            this.txtPatente.Name = "txtPatente";
-            this.txtPatente.Size = new System.Drawing.Size(100, 20);
-            this.txtPatente.TabIndex = 1;
-            this.txtPatente.TextChanged += new System.EventHandler(this.txtPatente_TextChanged);
+            txtPatente.Location = new Point(76, 16);
+            txtPatente.Margin = new Padding(4, 3, 4, 3);
+            txtPatente.Name = "txtPatente";
+            txtPatente.Size = new Size(116, 23);
+            txtPatente.TabIndex = 1;
+            txtPatente.TextChanged += txtPatente_TextChanged;
             // 
             // label2
             // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(15, 19);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(44, 13);
-            this.label2.TabIndex = 0;
-            this.label2.Text = "Patente";
+            label2.AutoSize = true;
+            label2.Location = new Point(18, 22);
+            label2.Margin = new Padding(4, 0, 4, 0);
+            label2.Name = "label2";
+            label2.Size = new Size(47, 15);
+            label2.TabIndex = 0;
+            label2.Text = "Patente";
             // 
             // panel2
             // 
-            this.panel2.Controls.Add(this.listView2);
-            this.panel2.Controls.Add(this.listView1);
-            this.panel2.Controls.Add(this.label4);
-            this.panel2.Controls.Add(this.label3);
-            this.panel2.Location = new System.Drawing.Point(18, 141);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(484, 313);
-            this.panel2.TabIndex = 2;
+            panel2.Controls.Add(listView2);
+            panel2.Controls.Add(listView1);
+            panel2.Controls.Add(label4);
+            panel2.Controls.Add(label3);
+            panel2.Location = new Point(21, 163);
+            panel2.Margin = new Padding(4, 3, 4, 3);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(565, 361);
+            panel2.TabIndex = 2;
             // 
             // listView2
             // 
-            this.listView2.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.Guia,
-            this.Destinatario2,
-            this.Remitente2,
-            this.EstadoActual2});
-            this.listView2.FullRowSelect = true;
-            this.listView2.GridLines = true;
-            this.listView2.HideSelection = false;
-            this.listView2.Location = new System.Drawing.Point(17, 190);
-            this.listView2.Name = "listView2";
-            this.listView2.Size = new System.Drawing.Size(443, 97);
-            this.listView2.TabIndex = 5;
-            this.listView2.UseCompatibleStateImageBehavior = false;
-            this.listView2.View = System.Windows.Forms.View.Details;
+            listView2.Columns.AddRange(new ColumnHeader[] { Guia, Destinatario2, Remitente2, EstadoActual2 });
+            listView2.FullRowSelect = true;
+            listView2.GridLines = true;
+            listView2.Location = new Point(20, 219);
+            listView2.Margin = new Padding(4, 3, 4, 3);
+            listView2.Name = "listView2";
+            listView2.Size = new Size(524, 111);
+            listView2.TabIndex = 5;
+            listView2.UseCompatibleStateImageBehavior = false;
+            listView2.View = View.Details;
             // 
             // Guia
             // 
-            this.Guia.Text = "N° de Guia";
-            this.Guia.Width = 110;
+            Guia.Text = "N° de Guia";
+            Guia.Width = 110;
             // 
             // Destinatario2
             // 
-            this.Destinatario2.Text = "Destinatario";
-            this.Destinatario2.Width = 110;
+            Destinatario2.Text = "Destinatario";
+            Destinatario2.Width = 110;
             // 
             // Remitente2
             // 
-            this.Remitente2.Text = "Remitente";
-            this.Remitente2.Width = 110;
+            Remitente2.Text = "Remitente";
+            Remitente2.Width = 110;
             // 
             // EstadoActual2
             // 
-            this.EstadoActual2.Text = "Estado Actual";
-            this.EstadoActual2.Width = 110;
+            EstadoActual2.Text = "Estado Actual";
+            EstadoActual2.Width = 190;
             // 
             // listView1
             // 
-            this.listView1.Columns.AddRange(new System.Windows.Forms.ColumnHeader[] {
-            this.Destinatario,
-            this.Remitente,
-            this.EstadoActual,
-            this.NDeGuia});
-            this.listView1.FullRowSelect = true;
-            this.listView1.GridLines = true;
-            this.listView1.HideSelection = false;
-            this.listView1.Location = new System.Drawing.Point(17, 34);
-            this.listView1.Name = "listView1";
-            this.listView1.Size = new System.Drawing.Size(443, 103);
-            this.listView1.TabIndex = 4;
-            this.listView1.UseCompatibleStateImageBehavior = false;
-            this.listView1.View = System.Windows.Forms.View.Details;
-            this.listView1.SelectedIndexChanged += new System.EventHandler(this.listView1_SelectedIndexChanged);
+            listView1.Columns.AddRange(new ColumnHeader[] { Destinatario, Remitente, EstadoActual, NDeGuia });
+            listView1.FullRowSelect = true;
+            listView1.GridLines = true;
+            listView1.Location = new Point(20, 39);
+            listView1.Margin = new Padding(4, 3, 4, 3);
+            listView1.Name = "listView1";
+            listView1.Size = new Size(524, 118);
+            listView1.TabIndex = 4;
+            listView1.UseCompatibleStateImageBehavior = false;
+            listView1.View = View.Details;
+            listView1.SelectedIndexChanged += listView1_SelectedIndexChanged;
             // 
             // Destinatario
             // 
-            this.Destinatario.DisplayIndex = 1;
-            this.Destinatario.Text = "Destinatario";
-            this.Destinatario.Width = 110;
+            Destinatario.DisplayIndex = 1;
+            Destinatario.Text = "Destinatario";
+            Destinatario.Width = 110;
             // 
             // Remitente
             // 
-            this.Remitente.DisplayIndex = 2;
-            this.Remitente.Text = "Remitente";
-            this.Remitente.Width = 110;
+            Remitente.DisplayIndex = 2;
+            Remitente.Text = "Remitente";
+            Remitente.Width = 110;
             // 
             // EstadoActual
             // 
-            this.EstadoActual.DisplayIndex = 3;
-            this.EstadoActual.Text = "Estado Actual";
-            this.EstadoActual.Width = 110;
+            EstadoActual.DisplayIndex = 3;
+            EstadoActual.Text = "Estado Actual";
+            EstadoActual.Width = 190;
             // 
             // NDeGuia
             // 
-            this.NDeGuia.DisplayIndex = 0;
-            this.NDeGuia.Text = "N° de Guia";
-            this.NDeGuia.Width = 110;
+            NDeGuia.DisplayIndex = 0;
+            NDeGuia.Text = "N° de Guia";
+            NDeGuia.Width = 110;
             // 
             // label4
             // 
-            this.label4.AutoSize = true;
-            this.label4.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label4.Location = new System.Drawing.Point(13, 158);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(55, 19);
-            this.label4.TabIndex = 1;
-            this.label4.Text = "Cargar";
+            label4.AutoSize = true;
+            label4.Font = new Font("Microsoft YaHei UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label4.Location = new Point(15, 182);
+            label4.Margin = new Padding(4, 0, 4, 0);
+            label4.Name = "label4";
+            label4.Size = new Size(55, 19);
+            label4.TabIndex = 1;
+            label4.Text = "Cargar";
             // 
             // label3
             // 
-            this.label3.AutoSize = true;
-            this.label3.Font = new System.Drawing.Font("Microsoft YaHei UI", 9.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label3.Location = new System.Drawing.Point(13, 12);
-            this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(77, 19);
-            this.label3.TabIndex = 0;
-            this.label3.Text = "Descargar";
+            label3.AutoSize = true;
+            label3.Font = new Font("Microsoft YaHei UI", 9.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label3.Location = new Point(15, 14);
+            label3.Margin = new Padding(4, 0, 4, 0);
+            label3.Name = "label3";
+            label3.Size = new Size(77, 19);
+            label3.TabIndex = 0;
+            label3.Text = "Descargar";
             // 
             // button2
             // 
-            this.button2.Location = new System.Drawing.Point(427, 475);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(75, 23);
-            this.button2.TabIndex = 3;
-            this.button2.Text = "Aceptar";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
+            button2.Location = new Point(498, 548);
+            button2.Margin = new Padding(4, 3, 4, 3);
+            button2.Name = "button2";
+            button2.Size = new Size(88, 27);
+            button2.TabIndex = 3;
+            button2.Text = "Aceptar";
+            button2.UseVisualStyleBackColor = true;
+            button2.Click += button2_Click;
             // 
             // button3
             // 
-            this.button3.Location = new System.Drawing.Point(291, 473);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(108, 25);
-            this.button3.TabIndex = 4;
-            this.button3.Text = "Volver al menu";
-            this.button3.UseVisualStyleBackColor = true;
+            button3.Location = new Point(238, 546);
+            button3.Margin = new Padding(4, 3, 4, 3);
+            button3.Name = "button3";
+            button3.Size = new Size(126, 29);
+            button3.TabIndex = 4;
+            button3.Text = "Volver al menu";
+            button3.UseVisualStyleBackColor = true;
             // 
-            // CargasYDescargas
+            // button1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(520, 530);
-            this.Controls.Add(this.button3);
-            this.Controls.Add(this.button2);
-            this.Controls.Add(this.panel2);
-            this.Controls.Add(this.panel1);
-            this.Controls.Add(this.label1);
-            this.Name = "CargasYDescargas";
-            this.Text = "Cargas y descargas";
-            this.Load += new System.EventHandler(this.Form1_Load);
-            this.panel1.ResumeLayout(false);
-            this.panel1.PerformLayout();
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            button1.Location = new Point(390, 546);
+            button1.Name = "button1";
+            button1.Size = new Size(75, 29);
+            button1.TabIndex = 6;
+            button1.Text = "Deshacer";
+            button1.UseVisualStyleBackColor = true;
+            button1.Click += button1_Click_1;
+            // 
+            // CargasYDescargasForm
+            // 
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(607, 612);
+            Controls.Add(button1);
+            Controls.Add(button3);
+            Controls.Add(button2);
+            Controls.Add(panel2);
+            Controls.Add(panel1);
+            Controls.Add(label1);
+            Margin = new Padding(4, 3, 4, 3);
+            Name = "CargasYDescargasForm";
+            Text = "Cargas y descargas";
+            Load += Form1_Load;
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
+            panel2.ResumeLayout(false);
+            panel2.PerformLayout();
+            ResumeLayout(false);
+            PerformLayout();
 
         }
 
@@ -296,6 +313,7 @@
         private System.Windows.Forms.Button button3;
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txtEmpresa;
+        private Button button1;
     }
 }
 
