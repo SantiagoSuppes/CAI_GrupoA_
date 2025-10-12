@@ -57,7 +57,6 @@ namespace CAI_GrupoA_.CdRecepcionPaquetes
             InitListView();
             InitCajas();
             InitDestino();
-            InitCDOrigen();
         }
 
         private void InitListView()
@@ -95,14 +94,6 @@ namespace CAI_GrupoA_.CdRecepcionPaquetes
             AplicarReglasModalidad();
         }
 
-        private void InitCDOrigen()
-        {
-            var todosCDs = _cdsPorProv.Values.SelectMany(v => v).Distinct().OrderBy(x => x).ToArray();
-            cdOrigen.Items.Clear();
-            cdOrigen.Items.AddRange(todosCDs);
-            if (cdOrigen.Items.Count > 0) cdOrigen.SelectedIndex = 0;
-        }
-
         // ========= Buscar cliente =========
         private void btnBuscar_Click(object sender, EventArgs e)
         {
@@ -110,17 +101,12 @@ namespace CAI_GrupoA_.CdRecepcionPaquetes
 
             string cuit = DigitsOnly(txtCuit.Text);
             if (!EsCuitBasico(cuit))
-            {
-                Msg("CUIT inválido. Debe tener 11 dígitos.");
-                txtCuit.Focus(); return;
-            }
+            { Msg("CUIT inválido. Debe tener 11 dígitos."); txtCuit.Focus(); return; }
 
             var cli = _clientes.FirstOrDefault(x => x.Cuit == cuit);
             if (cli is null)
-            {
-                Msg("No se encontró ningún cliente con ese CUIT.");
-                txtCuit.Clear(); return;
-            }
+            { Msg("No se encontró ningún cliente con ese CUIT."); txtCuit.Clear(); return; }
+
             txtCliente.Text = cli.RazonSocial;
         }
 
@@ -190,7 +176,8 @@ namespace CAI_GrupoA_.CdRecepcionPaquetes
         {
             if (!ValidarTodo()) return;
 
-            var nroGuia = GenerarNumeroGuia(cdOrigen.Text);
+            var cdNombre = ObtenerCDOrigenPreferido();     // << determina el CD Origen
+            var nroGuia = GenerarNumeroGuia(cdNombre);    // << genera CDxx-####
 
             Msg($"Envío registrado correctamente.\nN° de guía: {nroGuia}");
 
@@ -199,22 +186,36 @@ namespace CAI_GrupoA_.CdRecepcionPaquetes
             txtCuit.Focus();
             InitCajas();
             InitDestino();
-            InitCDOrigen();
         }
 
         // ========= Numeración =========
         private string GenerarNumeroGuia(string cdNombre)
         {
+            // cdNombre -> prefijo tipo "CD01"
             var prefijo = _codigoPorCD.TryGetValue(cdNombre, out var cod) ? cod : "CD00";
             int next = _secuenciaPorCD.TryGetValue(prefijo, out var cur) ? cur + 1 : 1;
             _secuenciaPorCD[prefijo] = next;
             return $"{prefijo}-{next:0000}";
         }
 
+        // Prioriza el CD seleccionado si modalidad = CD; si no, mapea por provincia
+        private string ObtenerCDOrigenPreferido()
+        {
+            if (cmbModalidad.Text == "CD" && cmbCD.SelectedIndex >= 0)
+                return cmbCD.Text;
+
+            // fallback por provincia
+            return cmbProvincia.Text switch
+            {
+                "Córdoba" => "CD Córdoba 1",
+                "Santa Fe" => "CD Rosario",
+                "Buenos Aires" => "CD Norte",
+                _ => "CD Norte"
+            };
+        }
+
         private bool ValidarTodo()
         {
-            if (cdOrigen.SelectedIndex < 0) { Msg("Seleccioná el CD Origen."); cdOrigen.DroppedDown = true; return false; }
-
             if (string.IsNullOrWhiteSpace(txtCuit.Text)) { Msg("Ingrese CUIT."); txtCuit.Focus(); return false; }
             if (string.IsNullOrWhiteSpace(txtCliente.Text)) { Msg("Busque un cliente válido."); return false; }
 
@@ -300,7 +301,7 @@ namespace CAI_GrupoA_.CdRecepcionPaquetes
 
         private static void Msg(string m) => MessageBox.Show(m, "Validación");
 
-        // ========= Stubs Designer (si el diseñador los requiere) =========
+        // ========= Stubs Designer =========
         private void groupBox1_Enter(object sender, EventArgs e) { }
         private void groupBox2_Enter(object sender, EventArgs e) { }
         private void groupBox3_Enter(object sender, EventArgs e) { }
