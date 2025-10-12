@@ -10,7 +10,7 @@ namespace CAI_GrupoA_.CdRecepcionPaquetes
         // ========= Modelos y datos =========
         private sealed class Cliente
         {
-            public string Cuit { get; init; } = string.Empty;
+            public string Cuit { get; init; } = string.Empty;   // almacenado sin guiones, 11 dígitos
             public string RazonSocial { get; init; } = string.Empty;
         }
 
@@ -57,7 +57,9 @@ namespace CAI_GrupoA_.CdRecepcionPaquetes
             InitListView();
             InitCajas();
             InitDestino();
-            InitCDOrigen();
+
+            // permitir dígitos y guiones en CUIT
+            txtCuit.KeyPress += txtCuit_KeyPress;
         }
 
         private void InitListView()
@@ -95,32 +97,19 @@ namespace CAI_GrupoA_.CdRecepcionPaquetes
             AplicarReglasModalidad();
         }
 
-        private void InitCDOrigen()
-        {
-            var todosCDs = _cdsPorProv.Values.SelectMany(v => v).Distinct().OrderBy(x => x).ToArray();
-            cdOrigen.Items.Clear();
-            cdOrigen.Items.AddRange(todosCDs);
-            if (cdOrigen.Items.Count > 0) cdOrigen.SelectedIndex = 0;
-        }
-
         // ========= Buscar cliente =========
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             txtCliente.Clear();
 
-            string cuit = DigitsOnly(txtCuit.Text);
+            string cuit = NormalizarCuit(txtCuit.Text); // admite "20-12345678-0"
             if (!EsCuitBasico(cuit))
-            {
-                Msg("CUIT inválido. Debe tener 11 dígitos.");
-                txtCuit.Focus(); return;
-            }
+            { Msg("CUIT inválido. Debe tener 11 dígitos."); txtCuit.Focus(); return; }
 
             var cli = _clientes.FirstOrDefault(x => x.Cuit == cuit);
             if (cli is null)
-            {
-                Msg("No se encontró ningún cliente con ese CUIT.");
-                txtCuit.Clear(); return;
-            }
+            { Msg("No se encontró ningún cliente con ese CUIT."); txtCuit.Clear(); return; }
+
             txtCliente.Text = cli.RazonSocial;
         }
 
@@ -190,7 +179,8 @@ namespace CAI_GrupoA_.CdRecepcionPaquetes
         {
             if (!ValidarTodo()) return;
 
-            var nroGuia = GenerarNumeroGuia(cdOrigen.Text);
+            var cdNombre = ObtenerCDOrigenPreferido();
+            var nroGuia = GenerarNumeroGuia(cdNombre);
 
             Msg($"Envío registrado correctamente.\nN° de guía: {nroGuia}");
 
@@ -199,7 +189,6 @@ namespace CAI_GrupoA_.CdRecepcionPaquetes
             txtCuit.Focus();
             InitCajas();
             InitDestino();
-            InitCDOrigen();
         }
 
         // ========= Numeración =========
@@ -211,10 +200,22 @@ namespace CAI_GrupoA_.CdRecepcionPaquetes
             return $"{prefijo}-{next:0000}";
         }
 
+        private string ObtenerCDOrigenPreferido()
+        {
+            if (cmbModalidad.Text == "CD" && cmbCD.SelectedIndex >= 0)
+                return cmbCD.Text;
+
+            return cmbProvincia.Text switch
+            {
+                "Córdoba" => "CD Córdoba 1",
+                "Santa Fe" => "CD Rosario",
+                "Buenos Aires" => "CD Norte",
+                _ => "CD Norte"
+            };
+        }
+
         private bool ValidarTodo()
         {
-            if (cdOrigen.SelectedIndex < 0) { Msg("Seleccioná el CD Origen."); cdOrigen.DroppedDown = true; return false; }
-
             if (string.IsNullOrWhiteSpace(txtCuit.Text)) { Msg("Ingrese CUIT."); txtCuit.Focus(); return false; }
             if (string.IsNullOrWhiteSpace(txtCliente.Text)) { Msg("Busque un cliente válido."); return false; }
 
@@ -274,8 +275,15 @@ namespace CAI_GrupoA_.CdRecepcionPaquetes
             }
         }
 
-        private static string DigitsOnly(string s) => new string((s ?? "").Where(char.IsDigit).ToArray());
-        private static bool EsCuitBasico(string cuit) => !string.IsNullOrWhiteSpace(cuit) && cuit.Length == 11;
+        // Acepta 20-12345678-0 o 20123456780
+        private static string NormalizarCuit(string s)
+            => new string((s ?? "").Where(char.IsDigit).ToArray());
+
+        private static bool EsCuitBasico(string cuitSinSeparadores)
+            => !string.IsNullOrWhiteSpace(cuitSinSeparadores) && cuitSinSeparadores.Length == 11;
+
+        private static string DigitsOnly(string s)
+            => new string((s ?? "").Where(char.IsDigit).ToArray());
 
         private static bool ReqTexto(TextBox tb, int minLen = 1)
             => tb != null && !string.IsNullOrWhiteSpace(tb.Text) && tb.Text.Trim().Length >= minLen;
@@ -300,7 +308,14 @@ namespace CAI_GrupoA_.CdRecepcionPaquetes
 
         private static void Msg(string m) => MessageBox.Show(m, "Validación");
 
-        // ========= Stubs Designer (si el diseñador los requiere) =========
+        // Solo dígitos, backspace y guion para el CUIT
+        private void txtCuit_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '-')
+                e.Handled = true;
+        }
+
+        // ========= Stubs Designer =========
         private void groupBox1_Enter(object sender, EventArgs e) { }
         private void groupBox2_Enter(object sender, EventArgs e) { }
         private void groupBox3_Enter(object sender, EventArgs e) { }

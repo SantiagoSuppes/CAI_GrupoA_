@@ -6,7 +6,7 @@ using CAI_GrupoA_.CdRecepcionPaquetes;
 using CAI_GrupoA_.CdEntregarCliente;
 using CAI_GrupoA_.FacturacionClientes;
 using CAI_GrupoA_.CdRendicionFletero;
-//using CAI_GrupoA_.EstimacionCostosvsVentas;
+using CAI_GrupoA_.EstimacionCostosvsVentas;
 using CAI_GrupoA_.GuiaEstadoHistorial;
 using CAI_GrupoA_.CargasYDescargas;
 
@@ -24,21 +24,20 @@ namespace CAI_GrupoA_
             // see https://aka.ms/applicationconfiguration.
             ApplicationConfiguration.Initialize();
 
-            Application.Run(new LogInForm());
+            //Application.Run(new LogInForm());
 
-            Application.Run(new MenuPrincipalForm());
+            //Application.Run(new MenuPrincipalForm());
 
             Application.Run(new CallCenterForm());
-            Application.Run(new ImposicionEnAgenciaForm());
-            Application.Run(new CdRecepcionPaquetesForm());
+            //Application.Run(new ImposicionEnAgenciaForm());
+            //Application.Run(new CdRecepcionPaquetesForm());
 
-            Application.Run(new CdEntregarClienteForm());
-            Application.Run(new FacturacionClienteForm());
+            //Application.Run(new CdEntregarClienteForm());
+            //Application.Run(new FacturacionClienteForm());
 
-            Application.Run(new CdRendicionFleteroForm());
+            //Application.Run(new CdRendicionFleteroForm());
             //Application.Run(new EstimacionCostosvsVentasForms());
-            Application.Run(new GuiaEstadoHistorialForm());
-            Application.Run(new CargasYDescargasForm());
+            //Application.Run(new GuiaEstadoHistorialForm());
 
         }
     }
