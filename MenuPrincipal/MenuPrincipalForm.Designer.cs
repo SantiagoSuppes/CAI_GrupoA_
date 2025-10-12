@@ -28,242 +28,234 @@
         /// </summary>
         private void InitializeComponent()
         {
-            this.btnEntregaAg = new System.Windows.Forms.Button();
-            this.btnEntregaCD = new System.Windows.Forms.Button();
-            this.btnReportesCostos = new System.Windows.Forms.Button();
-            this.btnFacturacion = new System.Windows.Forms.Button();
-            this.btnCargaDescarga = new System.Windows.Forms.Button();
-            this.btnRendicion = new System.Windows.Forms.Button();
-            this.btnEstado = new System.Windows.Forms.Button();
-            this.btnCallCenter = new System.Windows.Forms.Button();
-            this.RecepcionCD = new System.Windows.Forms.Button();
-            this.btnRecepcionAg = new System.Windows.Forms.Button();
-            this.lblMenu = new System.Windows.Forms.Label();
-            this.lblUsuario = new System.Windows.Forms.Label();
-            this.lblFecha = new System.Windows.Forms.Label();
-            this.txtUsuario = new System.Windows.Forms.TextBox();
-            this.btnCerrarSesion = new System.Windows.Forms.Button();
-            this.gpbSesionActual = new System.Windows.Forms.GroupBox();
-            this.groupBox1 = new System.Windows.Forms.GroupBox();
-            this.dtpFecha = new System.Windows.Forms.DateTimePicker();
-            this.gpbSesionActual.SuspendLayout();
-            this.SuspendLayout();
-            // 
-            // btnEntregaAg
-            // 
-            this.btnEntregaAg.Location = new System.Drawing.Point(366, 254);
-            this.btnEntregaAg.Name = "btnEntregaAg";
-            this.btnEntregaAg.Size = new System.Drawing.Size(124, 42);
-            this.btnEntregaAg.TabIndex = 0;
-            this.btnEntregaAg.Text = "🎯 Entrega al Cliente en Agencia";
-            this.btnEntregaAg.UseVisualStyleBackColor = true;
-            // 
-            // btnEntregaCD
-            // 
-            this.btnEntregaCD.Location = new System.Drawing.Point(366, 206);
-            this.btnEntregaCD.Name = "btnEntregaCD";
-            this.btnEntregaCD.Size = new System.Drawing.Size(124, 42);
-            this.btnEntregaCD.TabIndex = 1;
-            this.btnEntregaCD.Text = "🎯 Entrega al Cliente en CD";
-            this.btnEntregaCD.UseVisualStyleBackColor = true;
-            // 
-            // btnReportesCostos
-            // 
-            this.btnReportesCostos.Location = new System.Drawing.Point(525, 206);
-            this.btnReportesCostos.Name = "btnReportesCostos";
-            this.btnReportesCostos.Size = new System.Drawing.Size(124, 42);
-            this.btnReportesCostos.TabIndex = 2;
-            this.btnReportesCostos.Text = "📊 Reportes y Costos";
-            this.btnReportesCostos.UseVisualStyleBackColor = true;
-            // 
-            // btnFacturacion
-            // 
-            this.btnFacturacion.Location = new System.Drawing.Point(525, 254);
-            this.btnFacturacion.Name = "btnFacturacion";
-            this.btnFacturacion.Size = new System.Drawing.Size(124, 42);
-            this.btnFacturacion.TabIndex = 3;
-            this.btnFacturacion.Text = "💰 Facturar al Cliente";
-            this.btnFacturacion.UseVisualStyleBackColor = true;
-            // 
-            // btnCargaDescarga
-            // 
-            this.btnCargaDescarga.Location = new System.Drawing.Point(202, 190);
-            this.btnCargaDescarga.Name = "btnCargaDescarga";
-            this.btnCargaDescarga.Size = new System.Drawing.Size(124, 42);
-            this.btnCargaDescarga.TabIndex = 4;
-            this.btnCargaDescarga.Text = "🚛 Carga / Descarga ";
-            this.btnCargaDescarga.UseVisualStyleBackColor = true;
-            // 
-            // btnRendicion
-            // 
-            this.btnRendicion.Location = new System.Drawing.Point(202, 238);
-            this.btnRendicion.Name = "btnRendicion";
-            this.btnRendicion.Size = new System.Drawing.Size(124, 42);
-            this.btnRendicion.TabIndex = 5;
-            this.btnRendicion.Text = "🚚 Rendición Fletero / CD";
-            this.btnRendicion.UseVisualStyleBackColor = true;
-            // 
-            // btnEstado
-            // 
-            this.btnEstado.Location = new System.Drawing.Point(202, 286);
-            this.btnEstado.Name = "btnEstado";
-            this.btnEstado.Size = new System.Drawing.Size(124, 42);
-            this.btnEstado.TabIndex = 6;
-            this.btnEstado.Text = "📦 Estado e Historial de Envíos";
-            this.btnEstado.UseVisualStyleBackColor = true;
-            // 
-            // btnCallCenter
-            // 
-            this.btnCallCenter.Location = new System.Drawing.Point(45, 190);
-            this.btnCallCenter.Name = "btnCallCenter";
-            this.btnCallCenter.Size = new System.Drawing.Size(124, 42);
-            this.btnCallCenter.TabIndex = 7;
-            this.btnCallCenter.Text = "📞 Atención al Cliente";
-            this.btnCallCenter.UseVisualStyleBackColor = true;
-            // 
-            // RecepcionCD
-            // 
-            this.RecepcionCD.Location = new System.Drawing.Point(45, 238);
-            this.RecepcionCD.Name = "RecepcionCD";
-            this.RecepcionCD.Size = new System.Drawing.Size(124, 42);
-            this.RecepcionCD.TabIndex = 8;
-            this.RecepcionCD.Text = "🏭 Recepción en CD";
-            this.RecepcionCD.UseVisualStyleBackColor = true;
-            // 
-            // btnRecepcionAg
-            // 
-            this.btnRecepcionAg.Location = new System.Drawing.Point(45, 286);
-            this.btnRecepcionAg.Name = "btnRecepcionAg";
-            this.btnRecepcionAg.Size = new System.Drawing.Size(124, 42);
-            this.btnRecepcionAg.TabIndex = 9;
-            this.btnRecepcionAg.Text = "🏢 Recepción en Agencias";
-            this.btnRecepcionAg.UseVisualStyleBackColor = true;
+            lblMenu = new Label();
+            lblUsuario = new Label();
+            lblFecha = new Label();
+            txtUsuario = new TextBox();
+            btnCerrarSesion = new Button();
+            dtpFecha = new DateTimePicker();
+            groupBox1 = new GroupBox();
+            btnRendicion = new Button();
+            btnReportesCostos = new Button();
+            btnFacturacion = new Button();
+            btnCargaDescarga = new Button();
+            btnEntregaCD = new Button();
+            btnRecepcionAg = new Button();
+            btnRecepcionCD = new Button();
+            btnCallCenter = new Button();
+            btnEstado = new Button();
+            groupBox1.SuspendLayout();
+            SuspendLayout();
             // 
             // lblMenu
             // 
-            this.lblMenu.AutoSize = true;
-            this.lblMenu.Font = new System.Drawing.Font("Segoe UI", 15.75F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.lblMenu.Location = new System.Drawing.Point(241, 44);
-            this.lblMenu.Name = "lblMenu";
-            this.lblMenu.Size = new System.Drawing.Size(162, 30);
-            this.lblMenu.TabIndex = 10;
-            this.lblMenu.Text = "Menú Principal";
-            this.lblMenu.Click += new System.EventHandler(this.lblMenu_Click);
+            lblMenu.AutoSize = true;
+            lblMenu.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            lblMenu.Location = new Point(36, 42);
+            lblMenu.Margin = new Padding(4, 0, 4, 0);
+            lblMenu.Name = "lblMenu";
+            lblMenu.Size = new Size(162, 30);
+            lblMenu.TabIndex = 10;
+            lblMenu.Text = "Menú Principal";
+            lblMenu.Click += lblMenu_Click;
             // 
             // lblUsuario
             // 
-            this.lblUsuario.AutoSize = true;
-            this.lblUsuario.Location = new System.Drawing.Point(67, 34);
-            this.lblUsuario.Name = "lblUsuario";
-            this.lblUsuario.Size = new System.Drawing.Size(46, 13);
-            this.lblUsuario.TabIndex = 11;
-            this.lblUsuario.Text = "Usuario:";
+            lblUsuario.AutoSize = true;
+            lblUsuario.Location = new Point(222, 53);
+            lblUsuario.Margin = new Padding(4, 0, 4, 0);
+            lblUsuario.Name = "lblUsuario";
+            lblUsuario.Size = new Size(50, 15);
+            lblUsuario.TabIndex = 11;
+            lblUsuario.Text = "Usuario:";
             // 
             // lblFecha
             // 
-            this.lblFecha.AutoSize = true;
-            this.lblFecha.Location = new System.Drawing.Point(249, 35);
-            this.lblFecha.Name = "lblFecha";
-            this.lblFecha.Size = new System.Drawing.Size(40, 13);
-            this.lblFecha.TabIndex = 12;
-            this.lblFecha.Text = "Fecha:";
+            lblFecha.AutoSize = true;
+            lblFecha.Location = new Point(449, 52);
+            lblFecha.Margin = new Padding(4, 0, 4, 0);
+            lblFecha.Name = "lblFecha";
+            lblFecha.Size = new Size(41, 15);
+            lblFecha.TabIndex = 12;
+            lblFecha.Text = "Fecha:";
             // 
             // txtUsuario
             // 
-            this.txtUsuario.Location = new System.Drawing.Point(235, 104);
-            this.txtUsuario.Name = "txtUsuario";
-            this.txtUsuario.ReadOnly = true;
-            this.txtUsuario.Size = new System.Drawing.Size(123, 20);
-            this.txtUsuario.TabIndex = 13;
+            txtUsuario.Location = new Point(283, 48);
+            txtUsuario.Margin = new Padding(4, 3, 4, 3);
+            txtUsuario.Name = "txtUsuario";
+            txtUsuario.ReadOnly = true;
+            txtUsuario.Size = new Size(143, 23);
+            txtUsuario.TabIndex = 13;
             // 
             // btnCerrarSesion
             // 
-            this.btnCerrarSesion.Location = new System.Drawing.Point(270, 372);
-            this.btnCerrarSesion.Name = "btnCerrarSesion";
-            this.btnCerrarSesion.Size = new System.Drawing.Size(103, 23);
-            this.btnCerrarSesion.TabIndex = 15;
-            this.btnCerrarSesion.Text = "Cerrar Sesión";
-            this.btnCerrarSesion.UseVisualStyleBackColor = true;
-            // 
-            // gpbSesionActual
-            // 
-            this.gpbSesionActual.Controls.Add(this.lblUsuario);
-            this.gpbSesionActual.Controls.Add(this.lblFecha);
-            this.gpbSesionActual.Controls.Add(this.dtpFecha);
-            this.gpbSesionActual.Location = new System.Drawing.Point(120, 77);
-            this.gpbSesionActual.Name = "gpbSesionActual";
-            this.gpbSesionActual.Size = new System.Drawing.Size(433, 65);
-            this.gpbSesionActual.TabIndex = 16;
-            this.gpbSesionActual.TabStop = false;
-            this.gpbSesionActual.Text = "Sesión Actual";
-            // 
-            // groupBox1
-            // 
-            this.groupBox1.Location = new System.Drawing.Point(31, 162);
-            this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(627, 192);
-            this.groupBox1.TabIndex = 17;
-            this.groupBox1.TabStop = false;
-            this.groupBox1.Text = "Seleccione la que corresponda";
+            btnCerrarSesion.Location = new Point(637, 47);
+            btnCerrarSesion.Margin = new Padding(4, 3, 4, 3);
+            btnCerrarSesion.Name = "btnCerrarSesion";
+            btnCerrarSesion.Size = new Size(120, 27);
+            btnCerrarSesion.TabIndex = 15;
+            btnCerrarSesion.Text = "Cerrar Sesión";
+            btnCerrarSesion.UseVisualStyleBackColor = true;
             // 
             // dtpFecha
             // 
-            this.dtpFecha.Enabled = false;
-            this.dtpFecha.Format = System.Windows.Forms.DateTimePickerFormat.Short;
-            this.dtpFecha.Location = new System.Drawing.Point(290, 28);
-            this.dtpFecha.Name = "dtpFecha";
-            this.dtpFecha.Size = new System.Drawing.Size(89, 20);
-            this.dtpFecha.TabIndex = 14;
-            this.dtpFecha.Value = new System.DateTime(2025, 10, 11, 18, 42, 33, 0);
+            dtpFecha.Enabled = false;
+            dtpFecha.Format = DateTimePickerFormat.Short;
+            dtpFecha.Location = new Point(498, 49);
+            dtpFecha.Margin = new Padding(4, 3, 4, 3);
+            dtpFecha.Name = "dtpFecha";
+            dtpFecha.Size = new Size(103, 23);
+            dtpFecha.TabIndex = 14;
+            dtpFecha.Value = new DateTime(2025, 10, 11, 18, 42, 33, 0);
+            // 
+            // groupBox1
+            // 
+            groupBox1.Controls.Add(btnRendicion);
+            groupBox1.Controls.Add(btnReportesCostos);
+            groupBox1.Controls.Add(btnFacturacion);
+            groupBox1.Controls.Add(btnCargaDescarga);
+            groupBox1.Controls.Add(btnEntregaCD);
+            groupBox1.Controls.Add(btnRecepcionAg);
+            groupBox1.Controls.Add(btnRecepcionCD);
+            groupBox1.Controls.Add(btnCallCenter);
+            groupBox1.Controls.Add(btnEstado);
+            groupBox1.Location = new Point(36, 103);
+            groupBox1.Margin = new Padding(4, 3, 4, 3);
+            groupBox1.Name = "groupBox1";
+            groupBox1.Padding = new Padding(4, 3, 4, 3);
+            groupBox1.Size = new Size(732, 222);
+            groupBox1.TabIndex = 17;
+            groupBox1.TabStop = false;
+            groupBox1.Text = "Seleccione la que corresponda";
+            // 
+            // btnRendicion
+            // 
+            btnRendicion.Location = new Point(291, 95);
+            btnRendicion.Margin = new Padding(4, 3, 4, 3);
+            btnRendicion.Name = "btnRendicion";
+            btnRendicion.Size = new Size(145, 48);
+            btnRendicion.TabIndex = 14;
+            btnRendicion.Text = "🚚 Entrega y recepción de pedidos";
+            btnRendicion.UseVisualStyleBackColor = true;
+            // 
+            // btnReportesCostos
+            // 
+            btnReportesCostos.Location = new Point(466, 95);
+            btnReportesCostos.Margin = new Padding(4, 3, 4, 3);
+            btnReportesCostos.Name = "btnReportesCostos";
+            btnReportesCostos.Size = new Size(145, 48);
+            btnReportesCostos.TabIndex = 11;
+            btnReportesCostos.Text = "📊 Reporte de Costos y Ventas";
+            btnReportesCostos.UseVisualStyleBackColor = true;
+            // 
+            // btnFacturacion
+            // 
+            btnFacturacion.Location = new Point(466, 150);
+            btnFacturacion.Margin = new Padding(4, 3, 4, 3);
+            btnFacturacion.Name = "btnFacturacion";
+            btnFacturacion.Size = new Size(145, 48);
+            btnFacturacion.TabIndex = 12;
+            btnFacturacion.Text = "💰 Facturar a Clientes";
+            btnFacturacion.UseVisualStyleBackColor = true;
+            // 
+            // btnCargaDescarga
+            // 
+            btnCargaDescarga.Location = new Point(291, 39);
+            btnCargaDescarga.Margin = new Padding(4, 3, 4, 3);
+            btnCargaDescarga.Name = "btnCargaDescarga";
+            btnCargaDescarga.Size = new Size(145, 48);
+            btnCargaDescarga.TabIndex = 13;
+            btnCargaDescarga.Text = "🚛 Carga / Descarga de pedidos";
+            btnCargaDescarga.UseVisualStyleBackColor = true;
+            // 
+            // btnEntregaCD
+            // 
+            btnEntregaCD.Location = new Point(466, 39);
+            btnEntregaCD.Margin = new Padding(4, 3, 4, 3);
+            btnEntregaCD.Name = "btnEntregaCD";
+            btnEntregaCD.Size = new Size(145, 48);
+            btnEntregaCD.TabIndex = 10;
+            btnEntregaCD.Text = "🎯 Entrega de pedido";
+            btnEntregaCD.UseVisualStyleBackColor = true;
+            // 
+            // btnRecepcionAg
+            // 
+            btnRecepcionAg.Location = new Point(107, 150);
+            btnRecepcionAg.Margin = new Padding(4, 3, 4, 3);
+            btnRecepcionAg.Name = "btnRecepcionAg";
+            btnRecepcionAg.Size = new Size(145, 48);
+            btnRecepcionAg.TabIndex = 18;
+            btnRecepcionAg.Text = "🏢 Registrar pedido en agencia";
+            btnRecepcionAg.UseVisualStyleBackColor = true;
+            // 
+            // btnRecepcionCD
+            // 
+            btnRecepcionCD.Location = new Point(107, 95);
+            btnRecepcionCD.Margin = new Padding(4, 3, 4, 3);
+            btnRecepcionCD.Name = "btnRecepcionCD";
+            btnRecepcionCD.Size = new Size(145, 48);
+            btnRecepcionCD.TabIndex = 17;
+            btnRecepcionCD.Text = "🏭 Registrar pedido en CD";
+            btnRecepcionCD.UseVisualStyleBackColor = true;
+            // 
+            // btnCallCenter
+            // 
+            btnCallCenter.Location = new Point(107, 39);
+            btnCallCenter.Margin = new Padding(4, 3, 4, 3);
+            btnCallCenter.Name = "btnCallCenter";
+            btnCallCenter.Size = new Size(145, 48);
+            btnCallCenter.TabIndex = 16;
+            btnCallCenter.Text = "📞 Registrar pedido en Call Center";
+            btnCallCenter.UseVisualStyleBackColor = true;
+            // 
+            // btnEstado
+            // 
+            btnEstado.Location = new Point(291, 150);
+            btnEstado.Margin = new Padding(4, 3, 4, 3);
+            btnEstado.Name = "btnEstado";
+            btnEstado.Size = new Size(145, 48);
+            btnEstado.TabIndex = 15;
+            btnEstado.Text = "📦 Estado de pedidos";
+            btnEstado.UseVisualStyleBackColor = true;
             // 
             // MenuPrincipalForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
-            this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(695, 450);
-            this.Controls.Add(this.lblMenu);
-            this.Controls.Add(this.btnCerrarSesion);
-            this.Controls.Add(this.txtUsuario);
-            this.Controls.Add(this.btnRecepcionAg);
-            this.Controls.Add(this.RecepcionCD);
-            this.Controls.Add(this.btnCallCenter);
-            this.Controls.Add(this.btnEstado);
-            this.Controls.Add(this.btnRendicion);
-            this.Controls.Add(this.btnCargaDescarga);
-            this.Controls.Add(this.btnFacturacion);
-            this.Controls.Add(this.btnReportesCostos);
-            this.Controls.Add(this.btnEntregaCD);
-            this.Controls.Add(this.btnEntregaAg);
-            this.Controls.Add(this.gpbSesionActual);
-            this.Controls.Add(this.groupBox1);
-            this.Name = "MenuPrincipalForm";
-            this.Text = "MenuPrincipalForm";
-            this.gpbSesionActual.ResumeLayout(false);
-            this.gpbSesionActual.PerformLayout();
-            this.ResumeLayout(false);
-            this.PerformLayout();
+            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleMode = AutoScaleMode.Font;
+            ClientSize = new Size(811, 348);
+            Controls.Add(lblFecha);
+            Controls.Add(lblUsuario);
+            Controls.Add(dtpFecha);
+            Controls.Add(btnCerrarSesion);
+            Controls.Add(lblMenu);
+            Controls.Add(txtUsuario);
+            Controls.Add(groupBox1);
+            Margin = new Padding(4, 3, 4, 3);
+            Name = "MenuPrincipalForm";
+            Text = "MenuPrincipalForm";
+            groupBox1.ResumeLayout(false);
+            ResumeLayout(false);
+            PerformLayout();
 
         }
 
         #endregion
-
-        private System.Windows.Forms.Button btnEntregaAg;
-        private System.Windows.Forms.Button btnEntregaCD;
-        private System.Windows.Forms.Button btnReportesCostos;
-        private System.Windows.Forms.Button btnFacturacion;
-        private System.Windows.Forms.Button btnCargaDescarga;
-        private System.Windows.Forms.Button btnRendicion;
-        private System.Windows.Forms.Button btnEstado;
-        private System.Windows.Forms.Button btnCallCenter;
-        private System.Windows.Forms.Button RecepcionCD;
-        private System.Windows.Forms.Button btnRecepcionAg;
         private System.Windows.Forms.Label lblMenu;
         private System.Windows.Forms.Label lblUsuario;
         private System.Windows.Forms.Label lblFecha;
         private System.Windows.Forms.TextBox txtUsuario;
         private System.Windows.Forms.Button btnCerrarSesion;
-        private System.Windows.Forms.GroupBox gpbSesionActual;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.DateTimePicker dtpFecha;
+        private Button btnRendicion;
+        private Button btnReportesCostos;
+        private Button btnFacturacion;
+        private Button btnCargaDescarga;
+        private Button btnEntregaCD;
+        private Button btnRecepcionAg;
+        private Button btnRecepcionCD;
+        private Button btnCallCenter;
+        private Button btnEstado;
     }
 }
