@@ -28,18 +28,18 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ListViewItem listViewItem13 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
-            ListViewItem listViewItem14 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
-            ListViewItem listViewItem15 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
-            ListViewItem listViewItem16 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
-            ListViewItem listViewItem17 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
-            ListViewItem listViewItem18 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
-            ListViewItem listViewItem19 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
-            ListViewItem listViewItem20 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
-            ListViewItem listViewItem21 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
-            ListViewItem listViewItem22 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
-            ListViewItem listViewItem23 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
-            ListViewItem listViewItem24 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
+            ListViewItem listViewItem25 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
+            ListViewItem listViewItem26 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
+            ListViewItem listViewItem27 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
+            ListViewItem listViewItem28 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
+            ListViewItem listViewItem29 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
+            ListViewItem listViewItem30 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
+            ListViewItem listViewItem31 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
+            ListViewItem listViewItem32 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
+            ListViewItem listViewItem33 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
+            ListViewItem listViewItem34 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
+            ListViewItem listViewItem35 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
+            ListViewItem listViewItem36 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
             dgvResultados = new ListView();
             columnEmpresa = new ColumnHeader();
             columnVenta = new ColumnHeader();
@@ -53,6 +53,7 @@
             label1 = new Label();
             empresa = new Label();
             Periodolabel = new Label();
+            btnGenerarReporte = new Button();
             FiltrosBox.SuspendLayout();
             SuspendLayout();
             // 
@@ -62,7 +63,7 @@
             dgvResultados.FullRowSelect = true;
             dgvResultados.GridLines = true;
             dgvResultados.HeaderStyle = ColumnHeaderStyle.Nonclickable;
-            dgvResultados.Items.AddRange(new ListViewItem[] { listViewItem13, listViewItem14, listViewItem15, listViewItem16, listViewItem17, listViewItem18, listViewItem19, listViewItem20, listViewItem21, listViewItem22, listViewItem23, listViewItem24 });
+            dgvResultados.Items.AddRange(new ListViewItem[] { listViewItem25, listViewItem26, listViewItem27, listViewItem28, listViewItem29, listViewItem30, listViewItem31, listViewItem32, listViewItem33, listViewItem34, listViewItem35, listViewItem36 });
             dgvResultados.Location = new Point(34, 125);
             dgvResultados.Margin = new Padding(4, 3, 4, 3);
             dgvResultados.Name = "dgvResultados";
@@ -183,11 +184,23 @@
             Periodolabel.TabIndex = 0;
             Periodolabel.Text = "Periodo:";
             // 
+            // btnGenerarReporte
+            // 
+            btnGenerarReporte.Location = new Point(629, 402);
+            btnGenerarReporte.Margin = new Padding(4, 3, 4, 3);
+            btnGenerarReporte.Name = "btnGenerarReporte";
+            btnGenerarReporte.Size = new Size(125, 27);
+            btnGenerarReporte.TabIndex = 7;
+            btnGenerarReporte.Text = "Generar Reporte";
+            btnGenerarReporte.UseVisualStyleBackColor = true;
+            btnGenerarReporte.Click += btnGenerarReporte_Click;
+            // 
             // EstimacionCostosvsVentasForms
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(816, 415);
+            ClientSize = new Size(816, 453);
+            Controls.Add(btnGenerarReporte);
             Controls.Add(dgvResultados);
             Controls.Add(FiltrosBox);
             Margin = new Padding(4, 3, 4, 3);
@@ -213,5 +226,6 @@
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Label empresa;
         private System.Windows.Forms.Label Periodolabel;
+        private Button btnGenerarReporte;
     }
 }
