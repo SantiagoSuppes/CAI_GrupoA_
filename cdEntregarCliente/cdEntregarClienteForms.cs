@@ -8,15 +8,33 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace GrupoA.cdEntregarCliente
+namespace CAI_GrupoA_.CdEntregarCliente
 {
-    public partial class cdEntregarClienteForms : Form
+    public partial class CdEntregarClienteForms : Form
     {
-        public cdEntregarClienteForms()
+        public CdEntregarClienteForms()
         {
             InitializeComponent();
         }
 
+
+
+
+        // Padrón de destinatarios válidos (simulado)
+        private readonly HashSet<string> _destinatariosValidos = new HashSet<string>
+{
+    "44997021","30111222","23333444","40999888","36555111"
+};
+
+        // Datos fake
+        private static readonly string[] _talles = { "S", "M", "L", "XL", "XXL" };
+
+        private static string CuitFake(Random r) => $"{r.Next(20, 28)}-{r.Next(10000000, 99999999)}-{r.Next(0, 9)}";
+        private static string FechaFake(Random r)
+        {
+            var d = new DateTime(r.Next(2022, 2026), r.Next(1, 13), r.Next(1, 28));
+            return d.ToString("dd/MM/yyyy");
+        }
         private void btnBuscarEncomiendaDestinatario_Click(object sender, EventArgs e)
         {
             // 1. Campo vacío
@@ -51,25 +69,70 @@ namespace GrupoA.cdEntregarCliente
                 txtDniDestinatario.Focus();
                 return;
             }
+
+            // 5. Destinatario existe
+            if (!_destinatariosValidos.Contains(txtDniDestinatario.Text))
+            {
+                MessageBox.Show("El DNI ingresado no corresponde a un destinatario existente.", "Información",
+                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
+
+            var rng = new Random(txtDniDestinatario.Text.GetHashCode());
+            int cantidad = rng.Next(2, 5); // 2..4 filas
+
+            for (int i = 0; i < cantidad; i++)
+            {
+                string nroGuia = $"#FR{rng.Next(1, 999):000}";
+                string talle = _talles[rng.Next(_talles.Length)];
+                string dniDest = txtDniDestinatario.Text;                     // el ingresado
+                string cuitRem = CuitFake(rng);
+                string fecha = FechaFake(rng);
+
+                // Ejemplo de orden de columnas:
+                // "#FR001", "S", "44997021", "23-44907018-8", "02/05/2023"
+                lvEncomiendas.Items.Add(new ListViewItem(new[] { nroGuia, talle, dniDest, cuitRem, fecha }));
+            }
         }
+
+
 
         private void btnConfirmarEntrega_Click(object sender, EventArgs e)
         {
-            // 1. Validar que haya elementos en el ListView
-            if (listViewEncomiendas.Items.Count == 0)
-            {
-                MessageBox.Show("No hay encomiendas cargadas para confirmar entrega.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return;
-            }
-
-            // 2. Validar que al menos uno esté seleccionado (checked)
-            var seleccionadas = listViewEncomiendas.Items.Cast<ListViewItem>().Where(i => i.Checked).ToList();
+            // ¿Hay al menos una guía marcada?
+            var seleccionadas = lvEncomiendas.Items
+                .Cast<ListViewItem>()
+                .Where(it => it.Checked)
+                .ToList();
 
             if (seleccionadas.Count == 0)
             {
-                MessageBox.Show("Debe seleccionar al menos una encomienda para confirmar la entrega.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                MessageBox.Show(
+                    "No puede confirmar una entrega sin haber seleccionado ninguna guía",
+                    "Operación inválida",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning
+                );
                 return;
             }
+
+            // Confirmación de entrega
+            MessageBox.Show(
+                "Se ha completado la entrega al cliente seleccionado",
+                "Entrega confirmada",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information
+            );
+
+            // Eliminar SOLO las seleccionadas (iterar hacia atrás o usar lista previa)
+            // Opción 1: usando la lista 'seleccionadas'
+            foreach (var item in seleccionadas)
+                lvEncomiendas.Items.Remove(item);
+
+            // Si preferís iterar por índice:
+            // for (int i = lvEncomiendas.Items.Count - 1; i >= 0; i--)
+            //     if (lvEncomiendas.Items[i].Checked)
+            //         lvEncomiendas.Items.RemoveAt(i);
         }
     }
 }

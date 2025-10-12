@@ -28,14 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            ListViewItem listViewItem1 = new ListViewItem("FR001");
-            ListViewItem listViewItem2 = new ListViewItem("HDRDF001");
-            ListViewItem listViewItem3 = new ListViewItem("HDRDF002");
-            ListViewItem listViewItem4 = new ListViewItem("HDRDF003");
-            ListViewItem listViewItem5 = new ListViewItem("HDRDF004");
-            ListViewItem listViewItem6 = new ListViewItem("HDRDF005");
-            ListViewItem listViewItem7 = new ListViewItem("FD001");
-            ListViewItem listViewItem8 = new ListViewItem("FR001");
             label1 = new Label();
             groupBox1 = new GroupBox();
             btnBuscarViajesAsignados = new Button();
@@ -49,26 +41,27 @@
             domicilio = new ColumnHeader();
             label3 = new Label();
             groupBox3 = new GroupBox();
-            listView1 = new ListView();
+            lvDistribucionesRealizadas = new ListView();
             columnHeader2 = new ColumnHeader();
             columnHeader1 = new ColumnHeader();
             columnHeader3 = new ColumnHeader();
             columnHeader4 = new ColumnHeader();
             label4 = new Label();
             groupBox4 = new GroupBox();
-            label6 = new Label();
-            listView3 = new ListView();
+            lvDistNuevos = new ListView();
             columnHeader9 = new ColumnHeader();
             columnHeader10 = new ColumnHeader();
             columnHeader11 = new ColumnHeader();
             columnHeader12 = new ColumnHeader();
-            listView2 = new ListView();
+            lvRetirosNuevos = new ListView();
             columnHeader5 = new ColumnHeader();
             columnHeader6 = new ColumnHeader();
             columnHeader7 = new ColumnHeader();
             columnHeader8 = new ColumnHeader();
+            label6 = new Label();
             label5 = new Label();
             button2 = new Button();
+            btnConfirmar = new Button();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -139,8 +132,6 @@
             // 
             lvDetalle.CheckBoxes = true;
             lvDetalle.Columns.AddRange(new ColumnHeader[] { nguia, tipoCaja, estado, domicilio });
-            listViewItem1.StateImageIndex = 0;
-            lvDetalle.Items.AddRange(new ListViewItem[] { listViewItem1 });
             lvDetalle.Location = new Point(24, 52);
             lvDetalle.Margin = new Padding(3, 4, 3, 4);
             lvDetalle.Name = "lvDetalle";
@@ -180,7 +171,7 @@
             // 
             // groupBox3
             // 
-            groupBox3.Controls.Add(listView1);
+            groupBox3.Controls.Add(lvDistribucionesRealizadas);
             groupBox3.Controls.Add(label4);
             groupBox3.Location = new Point(12, 413);
             groupBox3.Name = "groupBox3";
@@ -189,23 +180,17 @@
             groupBox3.TabStop = false;
             groupBox3.Text = "Entregas en ejecución";
             // 
-            // listView1
+            // lvDistribucionesRealizadas
             // 
-            listView1.CheckBoxes = true;
-            listView1.Columns.AddRange(new ColumnHeader[] { columnHeader2, columnHeader1, columnHeader3, columnHeader4 });
-            listViewItem2.StateImageIndex = 0;
-            listViewItem3.StateImageIndex = 0;
-            listViewItem4.StateImageIndex = 0;
-            listViewItem5.StateImageIndex = 0;
-            listViewItem6.StateImageIndex = 0;
-            listView1.Items.AddRange(new ListViewItem[] { listViewItem2, listViewItem3, listViewItem4, listViewItem5, listViewItem6 });
-            listView1.Location = new Point(24, 52);
-            listView1.Margin = new Padding(3, 4, 3, 4);
-            listView1.Name = "listView1";
-            listView1.Size = new Size(746, 120);
-            listView1.TabIndex = 43;
-            listView1.UseCompatibleStateImageBehavior = false;
-            listView1.View = View.Details;
+            lvDistribucionesRealizadas.CheckBoxes = true;
+            lvDistribucionesRealizadas.Columns.AddRange(new ColumnHeader[] { columnHeader2, columnHeader1, columnHeader3, columnHeader4 });
+            lvDistribucionesRealizadas.Location = new Point(24, 52);
+            lvDistribucionesRealizadas.Margin = new Padding(3, 4, 3, 4);
+            lvDistribucionesRealizadas.Name = "lvDistribucionesRealizadas";
+            lvDistribucionesRealizadas.Size = new Size(746, 120);
+            lvDistribucionesRealizadas.TabIndex = 43;
+            lvDistribucionesRealizadas.UseCompatibleStateImageBehavior = false;
+            lvDistribucionesRealizadas.View = View.Details;
             // 
             // columnHeader2
             // 
@@ -215,19 +200,19 @@
             // columnHeader1
             // 
             columnHeader1.DisplayIndex = 2;
-            columnHeader1.Text = "Domicilio";
+            columnHeader1.Text = "Estado";
             columnHeader1.Width = 250;
             // 
             // columnHeader3
             // 
             columnHeader3.DisplayIndex = 3;
-            columnHeader3.Text = "CUIT Cliente";
+            columnHeader3.Text = "Domicilio";
             columnHeader3.Width = 120;
             // 
             // columnHeader4
             // 
             columnHeader4.DisplayIndex = 1;
-            columnHeader4.Text = "Estado";
+            columnHeader4.Text = "CUIT Cliente";
             columnHeader4.Width = 250;
             // 
             // label4
@@ -241,9 +226,9 @@
             // 
             // groupBox4
             // 
+            groupBox4.Controls.Add(lvDistNuevos);
+            groupBox4.Controls.Add(lvRetirosNuevos);
             groupBox4.Controls.Add(label6);
-            groupBox4.Controls.Add(listView3);
-            groupBox4.Controls.Add(listView2);
             groupBox4.Controls.Add(label5);
             groupBox4.Location = new Point(12, 606);
             groupBox4.Name = "groupBox4";
@@ -252,91 +237,93 @@
             groupBox4.TabStop = false;
             groupBox4.Text = "Viajes a realizar";
             // 
+            // lvDistNuevos
+            // 
+            lvDistNuevos.CheckBoxes = true;
+            lvDistNuevos.Columns.AddRange(new ColumnHeader[] { columnHeader9, columnHeader10, columnHeader11, columnHeader12 });
+            lvDistNuevos.Location = new Point(24, 178);
+            lvDistNuevos.Margin = new Padding(3, 4, 3, 4);
+            lvDistNuevos.Name = "lvDistNuevos";
+            lvDistNuevos.Size = new Size(746, 98);
+            lvDistNuevos.TabIndex = 47;
+            lvDistNuevos.UseCompatibleStateImageBehavior = false;
+            lvDistNuevos.View = View.Details;
+            // 
+            // columnHeader9
+            // 
+            columnHeader9.Text = "ID Distribución";
+            columnHeader9.Width = 120;
+            // 
+            // columnHeader10
+            // 
+            columnHeader10.DisplayIndex = 2;
+            columnHeader10.Text = "Estado";
+            columnHeader10.Width = 250;
+            // 
+            // columnHeader11
+            // 
+            columnHeader11.DisplayIndex = 3;
+            columnHeader11.Text = "Domicilio";
+            columnHeader11.Width = 120;
+            // 
+            // columnHeader12
+            // 
+            columnHeader12.DisplayIndex = 1;
+            columnHeader12.Text = "CUIT Cliente";
+            columnHeader12.Width = 250;
+            // 
+            // lvRetirosNuevos
+            // 
+            lvRetirosNuevos.CheckBoxes = true;
+            lvRetirosNuevos.Columns.AddRange(new ColumnHeader[] { columnHeader5, columnHeader6, columnHeader7, columnHeader8 });
+            lvRetirosNuevos.Location = new Point(24, 52);
+            lvRetirosNuevos.Margin = new Padding(3, 4, 3, 4);
+            lvRetirosNuevos.Name = "lvRetirosNuevos";
+            lvRetirosNuevos.Size = new Size(746, 98);
+            lvRetirosNuevos.TabIndex = 44;
+            lvRetirosNuevos.UseCompatibleStateImageBehavior = false;
+            lvRetirosNuevos.View = View.Details;
+            // 
+            // columnHeader5
+            // 
+            columnHeader5.Text = "ID Retiro";
+            columnHeader5.Width = 120;
+            // 
+            // columnHeader6
+            // 
+            columnHeader6.DisplayIndex = 2;
+            columnHeader6.Text = "Estado";
+            columnHeader6.Width = 250;
+            // 
+            // columnHeader7
+            // 
+            columnHeader7.DisplayIndex = 3;
+            columnHeader7.Text = "Domicilio";
+            columnHeader7.Width = 120;
+            // 
+            // columnHeader8
+            // 
+            columnHeader8.DisplayIndex = 1;
+            columnHeader8.Text = "CUIT Cliente";
+            columnHeader8.Width = 250;
+            // 
             // label6
             // 
             label6.AutoSize = true;
             label6.Location = new Point(24, 154);
             label6.Name = "label6";
-            label6.Size = new Size(217, 20);
+            label6.Size = new Size(276, 20);
             label6.TabIndex = 46;
-            label6.Text = "Detalle de Guías para Distribuir";
-            // 
-            // listView3
-            // 
-            listView3.CheckBoxes = true;
-            listView3.Columns.AddRange(new ColumnHeader[] { columnHeader9, columnHeader10, columnHeader11, columnHeader12 });
-            listViewItem7.StateImageIndex = 0;
-            listView3.Items.AddRange(new ListViewItem[] { listViewItem7 });
-            listView3.Location = new Point(24, 178);
-            listView3.Margin = new Padding(3, 4, 3, 4);
-            listView3.Name = "listView3";
-            listView3.Size = new Size(746, 93);
-            listView3.TabIndex = 45;
-            listView3.UseCompatibleStateImageBehavior = false;
-            listView3.View = View.Details;
-            // 
-            // columnHeader9
-            // 
-            columnHeader9.Text = "N° Guía";
-            columnHeader9.Width = 120;
-            // 
-            // columnHeader10
-            // 
-            columnHeader10.Text = "Tipo De Caja";
-            columnHeader10.Width = 120;
-            // 
-            // columnHeader11
-            // 
-            columnHeader11.Text = "Estado";
-            columnHeader11.Width = 250;
-            // 
-            // columnHeader12
-            // 
-            columnHeader12.Text = "Domicilio";
-            columnHeader12.Width = 250;
-            // 
-            // listView2
-            // 
-            listView2.CheckBoxes = true;
-            listView2.Columns.AddRange(new ColumnHeader[] { columnHeader5, columnHeader6, columnHeader7, columnHeader8 });
-            listViewItem8.StateImageIndex = 0;
-            listView2.Items.AddRange(new ListViewItem[] { listViewItem8 });
-            listView2.Location = new Point(24, 52);
-            listView2.Margin = new Padding(3, 4, 3, 4);
-            listView2.Name = "listView2";
-            listView2.Size = new Size(746, 94);
-            listView2.TabIndex = 44;
-            listView2.UseCompatibleStateImageBehavior = false;
-            listView2.View = View.Details;
-            // 
-            // columnHeader5
-            // 
-            columnHeader5.Text = "N° Guía";
-            columnHeader5.Width = 120;
-            // 
-            // columnHeader6
-            // 
-            columnHeader6.Text = "Tipo De Caja";
-            columnHeader6.Width = 120;
-            // 
-            // columnHeader7
-            // 
-            columnHeader7.Text = "Estado";
-            columnHeader7.Width = 250;
-            // 
-            // columnHeader8
-            // 
-            columnHeader8.Text = "Domicilio";
-            columnHeader8.Width = 250;
+            label6.Text = "Detalle de Hojas de ruta de Distribución";
             // 
             // label5
             // 
             label5.AutoSize = true;
             label5.Location = new Point(24, 28);
             label5.Name = "label5";
-            label5.Size = new Size(204, 20);
+            label5.Size = new Size(236, 20);
             label5.TabIndex = 3;
-            label5.Text = "Detalle de Guías para Retirar ";
+            label5.Text = "Detalle de Hojas de ruta de Retiro";
             // 
             // button2
             // 
@@ -347,11 +334,22 @@
             button2.Text = "Volver al Menú";
             button2.UseVisualStyleBackColor = true;
             // 
+            // btnConfirmar
+            // 
+            btnConfirmar.Location = new Point(313, 903);
+            btnConfirmar.Name = "btnConfirmar";
+            btnConfirmar.Size = new Size(164, 53);
+            btnConfirmar.TabIndex = 47;
+            btnConfirmar.Text = "Confirmar";
+            btnConfirmar.UseVisualStyleBackColor = true;
+            btnConfirmar.Click += btnConfirmar_Click;
+            // 
             // CdRendicionFleteroForms
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(826, 962);
+            Controls.Add(btnConfirmar);
             Controls.Add(button2);
             Controls.Add(groupBox4);
             Controls.Add(groupBox3);
@@ -387,7 +385,7 @@
         private ColumnHeader estado;
         private ColumnHeader domicilio;
         private GroupBox groupBox3;
-        private ListView listView1;
+        private ListView lvDistribucionesRealizadas;
         private ColumnHeader columnHeader2;
         private ColumnHeader columnHeader1;
         private ColumnHeader columnHeader3;
@@ -396,16 +394,17 @@
         private GroupBox groupBox4;
         private Label label5;
         private Label label6;
-        private ListView listView3;
-        private ColumnHeader columnHeader9;
-        private ColumnHeader columnHeader10;
-        private ColumnHeader columnHeader11;
-        private ColumnHeader columnHeader12;
-        private ListView listView2;
+        private Button button2;
+        private Button btnConfirmar;
+        private ListView lvRetirosNuevos;
         private ColumnHeader columnHeader5;
         private ColumnHeader columnHeader6;
         private ColumnHeader columnHeader7;
         private ColumnHeader columnHeader8;
-        private Button button2;
+        private ListView lvDistNuevos;
+        private ColumnHeader columnHeader9;
+        private ColumnHeader columnHeader10;
+        private ColumnHeader columnHeader11;
+        private ColumnHeader columnHeader12;
     }
 }
