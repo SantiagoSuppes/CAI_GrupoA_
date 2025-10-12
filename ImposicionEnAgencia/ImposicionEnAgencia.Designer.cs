@@ -31,7 +31,7 @@
             lstGuiasGeneradas = new ListView();
             btnGenerarGuia = new Button();
             groupBox3 = new GroupBox();
-            button1 = new Button();
+            btnAgregarCaja = new Button();
             label7 = new Label();
             numCantidad = new NumericUpDown();
             cmbTipoCaja = new ComboBox();
@@ -45,6 +45,8 @@
             label1 = new Label();
             label3 = new Label();
             groupBox2 = new GroupBox();
+            label15 = new Label();
+            txtLocalidad = new TextBox();
             cmbCD = new ComboBox();
             label5 = new Label();
             cmbAgencia = new ComboBox();
@@ -74,13 +76,13 @@
             // 
             lstGuiasGeneradas.Location = new Point(13, 22);
             lstGuiasGeneradas.Name = "lstGuiasGeneradas";
-            lstGuiasGeneradas.Size = new Size(520, 67);
+            lstGuiasGeneradas.Size = new Size(520, 90);
             lstGuiasGeneradas.TabIndex = 33;
             lstGuiasGeneradas.UseCompatibleStateImageBehavior = false;
             // 
             // btnGenerarGuia
             // 
-            btnGenerarGuia.Location = new Point(665, 567);
+            btnGenerarGuia.Location = new Point(666, 613);
             btnGenerarGuia.Name = "btnGenerarGuia";
             btnGenerarGuia.Size = new Size(102, 23);
             btnGenerarGuia.TabIndex = 31;
@@ -90,27 +92,27 @@
             // 
             // groupBox3
             // 
-            groupBox3.Controls.Add(button1);
+            groupBox3.Controls.Add(btnAgregarCaja);
             groupBox3.Controls.Add(label7);
             groupBox3.Controls.Add(numCantidad);
             groupBox3.Controls.Add(cmbTipoCaja);
             groupBox3.Controls.Add(label9);
-            groupBox3.Location = new Point(21, 358);
+            groupBox3.Location = new Point(22, 404);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new Size(746, 74);
             groupBox3.TabIndex = 30;
             groupBox3.TabStop = false;
             groupBox3.Text = "Detalle de Envío";
             // 
-            // button1
+            // btnAgregarCaja
             // 
-            button1.Location = new Point(616, 31);
-            button1.Name = "button1";
-            button1.Size = new Size(102, 23);
-            button1.TabIndex = 36;
-            button1.Text = "Agregar";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click;
+            btnAgregarCaja.Location = new Point(616, 31);
+            btnAgregarCaja.Name = "btnAgregarCaja";
+            btnAgregarCaja.Size = new Size(102, 23);
+            btnAgregarCaja.TabIndex = 36;
+            btnAgregarCaja.Text = "Agregar";
+            btnAgregarCaja.UseVisualStyleBackColor = true;
+            btnAgregarCaja.Click += btnAgregarCaja_Click;
             // 
             // label7
             // 
@@ -148,7 +150,7 @@
             // cmbModalidadEntrega
             // 
             cmbModalidadEntrega.FormattingEnabled = true;
-            cmbModalidadEntrega.Location = new Point(13, 95);
+            cmbModalidadEntrega.Location = new Point(15, 148);
             cmbModalidadEntrega.Name = "cmbModalidadEntrega";
             cmbModalidadEntrega.Size = new Size(230, 23);
             cmbModalidadEntrega.TabIndex = 31;
@@ -157,7 +159,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(13, 77);
+            label8.Location = new Point(15, 130);
             label8.Name = "label8";
             label8.Size = new Size(123, 15);
             label8.TabIndex = 32;
@@ -223,6 +225,8 @@
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(label15);
+            groupBox2.Controls.Add(txtLocalidad);
             groupBox2.Controls.Add(cmbCD);
             groupBox2.Controls.Add(label5);
             groupBox2.Controls.Add(cmbAgencia);
@@ -243,10 +247,26 @@
             groupBox2.Controls.Add(label13);
             groupBox2.Location = new Point(21, 146);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(746, 189);
+            groupBox2.Size = new Size(746, 252);
             groupBox2.TabIndex = 32;
             groupBox2.TabStop = false;
             groupBox2.Text = "Datos del Destinatario";
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(263, 77);
+            label15.Name = "label15";
+            label15.Size = new Size(58, 15);
+            label15.TabIndex = 38;
+            label15.Text = "Localidad";
+            // 
+            // txtLocalidad
+            // 
+            txtLocalidad.Location = new Point(263, 95);
+            txtLocalidad.Name = "txtLocalidad";
+            txtLocalidad.Size = new Size(230, 23);
+            txtLocalidad.TabIndex = 37;
             // 
             // cmbCD
             // 
@@ -268,7 +288,7 @@
             // cmbAgencia
             // 
             cmbAgencia.FormattingEnabled = true;
-            cmbAgencia.Location = new Point(263, 148);
+            cmbAgencia.Location = new Point(510, 203);
             cmbAgencia.Name = "cmbAgencia";
             cmbAgencia.Size = new Size(230, 23);
             cmbAgencia.TabIndex = 33;
@@ -276,7 +296,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(263, 130);
+            label4.Location = new Point(510, 185);
             label4.Name = "label4";
             label4.Size = new Size(50, 15);
             label4.TabIndex = 34;
@@ -285,10 +305,11 @@
             // cmbProvincia
             // 
             cmbProvincia.FormattingEnabled = true;
-            cmbProvincia.Location = new Point(263, 95);
+            cmbProvincia.Location = new Point(15, 95);
             cmbProvincia.Name = "cmbProvincia";
             cmbProvincia.Size = new Size(230, 23);
             cmbProvincia.TabIndex = 13;
+            cmbProvincia.SelectedIndexChanged += cmbProvincia_SelectedIndexChanged;
             // 
             // txtDNIDest
             // 
@@ -299,7 +320,7 @@
             // 
             // txtDomicilio
             // 
-            txtDomicilio.Location = new Point(13, 148);
+            txtDomicilio.Location = new Point(263, 148);
             txtDomicilio.Name = "txtDomicilio";
             txtDomicilio.Size = new Size(230, 23);
             txtDomicilio.TabIndex = 4;
@@ -332,7 +353,7 @@
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(263, 77);
+            label11.Location = new Point(15, 77);
             label11.Name = "label11";
             label11.Size = new Size(56, 15);
             label11.TabIndex = 20;
@@ -341,7 +362,7 @@
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new Point(13, 130);
+            label12.Location = new Point(263, 130);
             label12.Name = "label12";
             label12.Size = new Size(77, 15);
             label12.TabIndex = 19;
@@ -360,7 +381,6 @@
             txtCP.Name = "txtCP";
             txtCP.Size = new Size(230, 23);
             txtCP.TabIndex = 4;
-            txtCP.TextChanged += txtCP_TextChanged;
             // 
             // label14
             // 
@@ -383,9 +403,9 @@
             // groupBox4
             // 
             groupBox4.Controls.Add(lstGuiasGeneradas);
-            groupBox4.Location = new Point(126, 450);
+            groupBox4.Location = new Point(127, 484);
             groupBox4.Name = "groupBox4";
-            groupBox4.Size = new Size(551, 100);
+            groupBox4.Size = new Size(551, 123);
             groupBox4.TabIndex = 34;
             groupBox4.TabStop = false;
             groupBox4.Text = "Guías Generadas";
@@ -396,15 +416,15 @@
             label6.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
             label6.Location = new Point(21, 9);
             label6.Name = "label6";
-            label6.Size = new Size(221, 30);
+            label6.Size = new Size(305, 30);
             label6.TabIndex = 35;
-            label6.Text = "Generar Nueva Guía";
+            label6.Text = "Registrar Pedido en Agencia";
             // 
             // ImposicionEnAgencia
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(785, 611);
+            ClientSize = new Size(785, 644);
             Controls.Add(label6);
             Controls.Add(btnGenerarGuia);
             Controls.Add(groupBox3);
@@ -462,6 +482,8 @@
         private Label label13;
         private GroupBox groupBox4;
         private Label label6;
-        private Button button1;
+        private Button btnAgregarCaja;
+        private Label label15;
+        private TextBox txtLocalidad;
     }
 }
