@@ -65,5 +65,15 @@ namespace CAI_GrupoA_.LogIn
                 // Aca se va a abrir el formulario principal de la aplicación.}
             }
         }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void contraseñaTextBox_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }
