@@ -174,7 +174,7 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
 
             try
             {
-                // --- 1) SOLO validaciones del FORM que el modelo no conoce ---
+                // --- SOLO validaciones del FORM que el modelo no conoce ---
                 if (cajasTemporales.Count == 0)
                     errores.AppendLine("- Debe agregar al menos una caja antes de generar la guía.");
 
@@ -219,7 +219,7 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
                 var unico = DeduplicarLineas(errores.ToString());
                 if (!string.IsNullOrWhiteSpace(unico))
                 {
-                    // (Opcional) encabezado con cantidad
+                   
                     int cant = unico.Split('\n').Count(l => !string.IsNullOrWhiteSpace(l));
                     MessageBox.Show($"Se detectaron {cant} errores:\n\n{unico}",
                         "Campos inválidos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -261,7 +261,7 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
             }
         }
 
-        // Helper para deduplicar
+       
         private static string DeduplicarLineas(string texto)
         {
             if (string.IsNullOrWhiteSpace(texto)) return "";
