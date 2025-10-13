@@ -119,26 +119,36 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
         {
             var sb = new StringBuilder();
 
-            if (string.IsNullOrWhiteSpace(cuitR) || !EsCUITValido(cuitR))
-                sb.AppendLine("- CUIT inválido o faltante (ej: 20-35123456-7 o 20351234567).");
-            if (string.IsNullOrWhiteSpace(nomR))
-                sb.AppendLine("- La razón social del remitente es obligatoria.");
+            if (string.IsNullOrWhiteSpace(cuitR))
+                sb.AppendLine("- CUIT faltante.");
+            else if(!EsCUITValido(cuitR))
+                sb.AppendLine("- CUIT inválido (ej: 20-35123456-7 o 20351234567).");
             if (ContieneNumeros(nomR))
                 sb.AppendLine("- La razón social no puede contener números.");
             if (string.IsNullOrWhiteSpace(nomD))
                 sb.AppendLine("- El nombre del destinatario es obligatorio.");
             if (ContieneNumeros(nomD))
                 sb.AppendLine("- El nombre del destinatario no puede contener números.");
-            if (string.IsNullOrWhiteSpace(dniD) || !dniD.All(char.IsDigit))
-                sb.AppendLine("- El DNI del destinatario debe contener solo números y tener entre 8 y 11 dígitos.");
+            if (string.IsNullOrWhiteSpace(dniD))
+                sb.AppendLine("- El DNI del destinatario es obligatorio.");
+            else if (!dniD.All(char.IsDigit))
+                sb.AppendLine("- El DNI debe contener solo números.");
+            else if (dniD.Length < 8 || dniD.Length > 11)
+                sb.AppendLine("- El DNI debe tener entre 8 y 11 dígitos.");
+
             if (string.IsNullOrWhiteSpace(provincia))
                 sb.AppendLine("- Debe seleccionar una provincia.");
             if (string.IsNullOrWhiteSpace(localidad))
                 sb.AppendLine("- La localidad es obligatoria.");
             else if (ContieneNumeros(localidad))
                 sb.AppendLine("- La localidad no puede contener números.");
-            if (string.IsNullOrWhiteSpace(cp) || !cp.All(char.IsDigit))
+            if (string.IsNullOrWhiteSpace(cp))
+                sb.AppendLine("- El código postal es obligatorio.");
+            else if (!cp.All(char.IsDigit))
                 sb.AppendLine("- El código postal debe contener solo números.");
+            else if (cp.Length < 4 || cp.Length > 5)
+                sb.AppendLine("- El código postal debe tener entre 4 y 5 dígitos.");
+
             if (!omitirValidacionCaja)
             {
                 if (string.IsNullOrWhiteSpace(tamanio))

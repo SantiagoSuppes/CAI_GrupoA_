@@ -170,40 +170,13 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
         // --- Generar guía ---
         private void btnGenerarGuia_Click_1(object sender, EventArgs e)
         {
-            var errores = new StringBuilder();
+            var errores = new System.Text.StringBuilder();
 
             try
             {
-                // Validaciones visuales
+                // --- 1) SOLO validaciones del FORM que el modelo no conoce ---
                 if (cajasTemporales.Count == 0)
                     errores.AppendLine("- Debe agregar al menos una caja antes de generar la guía.");
-
-                if (string.IsNullOrWhiteSpace(txtCUIT.Text))
-                    errores.AppendLine("- Debe ingresar el CUIT del remitente.");
-
-                if (string.IsNullOrWhiteSpace(txtRazonSocial.Text))
-                    errores.AppendLine("- Debe ingresar la razón social del remitente.");
-
-                if (string.IsNullOrWhiteSpace(txtNombreDestinatario.Text))
-                    errores.AppendLine("- Debe ingresar el nombre del destinatario.");
-
-                if (string.IsNullOrWhiteSpace(txtDNIDest.Text))
-                    errores.AppendLine("- Debe ingresar el DNI del destinatario.");
-                else if (!txtDNIDest.Text.All(char.IsDigit))
-                    errores.AppendLine("- El DNI debe contener solo números.");
-
-                if (string.IsNullOrWhiteSpace(cmbProvincia.Text))
-                    errores.AppendLine("- Debe seleccionar una provincia.");
-
-                if (string.IsNullOrWhiteSpace(txtLocalidad.Text))
-                    errores.AppendLine("- Debe ingresar la localidad de destino.");
-                else if (txtLocalidad.Text.Any(char.IsDigit))
-                    errores.AppendLine("- La localidad no puede contener números.");
-
-                if (string.IsNullOrWhiteSpace(txtCP.Text))
-                    errores.AppendLine("- Debe ingresar el código postal.");
-                else if (!txtCP.Text.All(char.IsDigit))
-                    errores.AppendLine("- El código postal debe contener solo números.");
 
                 if (string.IsNullOrWhiteSpace(cmbModalidadEntrega.Text))
                     errores.AppendLine("- Debe seleccionar la modalidad de entrega.");
@@ -216,32 +189,44 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
                 if (modalidad == "Envío a Domicilio" && string.IsNullOrWhiteSpace(txtDomicilio.Text))
                     errores.AppendLine("- Debe ingresar la dirección de envío a domicilio.");
 
-                // Validación lógica sin crear guía
+                // --- 2) Validación de negocio (una sola llamada, sin crear guía) ---
                 try
                 {
                     modelo.CrearGuia(
-                        txtCUIT.Text, txtRazonSocial.Text, "",
-                        txtNombreDestinatario.Text, "",
-                        txtDNIDest.Text, txtTelefonoDest.Text,
-                        txtDomicilio.Text, txtLocalidad.Text,
-                        cmbProvincia.Text, txtCP.Text,
+                        txtCUIT.Text,              // CUIT (con/sin guiones)
+                        txtRazonSocial.Text,       // Razón social
+                        "",                        // tel remitente (si no lo usás)
+                        txtNombreDestinatario.Text,
+                        "",                        // apellido no usado
+                        txtDNIDest.Text,
+                        txtTelefonoDest.Text,
+                        txtDomicilio.Text,
+                        txtLocalidad.Text,
+                        cmbProvincia.Text,
+                        txtCP.Text,
                         "", 0, cmbModalidadEntrega.Text,
-                        true, true // solo validar
+                        omitirValidacionCaja: true,
+                        soloValidar: true
                     );
                 }
                 catch (ArgumentException ex)
                 {
+                    // Agregar los errores del modelo (puede traer varios)
                     errores.AppendLine(ex.Message);
                 }
 
-                if (errores.Length > 0)
+                // --- 3) DEDUPLICAR LÍNEAS antes de mostrar ---
+                var unico = DeduplicarLineas(errores.ToString());
+                if (!string.IsNullOrWhiteSpace(unico))
                 {
-                    MessageBox.Show("Revisá los siguientes errores:\n\n" + errores.ToString(),
-                        "Errores detectados", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    // (Opcional) encabezado con cantidad
+                    int cant = unico.Split('\n').Count(l => !string.IsNullOrWhiteSpace(l));
+                    MessageBox.Show($"Se detectaron {cant} errores:\n\n{unico}",
+                        "Campos inválidos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // Crear guía real
+                // --- 4) Crear guía REAL (sin validar cajas en el modelo) ---
                 var g = modelo.CrearGuia(
                     txtCUIT.Text, txtRazonSocial.Text, "",
                     txtNombreDestinatario.Text, "",
@@ -249,9 +234,11 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
                     txtDomicilio.Text, txtLocalidad.Text,
                     cmbProvincia.Text, txtCP.Text,
                     "", 0, cmbModalidadEntrega.Text,
-                    true, false
+                    omitirValidacionCaja: true,
+                    soloValidar: false
                 );
 
+                // pintar las cajas en la lista
                 lstGuiasGeneradas.Items.Clear();
                 foreach (var c in cajasTemporales)
                 {
@@ -272,6 +259,21 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
                 MessageBox.Show("Ocurrió un error inesperado:\n" + ex.Message,
                     "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
+        }
+
+        // Helper para deduplicar
+        private static string DeduplicarLineas(string texto)
+        {
+            if (string.IsNullOrWhiteSpace(texto)) return "";
+            var hs = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var sb = new System.Text.StringBuilder();
+            foreach (var raw in texto.Replace("\r", "").Split('\n'))
+            {
+                var line = raw.TrimEnd();
+                if (string.IsNullOrWhiteSpace(line)) continue;
+                if (hs.Add(line)) sb.AppendLine(line);
+            }
+            return sb.ToString();
         }
 
         private void LimpiarCampos()
