@@ -60,9 +60,9 @@
             label1.Font = new Font("Segoe UI", 12F, FontStyle.Bold, GraphicsUnit.Point, 0);
             label1.Location = new Point(33, 14);
             label1.Name = "label1";
-            label1.Size = new Size(177, 21);
+            label1.Size = new Size(176, 21);
             label1.TabIndex = 0;
-            label1.Text = "Seguimiento de Guías";
+            label1.Text = "📦 Estado de pedidos";
             // 
             // label2
             // 

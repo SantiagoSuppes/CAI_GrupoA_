@@ -415,9 +415,9 @@
             label6.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
             label6.Location = new Point(21, 9);
             label6.Name = "label6";
-            label6.Size = new Size(305, 30);
+            label6.Size = new Size(340, 30);
             label6.TabIndex = 35;
-            label6.Text = "Registrar Pedido en Agencia";
+            label6.Text = "🏢 Registrar pedido en agencia";
             // 
             // ImposicionEnAgenciaForm
             // 

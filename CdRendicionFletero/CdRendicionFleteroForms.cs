@@ -189,5 +189,10 @@ namespace CAI_GrupoA_.CdRendicionFletero
 
             // Aquí enviarías al modelo lo marcado y actualizarías estados...
         }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
