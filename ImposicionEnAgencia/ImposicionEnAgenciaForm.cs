@@ -12,7 +12,6 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
     {
         public GuiasGeneradasEnAgencia modelo = new();
 
-        // Diccionario simulado de agencias y CD por provincia---
         private readonly Dictionary<string, (List<string> Agencias, List<string> CDs)> zonasPorProvincia = new()
         {
             { "Ciudad Autónoma de Buenos Aires", (new List<string>{ "Agencia Retiro", "Agencia Palermo" }, new List<string>{ "CD Central" }) },
@@ -31,7 +30,6 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
 
         private void ImposicionEnAgencia_Load(object sender, EventArgs e)
         {
-            // --- Configuración ListView ---
             lstGuiasGeneradas.View = View.Details;
             lstGuiasGeneradas.FullRowSelect = true;
             lstGuiasGeneradas.Columns.Clear();
@@ -39,7 +37,6 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
             lstGuiasGeneradas.Columns.Add("Cantidad", 100);
             lstGuiasGeneradas.Columns.Add("Tamaño", 120);
 
-            // --- Configuración de combos ---
             cmbTipoCaja.Items.AddRange(new[] { "S", "M", "L", "XL" });
             cmbTipoCaja.DropDownStyle = ComboBoxStyle.DropDownList;
 
@@ -61,19 +58,23 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
             numCantidad.Minimum = 1;
             numCantidad.Value = 1;
 
-            // --- Estado inicial ---
             cmbAgencia.Enabled = false;
             cmbCD.Enabled = false;
             txtDomicilio.Enabled = false;
             cmbProvincia.SelectedIndexChanged += cmbProvincia_SelectedIndexChanged;
+            txtTelefonoDest.KeyPress += txtTelefonoDest_KeyPress;
         }
 
-        // --- Buscar remitente ---
+        private void txtTelefonoDest_KeyPress(object sender, KeyPressEventArgs e)
+        {
+            // Solo permite números y teclas de control (ej: Backspace)
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+                e.Handled = true;
+        }
+
         private void btnBuscarRemitente_Click(object sender, EventArgs e)
         {
             string cuit = txtCUIT.Text.Trim();
-
-            // Permitir con o sin guiones
             cuit = cuit.Replace("-", "").Trim();
 
             if (cuit.Length != 11 || !cuit.All(char.IsDigit))
@@ -97,22 +98,17 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
             }
         }
 
-        // --- Modalidad de entrega ---
         private void cmbModalidadEntrega_SelectedIndexChanged(object sender, EventArgs e)
         {
             string modalidad = cmbModalidadEntrega.Text;
-
-            // Limpiar selección previa
             txtDomicilio.Clear();
             cmbAgencia.SelectedIndex = -1;
             cmbCD.SelectedIndex = -1;
 
-            // Deshabilitar todo
             txtDomicilio.Enabled = false;
             cmbAgencia.Enabled = false;
             cmbCD.Enabled = false;
 
-            // Habilitar según modalidad
             if (modalidad == "Entrega en Agencia")
                 cmbAgencia.Enabled = true;
             else if (modalidad == "Entrega en CD")
@@ -121,11 +117,9 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
                 txtDomicilio.Enabled = true;
         }
 
-        // --- Cambio de provincia ---
         private void cmbProvincia_SelectedIndexChanged(object sender, EventArgs e)
         {
             string provincia = cmbProvincia.Text.Trim();
-
             cmbAgencia.Items.Clear();
             cmbCD.Items.Clear();
 
@@ -136,7 +130,6 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
             }
         }
 
-        // --- Agregar caja ---
         private void btnAgregarCaja_Click_1(object sender, EventArgs e)
         {
             if (string.IsNullOrWhiteSpace(cmbTipoCaja.Text))
@@ -167,14 +160,12 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
                 "Confirmación", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        // --- Generar guía ---
         private void btnGenerarGuia_Click_1(object sender, EventArgs e)
         {
-            var errores = new System.Text.StringBuilder();
+            var errores = new StringBuilder();
 
             try
             {
-                // --- SOLO validaciones del FORM que el modelo no conoce ---
                 if (cajasTemporales.Count == 0)
                     errores.AppendLine("- Debe agregar al menos una caja antes de generar la guía.");
 
@@ -189,21 +180,18 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
                 if (modalidad == "Envío a Domicilio" && string.IsNullOrWhiteSpace(txtDomicilio.Text))
                     errores.AppendLine("- Debe ingresar la dirección de envío a domicilio.");
 
-                // --- 2) Validación de negocio (una sola llamada, sin crear guía) ---
+                // Validación de teléfono solo números
+                if (!string.IsNullOrWhiteSpace(txtTelefonoDest.Text) && !txtTelefonoDest.Text.All(char.IsDigit))
+                    errores.AppendLine("- El teléfono del destinatario solo puede contener números.");
+
                 try
                 {
                     modelo.CrearGuia(
-                        txtCUIT.Text,              // CUIT (con/sin guiones)
-                        txtRazonSocial.Text,       // Razón social
-                        "",                        // tel remitente (si no lo usás)
-                        txtNombreDestinatario.Text,
-                        "",                        // apellido no usado
-                        txtDNIDest.Text,
-                        txtTelefonoDest.Text,
-                        txtDomicilio.Text,
-                        txtLocalidad.Text,
-                        cmbProvincia.Text,
-                        txtCP.Text,
+                        txtCUIT.Text, txtRazonSocial.Text, "",
+                        txtNombreDestinatario.Text, "",
+                        txtDNIDest.Text, txtTelefonoDest.Text,
+                        txtDomicilio.Text, txtLocalidad.Text,
+                        cmbProvincia.Text, txtCP.Text,
                         "", 0, cmbModalidadEntrega.Text,
                         omitirValidacionCaja: true,
                         soloValidar: true
@@ -211,22 +199,18 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
                 }
                 catch (ArgumentException ex)
                 {
-                    // Agregar los errores del modelo (puede traer varios)
                     errores.AppendLine(ex.Message);
                 }
 
-                // --- 3) DEDUPLICAR LÍNEAS antes de mostrar ---
                 var unico = DeduplicarLineas(errores.ToString());
                 if (!string.IsNullOrWhiteSpace(unico))
                 {
-                   
                     int cant = unico.Split('\n').Count(l => !string.IsNullOrWhiteSpace(l));
                     MessageBox.Show($"Se detectaron {cant} errores:\n\n{unico}",
                         "Campos inválidos", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                // --- 4) Crear guía REAL (sin validar cajas en el modelo) ---
                 var g = modelo.CrearGuia(
                     txtCUIT.Text, txtRazonSocial.Text, "",
                     txtNombreDestinatario.Text, "",
@@ -238,7 +222,6 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
                     soloValidar: false
                 );
 
-                // pintar las cajas en la lista
                 lstGuiasGeneradas.Items.Clear();
                 foreach (var c in cajasTemporales)
                 {
@@ -261,12 +244,11 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
             }
         }
 
-       
         private static string DeduplicarLineas(string texto)
         {
             if (string.IsNullOrWhiteSpace(texto)) return "";
             var hs = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            var sb = new System.Text.StringBuilder();
+            var sb = new StringBuilder();
             foreach (var raw in texto.Replace("\r", "").Split('\n'))
             {
                 var line = raw.TrimEnd();
@@ -294,7 +276,5 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
             cmbCD.Enabled = false;
             txtDomicilio.Enabled = false;
         }
-
-       
     }
 }

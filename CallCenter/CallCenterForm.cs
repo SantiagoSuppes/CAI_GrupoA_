@@ -14,11 +14,8 @@ namespace CAI_GrupoA_.CallCenter
 {
     public partial class CallCenterForm : Form
     {
-        // Datos de prueba: CUIT como key (solo dígitos), lista de direcciones como value
         private readonly Dictionary<string, List<string>> clientesPrueba = new Dictionary<string, List<string>>();
-
         private static readonly string[] _tiposCaja = { "S", "M", "L", "XXL" };
-
         private static readonly string[] _modalidades = { "Domicilio", "Agencia", "CD" };
 
         private readonly Dictionary<string, List<string>> _agenciasPorProv = new()
@@ -27,6 +24,7 @@ namespace CAI_GrupoA_.CallCenter
             ["Córdoba"] = new() { "Agencia Centro", "Agencia Nueva Córdoba" },
             ["Santa Fe"] = new() { "Agencia Rosario" }
         };
+
         private readonly Dictionary<string, List<string>> _cdsPorProv = new()
         {
             ["Buenos Aires"] = new() { "CD Norte", "CD Sur" },
@@ -50,6 +48,7 @@ namespace CAI_GrupoA_.CallCenter
             InitDestino();
             InicializarTipoCaja();
         }
+
         private static void Msg(string m) => MessageBox.Show(m, "Validación");
 
         private void CargarClientes()
@@ -71,14 +70,11 @@ namespace CAI_GrupoA_.CallCenter
             {
                 "Calle 9 de Julio 555, Rosario"
             };
-
-
         }
 
         private bool ValidarCuit(out string cuitInput)
         {
             cuitInput = cuitTextBox.Text.Trim();
-
             clienteListView.Items.Clear();
 
             if (string.IsNullOrEmpty(cuitInput))
@@ -87,7 +83,6 @@ namespace CAI_GrupoA_.CallCenter
                 return false;
             }
 
-            // Validación de formato (acepta con o sin guiones)
             if (!Regex.IsMatch(cuitInput, @"^\d{2}-?\d{8}-?\d{1}$"))
             {
                 MessageBox.Show("El formato del CUIT no es válido. Ejemplo válido: 30-12345678-9", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -95,13 +90,12 @@ namespace CAI_GrupoA_.CallCenter
             }
             return true;
         }
+
         private void BuscarClienteButton_Click(object sender, EventArgs e)
         {
-            if(ValidarCuit(out string cuitInput))
+            if (ValidarCuit(out string cuitInput))
             {
-                // Normalizamos a solo dígitos para buscar en el diccionario de prueba
                 string cuitDigits = Regex.Replace(cuitInput, @"\D", "");
-
                 List<string> direcciones = ObtenerDireccionesPorCUIT(cuitDigits);
 
                 clienteListView.Items.Clear();
@@ -113,13 +107,10 @@ namespace CAI_GrupoA_.CallCenter
                 else
                 {
                     clienteListView.BeginUpdate();
-                    clienteListView.Items.Clear();
-
                     foreach (var dir in direcciones)
                     {
                         clienteListView.Items.Add(dir);
                     }
-
                     clienteListView.EndUpdate();
                 }
             }
@@ -131,25 +122,17 @@ namespace CAI_GrupoA_.CallCenter
             {
                 return [.. direcciones];
             }
-
             return new List<string>();
         }
 
         private void clienteListView_SelectedIndexChanged(object sender, EventArgs e)
         {
-            if (clienteListView.SelectedItems.Count > 0)
-            {
-                DirSeleccionadaTextBox.Text = clienteListView.SelectedItems[0].Text;
-            }
-            else
-            {
-                DirSeleccionadaTextBox.Text = string.Empty;
-            }
+            DirSeleccionadaTextBox.Text = clienteListView.SelectedItems.Count > 0
+                ? clienteListView.SelectedItems[0].Text
+                : string.Empty;
         }
 
-
-        // ========= Agregar detalle =========
-
+        // ======== Modalidad y destino ========
         private void InitDestino()
         {
             cmbModalidad.Items.Clear();
@@ -164,10 +147,10 @@ namespace CAI_GrupoA_.CallCenter
 
             AplicarReglasModalidad();
         }
+
         private void AplicarReglasModalidad()
         {
             string modalidad = cmbModalidad.Text;
-
             bool esDom = modalidad == "Domicilio";
             bool esAge = modalidad == "Agencia";
             bool esCD = modalidad == "CD";
@@ -189,15 +172,15 @@ namespace CAI_GrupoA_.CallCenter
             if (string.IsNullOrWhiteSpace(prov)) { cmbAgencia.Items.Clear(); cmbCD.Items.Clear(); return; }
 
             cmbAgencia.Items.Clear();
-            if (_agenciasPorProv.TryGetValue(prov, out var ags)) { cmbAgencia.Items.AddRange([.. ags]); }
+            if (_agenciasPorProv.TryGetValue(prov, out var ags)) cmbAgencia.Items.AddRange([.. ags]);
 
             cmbCD.Items.Clear();
-            if (_cdsPorProv.TryGetValue(prov, out var cds)) { cmbCD.Items.AddRange([.. cds]); }
+            if (_cdsPorProv.TryGetValue(prov, out var cds)) cmbCD.Items.AddRange([.. cds]);
         }
 
+        // ======== Validación de destinatario ========
         private bool ValidarDestinatario()
         {
-            // Ejemplo de controles: txtNombre, txtDni, txtTelefono, cmbModalidad, cmbProvincia, cmbAgencia, cmbCD, txtDireccion
             if (string.IsNullOrWhiteSpace(txtNombreYApellido.Text) || txtNombreYApellido.Text.Trim().Length < 2)
             {
                 Msg("Nombre y Apellido requerido.");
@@ -235,10 +218,10 @@ namespace CAI_GrupoA_.CallCenter
                 return false;
             }
 
-            if (string.IsNullOrWhiteSpace(txtCodigoPostal.Text) || txtCodigoPostal.Text.Trim().Length < 4 || txtCodigoPostal.Text.Trim().Length > 8)
+            if (!ReqCodigoPostal(txtCodigoPostal))
             {
-                Msg("Ingrese Codigo Postal válido.");
-                txtLocalidad.Focus();
+                Msg("Código Postal inválido. Use 4 dígitos.");
+                txtCodigoPostal.Focus();
                 return false;
             }
 
@@ -248,7 +231,6 @@ namespace CAI_GrupoA_.CallCenter
                 cmbModalidad.DroppedDown = true;
                 return false;
             }
-
 
             switch (cmbModalidad.Text)
             {
@@ -280,31 +262,16 @@ namespace CAI_GrupoA_.CallCenter
             return true;
         }
 
-        private void cmbProvincia_SelectedIndexChanged(object sender, EventArgs e)
+        private static bool ReqCodigoPostal(TextBox tb)
         {
-            string provincia = cmbProvincia.SelectedItem?.ToString();
-
-            // Limpiar los combos antes de cargar
-            cmbAgencia.Items.Clear();
-            cmbCD.Items.Clear();
-
-            // Cargar agencias según provincia
-            if (!string.IsNullOrWhiteSpace(provincia) && _agenciasPorProv.TryGetValue(provincia, out var agencias))
-            {
-                cmbAgencia.Items.AddRange([.. agencias]);
-            }
-
-            // Cargar CDs según provincia
-            if (!string.IsNullOrWhiteSpace(provincia) && _cdsPorProv.TryGetValue(provincia, out var cds))
-            {
-                cmbCD.Items.AddRange([.. cds]);
-            }
-
-            // Opcional: deseleccionar
-            cmbAgencia.SelectedIndex = -1;
-            cmbCD.SelectedIndex = -1;
+            var s = (tb?.Text ?? "").Trim().ToUpperInvariant();
+            if (string.IsNullOrWhiteSpace(s)) return false;
+            bool digits4 = s.All(char.IsDigit) && s.Length == 4;
+            bool cpa8 = s.Length == 8 && s.All(char.IsLetterOrDigit);
+            return digits4 || cpa8;
         }
 
+        // ======== Agregar detalle ========
         private void InicializarTipoCaja()
         {
             cmbTipoCaja.Items.Clear();
@@ -314,7 +281,6 @@ namespace CAI_GrupoA_.CallCenter
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
-            // Validación de tipo de caja
             if (cmbTipoCaja.SelectedIndex < 0)
             {
                 Msg("Seleccioná el tipo de caja.");
@@ -322,19 +288,14 @@ namespace CAI_GrupoA_.CallCenter
                 return;
             }
 
-            // Validación de cantidad
-            int cantidad;
-            if (!int.TryParse(nudCantidad.Text, out cantidad) || cantidad <= 0)
+            if (!int.TryParse(nudCantidad.Text, out int cantidad) || cantidad <= 0)
             {
                 Msg("Ingresá una cantidad válida (mayor a cero).");
                 nudCantidad.Focus();
                 return;
             }
 
-            // Agregar a la ListView
             string tipoCaja = cmbTipoCaja.SelectedItem.ToString();
-
-            // Si ya existe el tipo de caja, suma la cantidad
             var existente = lvDetalle.Items.Cast<ListViewItem>()
                 .FirstOrDefault(i => string.Equals(i.SubItems[0].Text, tipoCaja, StringComparison.OrdinalIgnoreCase));
 
@@ -350,7 +311,6 @@ namespace CAI_GrupoA_.CallCenter
                 lvDetalle.Items.Add(item);
             }
 
-            // Limpiar controles
             cmbTipoCaja.SelectedIndex = -1;
             cmbTipoCaja.Text = "";
             nudCantidad.Text = "1";
@@ -366,12 +326,12 @@ namespace CAI_GrupoA_.CallCenter
 
         private void btnRegistrarPedido_Click(object sender, EventArgs e)
         {
-            if(string.IsNullOrEmpty(DirSeleccionadaTextBox.Text))
+            if (string.IsNullOrEmpty(DirSeleccionadaTextBox.Text))
             {
-                Msg("Buscá un cliente y selecciona una dirección.");
+                Msg("Buscá un cliente y seleccioná una dirección.");
                 return;
             }
-            else if (!ValidarDestinatario()) { return; }
+            else if (!ValidarDestinatario()) return;
             else if (lvDetalle.Items.Count == 0)
             {
                 Msg("Agregá al menos un tipo de caja al detalle.");
@@ -380,7 +340,6 @@ namespace CAI_GrupoA_.CallCenter
             {
                 var nroGuia = GenerarNumeroGuia(cmbCD.Text);
                 Msg($"Pedido registrado correctamente.\nN° de guía: {nroGuia}");
-
                 LimpiarControles(this);
             }
         }
