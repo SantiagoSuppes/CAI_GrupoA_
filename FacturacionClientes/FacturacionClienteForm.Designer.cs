@@ -54,12 +54,12 @@
             // 
             lblFacturacion.AutoSize = true;
             lblFacturacion.Font = new Font("Segoe UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            lblFacturacion.Location = new Point(265, 59);
+            lblFacturacion.Location = new Point(250, 46);
             lblFacturacion.Margin = new Padding(4, 0, 4, 0);
             lblFacturacion.Name = "lblFacturacion";
-            lblFacturacion.Size = new Size(200, 30);
+            lblFacturacion.Size = new Size(228, 30);
             lblFacturacion.TabIndex = 0;
-            lblFacturacion.Text = "Facturación Cliente";
+            lblFacturacion.Text = "💰 Facturar a Clientes";
             // 
             // lblCUIT
             // 

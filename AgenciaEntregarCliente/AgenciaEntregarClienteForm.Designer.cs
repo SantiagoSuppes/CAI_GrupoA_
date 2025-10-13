@@ -89,11 +89,11 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(222, 33);
+            label2.Location = new Point(166, 27);
             label2.Name = "label2";
-            label2.Size = new Size(186, 25);
+            label2.Size = new Size(306, 25);
             label2.TabIndex = 46;
-            label2.Text = "Agencias - Entregas";
+            label2.Text = "🎯 Entrega de pedido en Agencia";
             // 
             // lvEncomiendas
             // 

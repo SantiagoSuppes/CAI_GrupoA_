@@ -47,11 +47,11 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(157, 7);
+            label2.Location = new Point(202, 14);
             label2.Name = "label2";
-            label2.Size = new Size(309, 25);
+            label2.Size = new Size(261, 25);
             label2.TabIndex = 6;
-            label2.Text = "Centro de Distribución - Entregas";
+            label2.Text = "🎯 Entrega de pedido en CD";
             // 
             // groupBox1
             // 

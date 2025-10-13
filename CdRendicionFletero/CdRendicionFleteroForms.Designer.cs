@@ -72,11 +72,12 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI Semibold", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(95, 18);
+            label1.Location = new Point(103, 21);
             label1.Name = "label1";
-            label1.Size = new Size(475, 30);
+            label1.Size = new Size(485, 30);
             label1.TabIndex = 0;
-            label1.Text = "Centro de Distribución - Rendición de Fleteros";
+            label1.Text = "🚚 Entrega y recepción de pedidos última milla";
+            label1.Click += label1_Click;
             // 
             // groupBox1
             // 

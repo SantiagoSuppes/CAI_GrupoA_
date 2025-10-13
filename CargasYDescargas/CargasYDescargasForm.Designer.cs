@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            label1 = new Label();
             panel1 = new Panel();
             txtEmpresa = new TextBox();
             label5 = new Label();
@@ -51,20 +50,10 @@
             button2 = new Button();
             button3 = new Button();
             button1 = new Button();
+            label1 = new Label();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
             SuspendLayout();
-            // 
-            // label1
-            // 
-            label1.AutoSize = true;
-            label1.Font = new Font("Microsoft YaHei UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(14, 27);
-            label1.Margin = new Padding(4, 0, 4, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(335, 28);
-            label1.TabIndex = 0;
-            label1.Text = "Registro de cargas y descargas";
             // 
             // panel1
             // 
@@ -265,6 +254,17 @@
             button1.UseVisualStyleBackColor = true;
             button1.Click += button1_Click_1;
             // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Font = new Font("Microsoft YaHei UI", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label1.Location = new Point(21, 27);
+            label1.Margin = new Padding(4, 0, 4, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(509, 28);
+            label1.TabIndex = 0;
+            label1.Text = "🚛 Carga / Descarga de pedidos larga distancia";
+            // 
             // CargasYDescargasForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
@@ -291,8 +291,6 @@
         }
 
         #endregion
-
-        private System.Windows.Forms.Label label1;
         private System.Windows.Forms.Panel panel1;
         private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.Button BuscarBtn;
@@ -315,6 +313,7 @@
         private System.Windows.Forms.Label label5;
         private System.Windows.Forms.TextBox txtEmpresa;
         private Button button1;
+        private Label label1;
     }
 }
 

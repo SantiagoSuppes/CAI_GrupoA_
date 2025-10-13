@@ -66,8 +66,8 @@
             label12 = new Label();
             cmbTipoCaja = new ComboBox();
             label13 = new Label();
-            label2 = new Label();
             button3 = new Button();
+            label2 = new Label();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
             groupBox3.SuspendLayout();
@@ -421,17 +421,6 @@
             label13.TabIndex = 34;
             label13.Text = "Tipo de Caja";
             // 
-            // label2
-            // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(36, 12);
-            label2.Name = "label2";
-            label2.Size = new Size(394, 25);
-            label2.TabIndex = 4;
-            label2.Text = "Registrar pedido en Centro de Distribución";
-            label2.Click += label2_Click;
-            // 
             // button3
             // 
             button3.Location = new Point(36, 601);
@@ -441,6 +430,17 @@
             button3.Text = "Registrar pedido";
             button3.UseVisualStyleBackColor = true;
             button3.Click += button3_Click;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            label2.Location = new Point(36, 12);
+            label2.Name = "label2";
+            label2.Size = new Size(245, 25);
+            label2.TabIndex = 4;
+            label2.Text = "🏭 Registrar pedido en CD";
+            label2.Click += label2_Click;
             // 
             // CdRecepcionPaquetesForm
             // 
@@ -475,7 +475,6 @@
         private GroupBox groupBox2;
         private GroupBox groupBox3;
         private Button button1;
-        private Label label2;
         private TextBox nombreApellido;
         private Label label4;
         private TextBox dni;
@@ -508,5 +507,6 @@
         private Button btnAgregar;
         private Label label16;
         private TextBox txtLocalidad;
+        private Label label2;
     }
 }
