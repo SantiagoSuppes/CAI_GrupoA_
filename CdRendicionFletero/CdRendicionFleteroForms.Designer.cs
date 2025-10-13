@@ -60,7 +60,6 @@
             columnHeader8 = new ColumnHeader();
             label6 = new Label();
             label5 = new Label();
-            button2 = new Button();
             btnConfirmar = new Button();
             groupBox1.SuspendLayout();
             groupBox2.SuspendLayout();
@@ -133,7 +132,7 @@
             groupBox2.Size = new Size(696, 147);
             groupBox2.TabIndex = 2;
             groupBox2.TabStop = false;
-            groupBox2.Text = "Encomiendas a recibir";
+            groupBox2.Text = "Guias recibidas";
             // 
             // lvDetalle
             // 
@@ -171,9 +170,9 @@
             label3.AutoSize = true;
             label3.Location = new Point(21, 21);
             label3.Name = "label3";
-            label3.Size = new Size(91, 15);
+            label3.Size = new Size(135, 15);
             label3.TabIndex = 3;
-            label3.Text = "Detalle de Guías";
+            label3.Text = "Guías que trajo el fletero";
             // 
             // groupBox3
             // 
@@ -186,7 +185,8 @@
             groupBox3.Size = new Size(696, 140);
             groupBox3.TabIndex = 44;
             groupBox3.TabStop = false;
-            groupBox3.Text = "Entregas en ejecución";
+            groupBox3.Text = "Hojas de Ruta Cumplidas";
+            groupBox3.Enter += groupBox3_Enter;
             // 
             // lvDistribucionesRealizadas
             // 
@@ -201,7 +201,7 @@
             // 
             // columnHeader2
             // 
-            columnHeader2.Text = "ID Distribución";
+            columnHeader2.Text = "HDR Distribución";
             columnHeader2.Width = 120;
             // 
             // columnHeader1
@@ -227,9 +227,9 @@
             label4.AutoSize = true;
             label4.Location = new Point(21, 21);
             label4.Name = "label4";
-            label4.Size = new Size(212, 15);
+            label4.Size = new Size(225, 15);
             label4.TabIndex = 3;
-            label4.Text = "Detalle de hojas de ruta de distribución";
+            label4.Text = "Hojas de ruta que trajo firmadas el fletero";
             // 
             // groupBox4
             // 
@@ -244,11 +244,10 @@
             groupBox4.Size = new Size(696, 218);
             groupBox4.TabIndex = 45;
             groupBox4.TabStop = false;
-            groupBox4.Text = "Viajes a realizar";
+            groupBox4.Text = "Viaje a realizar";
             // 
             // lvDistNuevos
             // 
-            lvDistNuevos.CheckBoxes = true;
             lvDistNuevos.Columns.AddRange(new ColumnHeader[] { columnHeader9, columnHeader10, columnHeader11, columnHeader12 });
             lvDistNuevos.Location = new Point(21, 134);
             lvDistNuevos.Name = "lvDistNuevos";
@@ -259,7 +258,7 @@
             // 
             // columnHeader9
             // 
-            columnHeader9.Text = "ID Distribución";
+            columnHeader9.Text = "HDR Distribución";
             columnHeader9.Width = 120;
             // 
             // columnHeader10
@@ -282,7 +281,6 @@
             // 
             // lvRetirosNuevos
             // 
-            lvRetirosNuevos.CheckBoxes = true;
             lvRetirosNuevos.Columns.AddRange(new ColumnHeader[] { columnHeader5, columnHeader6, columnHeader7, columnHeader8 });
             lvRetirosNuevos.Location = new Point(21, 39);
             lvRetirosNuevos.Name = "lvRetirosNuevos";
@@ -293,7 +291,7 @@
             // 
             // columnHeader5
             // 
-            columnHeader5.Text = "ID Retiro";
+            columnHeader5.Text = "HDR Retiro";
             columnHeader5.Width = 120;
             // 
             // columnHeader6
@@ -319,32 +317,22 @@
             label6.AutoSize = true;
             label6.Location = new Point(21, 116);
             label6.Name = "label6";
-            label6.Size = new Size(215, 15);
+            label6.Size = new Size(283, 15);
             label6.TabIndex = 46;
-            label6.Text = "Detalle de Hojas de ruta de Distribución";
+            label6.Text = "Lo que el fletero debe entregar en domicilio/agencia";
             // 
             // label5
             // 
             label5.AutoSize = true;
             label5.Location = new Point(21, 21);
             label5.Name = "label5";
-            label5.Size = new Size(182, 15);
+            label5.Size = new Size(286, 15);
             label5.TabIndex = 3;
-            label5.Text = "Detalle de Hojas de ruta de Retiro";
-            // 
-            // button2
-            // 
-            button2.Location = new Point(563, 677);
-            button2.Margin = new Padding(3, 2, 3, 2);
-            button2.Name = "button2";
-            button2.Size = new Size(144, 40);
-            button2.TabIndex = 46;
-            button2.Text = "Volver al Menú";
-            button2.UseVisualStyleBackColor = true;
+            label5.Text = "Lo que el fletero debe ir a buscar a domicilio/agencia";
             // 
             // btnConfirmar
             // 
-            btnConfirmar.Location = new Point(274, 677);
+            btnConfirmar.Location = new Point(540, 687);
             btnConfirmar.Margin = new Padding(3, 2, 3, 2);
             btnConfirmar.Name = "btnConfirmar";
             btnConfirmar.Size = new Size(144, 40);
@@ -358,9 +346,8 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
-            ClientSize = new Size(723, 562);
+            ClientSize = new Size(723, 738);
             Controls.Add(btnConfirmar);
-            Controls.Add(button2);
             Controls.Add(groupBox4);
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
@@ -405,7 +392,6 @@
         private GroupBox groupBox4;
         private Label label5;
         private Label label6;
-        private Button button2;
         private Button btnConfirmar;
         private ListView lvRetirosNuevos;
         private ColumnHeader columnHeader5;
