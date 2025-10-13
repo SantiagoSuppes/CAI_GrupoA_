@@ -86,7 +86,7 @@
             btnGenerarGuia.Name = "btnGenerarGuia";
             btnGenerarGuia.Size = new Size(102, 23);
             btnGenerarGuia.TabIndex = 31;
-            btnGenerarGuia.Text = "Generar Guía";
+            btnGenerarGuia.Text = "Registrar Pedido";
             btnGenerarGuia.UseVisualStyleBackColor = true;
             btnGenerarGuia.Click += btnGenerarGuia_Click_1;
             // 
