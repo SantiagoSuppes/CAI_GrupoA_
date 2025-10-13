@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CAI_GrupoA_.MenuPrincipal;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -10,6 +11,7 @@ using System.Windows.Forms;
 
 namespace CAI_GrupoA_.LogIn
 {
+
     public partial class LogInForm : Form
     {
         public LogInForm()
@@ -62,18 +64,11 @@ namespace CAI_GrupoA_.LogIn
 
             if (accesoConcedido)
             {
-                // Aca se va a abrir el formulario principal de la aplicación.}
+                MenuPrincipalForm menu = new MenuPrincipalForm();
+                menu.Show();
+
+                this.Hide();
             }
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void contraseñaTextBox_TextChanged(object sender, EventArgs e)
-        {
-
         }
     }
 }

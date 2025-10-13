@@ -31,6 +31,7 @@
             lstGuiasGeneradas = new ListView();
             btnGenerarGuia = new Button();
             groupBox3 = new GroupBox();
+            btnAgregarCaja = new Button();
             label7 = new Label();
             numCantidad = new NumericUpDown();
             cmbTipoCaja = new ComboBox();
@@ -44,6 +45,8 @@
             label1 = new Label();
             label3 = new Label();
             groupBox2 = new GroupBox();
+            txtLocalidad = new TextBox();
+            label15 = new Label();
             cmbCD = new ComboBox();
             label5 = new Label();
             cmbAgencia = new ComboBox();
@@ -79,7 +82,7 @@
             // 
             // btnGenerarGuia
             // 
-            btnGenerarGuia.Location = new Point(665, 567);
+            btnGenerarGuia.Location = new Point(666, 583);
             btnGenerarGuia.Name = "btnGenerarGuia";
             btnGenerarGuia.Size = new Size(102, 23);
             btnGenerarGuia.TabIndex = 31;
@@ -89,16 +92,27 @@
             // 
             // groupBox3
             // 
+            groupBox3.Controls.Add(btnAgregarCaja);
             groupBox3.Controls.Add(label7);
             groupBox3.Controls.Add(numCantidad);
             groupBox3.Controls.Add(cmbTipoCaja);
             groupBox3.Controls.Add(label9);
-            groupBox3.Location = new Point(21, 358);
+            groupBox3.Location = new Point(22, 374);
             groupBox3.Name = "groupBox3";
             groupBox3.Size = new Size(746, 74);
             groupBox3.TabIndex = 30;
             groupBox3.TabStop = false;
             groupBox3.Text = "Detalle de Envío";
+            // 
+            // btnAgregarCaja
+            // 
+            btnAgregarCaja.Location = new Point(637, 29);
+            btnAgregarCaja.Name = "btnAgregarCaja";
+            btnAgregarCaja.Size = new Size(102, 23);
+            btnAgregarCaja.TabIndex = 36;
+            btnAgregarCaja.Text = "Añadir";
+            btnAgregarCaja.UseVisualStyleBackColor = true;
+            btnAgregarCaja.Click += btnAgregarCaja_Click_1;
             // 
             // label7
             // 
@@ -136,7 +150,7 @@
             // cmbModalidadEntrega
             // 
             cmbModalidadEntrega.FormattingEnabled = true;
-            cmbModalidadEntrega.Location = new Point(13, 95);
+            cmbModalidadEntrega.Location = new Point(13, 148);
             cmbModalidadEntrega.Name = "cmbModalidadEntrega";
             cmbModalidadEntrega.Size = new Size(230, 23);
             cmbModalidadEntrega.TabIndex = 31;
@@ -145,7 +159,7 @@
             // label8
             // 
             label8.AutoSize = true;
-            label8.Location = new Point(13, 77);
+            label8.Location = new Point(13, 130);
             label8.Name = "label8";
             label8.Size = new Size(123, 15);
             label8.TabIndex = 32;
@@ -211,6 +225,8 @@
             // 
             // groupBox2
             // 
+            groupBox2.Controls.Add(txtLocalidad);
+            groupBox2.Controls.Add(label15);
             groupBox2.Controls.Add(cmbCD);
             groupBox2.Controls.Add(label5);
             groupBox2.Controls.Add(cmbAgencia);
@@ -231,10 +247,26 @@
             groupBox2.Controls.Add(label13);
             groupBox2.Location = new Point(21, 146);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(746, 189);
+            groupBox2.Size = new Size(746, 222);
             groupBox2.TabIndex = 32;
             groupBox2.TabStop = false;
             groupBox2.Text = "Datos del Destinatario";
+            // 
+            // txtLocalidad
+            // 
+            txtLocalidad.Location = new Point(263, 95);
+            txtLocalidad.Name = "txtLocalidad";
+            txtLocalidad.Size = new Size(230, 23);
+            txtLocalidad.TabIndex = 37;
+            // 
+            // label15
+            // 
+            label15.AutoSize = true;
+            label15.Location = new Point(263, 77);
+            label15.Name = "label15";
+            label15.Size = new Size(58, 15);
+            label15.TabIndex = 38;
+            label15.Text = "Localidad";
             // 
             // cmbCD
             // 
@@ -256,7 +288,7 @@
             // cmbAgencia
             // 
             cmbAgencia.FormattingEnabled = true;
-            cmbAgencia.Location = new Point(263, 148);
+            cmbAgencia.Location = new Point(510, 193);
             cmbAgencia.Name = "cmbAgencia";
             cmbAgencia.Size = new Size(230, 23);
             cmbAgencia.TabIndex = 33;
@@ -264,7 +296,7 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(263, 130);
+            label4.Location = new Point(510, 175);
             label4.Name = "label4";
             label4.Size = new Size(50, 15);
             label4.TabIndex = 34;
@@ -273,7 +305,7 @@
             // cmbProvincia
             // 
             cmbProvincia.FormattingEnabled = true;
-            cmbProvincia.Location = new Point(263, 95);
+            cmbProvincia.Location = new Point(13, 95);
             cmbProvincia.Name = "cmbProvincia";
             cmbProvincia.Size = new Size(230, 23);
             cmbProvincia.TabIndex = 13;
@@ -287,7 +319,7 @@
             // 
             // txtDomicilio
             // 
-            txtDomicilio.Location = new Point(13, 148);
+            txtDomicilio.Location = new Point(263, 148);
             txtDomicilio.Name = "txtDomicilio";
             txtDomicilio.Size = new Size(230, 23);
             txtDomicilio.TabIndex = 4;
@@ -320,7 +352,7 @@
             // label11
             // 
             label11.AutoSize = true;
-            label11.Location = new Point(263, 77);
+            label11.Location = new Point(13, 77);
             label11.Name = "label11";
             label11.Size = new Size(56, 15);
             label11.TabIndex = 20;
@@ -329,7 +361,7 @@
             // label12
             // 
             label12.AutoSize = true;
-            label12.Location = new Point(13, 130);
+            label12.Location = new Point(263, 130);
             label12.Name = "label12";
             label12.Size = new Size(77, 15);
             label12.TabIndex = 19;
@@ -348,7 +380,6 @@
             txtCP.Name = "txtCP";
             txtCP.Size = new Size(230, 23);
             txtCP.TabIndex = 4;
-            txtCP.TextChanged += txtCP_TextChanged;
             // 
             // label14
             // 
@@ -371,7 +402,7 @@
             // groupBox4
             // 
             groupBox4.Controls.Add(lstGuiasGeneradas);
-            groupBox4.Location = new Point(126, 450);
+            groupBox4.Location = new Point(127, 466);
             groupBox4.Name = "groupBox4";
             groupBox4.Size = new Size(551, 100);
             groupBox4.TabIndex = 34;
@@ -384,14 +415,15 @@
             label6.Font = new Font("Segoe UI", 16F, FontStyle.Bold);
             label6.Location = new Point(21, 9);
             label6.Name = "label6";
-            label6.Size = new Size(221, 30);
+            label6.Size = new Size(305, 30);
             label6.TabIndex = 35;
-            label6.Text = "Generar Nueva Guía";
+            label6.Text = "Registrar Pedido en Agencia";
             // 
-            // ImposicionEnAgencia
+            // ImposicionEnAgenciaForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoScroll = true;
             ClientSize = new Size(785, 611);
             Controls.Add(label6);
             Controls.Add(btnGenerarGuia);
@@ -399,7 +431,7 @@
             Controls.Add(groupBox1);
             Controls.Add(groupBox2);
             Controls.Add(groupBox4);
-            Name = "ImposicionEnAgencia";
+            Name = "ImposicionEnAgenciaForm";
             Text = "ImposicionEnAgencia";
             Load += ImposicionEnAgencia_Load;
             groupBox3.ResumeLayout(false);
@@ -450,5 +482,8 @@
         private Label label13;
         private GroupBox groupBox4;
         private Label label6;
+        private Button btnAgregarCaja;
+        private TextBox txtLocalidad;
+        private Label label15;
     }
 }

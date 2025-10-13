@@ -61,7 +61,6 @@
             contraseñaTextBox.Size = new Size(289, 23);
             contraseñaTextBox.TabIndex = 3;
             contraseñaTextBox.UseSystemPasswordChar = true;
-            contraseñaTextBox.TextChanged += contraseñaTextBox_TextChanged;
             // 
             // label3
             // 
@@ -109,7 +108,6 @@
             label1.Size = new Size(220, 25);
             label1.TabIndex = 5;
             label1.Text = "TUTASA - Iniciar Sesión";
-            label1.Click += label1_Click;
             // 
             // LogInForm
             // 
