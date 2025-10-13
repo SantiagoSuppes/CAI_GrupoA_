@@ -28,19 +28,6 @@ namespace CAI_GrupoA_
 
             Application.Run(new MenuPrincipalForm());
 
-            Application.Run(new CallCenterForm());
-            Application.Run(new ImposicionEnAgenciaForm());
-            Application.Run(new CdRecepcionPaquetesForm());
-
-            Application.Run(new CargasYDescargasForm());
-
-            Application.Run(new CdEntregarClienteForms());
-            Application.Run(new FacturacionClienteForm());
-
-            Application.Run(new CdRendicionFleteroForms());
-            Application.Run(new EstimacionCostosvsVentasForms());
-            Application.Run(new GuiaEstadoHistorialForm());
-
         }
     }
 }
