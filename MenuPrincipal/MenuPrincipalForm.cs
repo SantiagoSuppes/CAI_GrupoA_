@@ -11,7 +11,8 @@ using CAI_GrupoA_.GuiaEstadoHistorial;
 using CAI_GrupoA_.ImposicionEnAgencia;
 using CAI_GrupoA_.EstimacionCostosvsVentas;
 using CAI_GrupoA_.FacturacionClientes;
-using CAI_GrupoA_.LogIn;   // Nombre correcto del namespace del Login
+using CAI_GrupoA_.LogIn;
+using CAI_GrupoA_.AgenciaEntregarCliente;   // Nombre correcto del namespace del Login
 
 namespace CAI_GrupoA_.MenuPrincipal
 {
@@ -28,6 +29,7 @@ namespace CAI_GrupoA_.MenuPrincipal
             btnRecepcionCD.Click += (s, e) => Abrir(() => new CdRecepcionPaquetesForm());
             btnRecepcionAg.Click += (s, e) => Abrir(() => new ImposicionEnAgenciaForm());
             btnCargaDescarga.Click += (s, e) => Abrir(() => new CargasYDescargasForm());
+            btnEntregaAgencia.Click += (s, e) => Abrir(() => new AgenciaEntregarClienteForm());
             btnRendicion.Click += (s, e) => Abrir(() => new CdRendicionFleteroForms());
             btnEstado.Click += (s, e) => Abrir(() => new GuiaEstadoHistorialForm());
             btnEntregaCD.Click += (s, e) => Abrir(() => new CdEntregarClienteForms());

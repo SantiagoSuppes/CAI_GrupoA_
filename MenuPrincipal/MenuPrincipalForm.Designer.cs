@@ -35,6 +35,7 @@
             btnCerrarSesion = new Button();
             dtpFecha = new DateTimePicker();
             groupBox1 = new GroupBox();
+            btnEntregaAgencia = new Button();
             btnRendicion = new Button();
             btnReportesCostos = new Button();
             btnFacturacion = new Button();
@@ -111,6 +112,7 @@
             // 
             // groupBox1
             // 
+            groupBox1.Controls.Add(btnEntregaAgencia);
             groupBox1.Controls.Add(btnRendicion);
             groupBox1.Controls.Add(btnReportesCostos);
             groupBox1.Controls.Add(btnFacturacion);
@@ -124,24 +126,34 @@
             groupBox1.Margin = new Padding(4, 3, 4, 3);
             groupBox1.Name = "groupBox1";
             groupBox1.Padding = new Padding(4, 3, 4, 3);
-            groupBox1.Size = new Size(732, 222);
+            groupBox1.Size = new Size(732, 287);
             groupBox1.TabIndex = 17;
             groupBox1.TabStop = false;
             groupBox1.Text = "Seleccione la que corresponda";
             // 
+            // btnEntregaAgencia
+            // 
+            btnEntregaAgencia.Location = new Point(291, 149);
+            btnEntregaAgencia.Margin = new Padding(4, 3, 4, 3);
+            btnEntregaAgencia.Name = "btnEntregaAgencia";
+            btnEntregaAgencia.Size = new Size(145, 48);
+            btnEntregaAgencia.TabIndex = 19;
+            btnEntregaAgencia.Text = "🎯 Entrega de pedido en Agencia";
+            btnEntregaAgencia.UseVisualStyleBackColor = true;
+            // 
             // btnRendicion
             // 
-            btnRendicion.Location = new Point(291, 95);
+            btnRendicion.Location = new Point(291, 39);
             btnRendicion.Margin = new Padding(4, 3, 4, 3);
             btnRendicion.Name = "btnRendicion";
             btnRendicion.Size = new Size(145, 48);
             btnRendicion.TabIndex = 14;
-            btnRendicion.Text = "🚚 Entrega y recepción de pedidos";
+            btnRendicion.Text = "🚚 Entrega y recepción de pedidos última milla";
             btnRendicion.UseVisualStyleBackColor = true;
             // 
             // btnReportesCostos
             // 
-            btnReportesCostos.Location = new Point(466, 95);
+            btnReportesCostos.Location = new Point(462, 95);
             btnReportesCostos.Margin = new Padding(4, 3, 4, 3);
             btnReportesCostos.Name = "btnReportesCostos";
             btnReportesCostos.Size = new Size(145, 48);
@@ -151,7 +163,7 @@
             // 
             // btnFacturacion
             // 
-            btnFacturacion.Location = new Point(466, 150);
+            btnFacturacion.Location = new Point(462, 150);
             btnFacturacion.Margin = new Padding(4, 3, 4, 3);
             btnFacturacion.Name = "btnFacturacion";
             btnFacturacion.Size = new Size(145, 48);
@@ -161,22 +173,22 @@
             // 
             // btnCargaDescarga
             // 
-            btnCargaDescarga.Location = new Point(291, 39);
+            btnCargaDescarga.Location = new Point(107, 204);
             btnCargaDescarga.Margin = new Padding(4, 3, 4, 3);
             btnCargaDescarga.Name = "btnCargaDescarga";
             btnCargaDescarga.Size = new Size(145, 48);
             btnCargaDescarga.TabIndex = 13;
-            btnCargaDescarga.Text = "🚛 Carga / Descarga de pedidos";
+            btnCargaDescarga.Text = "🚛 Carga / Descarga de pedidos larga distancia";
             btnCargaDescarga.UseVisualStyleBackColor = true;
             // 
             // btnEntregaCD
             // 
-            btnEntregaCD.Location = new Point(466, 39);
+            btnEntregaCD.Location = new Point(291, 95);
             btnEntregaCD.Margin = new Padding(4, 3, 4, 3);
             btnEntregaCD.Name = "btnEntregaCD";
             btnEntregaCD.Size = new Size(145, 48);
             btnEntregaCD.TabIndex = 10;
-            btnEntregaCD.Text = "🎯 Entrega de pedido";
+            btnEntregaCD.Text = "🎯 Entrega de pedido en CD";
             btnEntregaCD.UseVisualStyleBackColor = true;
             // 
             // btnRecepcionAg
@@ -211,7 +223,7 @@
             // 
             // btnEstado
             // 
-            btnEstado.Location = new Point(291, 150);
+            btnEstado.Location = new Point(291, 204);
             btnEstado.Margin = new Padding(4, 3, 4, 3);
             btnEstado.Name = "btnEstado";
             btnEstado.Size = new Size(145, 48);
@@ -223,7 +235,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(811, 348);
+            ClientSize = new Size(811, 410);
             Controls.Add(lblFecha);
             Controls.Add(lblUsuario);
             Controls.Add(dtpFecha);
@@ -257,5 +269,6 @@
         private Button btnRecepcionCD;
         private Button btnCallCenter;
         private Button btnEstado;
+        private Button btnEntregaAgencia;
     }
 }

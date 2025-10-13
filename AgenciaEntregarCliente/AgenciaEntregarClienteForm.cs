@@ -1,18 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace CAI_GrupoA_.CdEntregarCliente
+namespace CAI_GrupoA_.AgenciaEntregarCliente
 {
-    public partial class CdEntregarClienteForms : Form
+    public partial class AgenciaEntregarClienteForm : Form
     {
-        public CdEntregarClienteForms()
+        public AgenciaEntregarClienteForm()
         {
             InitializeComponent();
         }
@@ -23,7 +19,7 @@ namespace CAI_GrupoA_.CdEntregarCliente
             "44997021","30111222","23333444","40999888","36555111"
         };
 
-        // Control de DNI ya cargados para evitar duplicados
+        // DNI ya cargados
         private readonly HashSet<string> _dnisAgregados = new HashSet<string>();
 
         // Datos fake
@@ -36,17 +32,17 @@ namespace CAI_GrupoA_.CdEntregarCliente
             return d.ToString("dd/MM/yyyy");
         }
 
-        private void CdEntregarClienteForms_Load(object sender, EventArgs e)
+        private void AgenciaEntregarClienteForm_Load(object sender, EventArgs e)
         {
-            // Configuración recomendada del ListView
+            // Configuración esperada del ListView
             lvEncomiendas.View = View.Details;
             lvEncomiendas.CheckBoxes = true;
             lvEncomiendas.FullRowSelect = true;
         }
 
-        private void btnBuscarEncomiendaDestinatario_Click(object sender, EventArgs e)
+        private void btnBuscarEncomiendaDestinatario_Click_1(object sender, EventArgs e)
         {
-            // 1) Campo vacío
+            // 1. Campo vacío
             if (string.IsNullOrWhiteSpace(txtDniDestinatario.Text))
             {
                 MessageBox.Show("Debe ingresar un DNI antes de buscar.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
@@ -54,7 +50,7 @@ namespace CAI_GrupoA_.CdEntregarCliente
                 return;
             }
 
-            // 2) Solo números
+            // 2. Solo números
             if (!txtDniDestinatario.Text.All(char.IsDigit))
             {
                 MessageBox.Show("El DNI solo puede contener números.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -63,7 +59,7 @@ namespace CAI_GrupoA_.CdEntregarCliente
                 return;
             }
 
-            // 3) Longitud válida
+            // 3. Longitud válida
             if (txtDniDestinatario.Text.Length < 7 || txtDniDestinatario.Text.Length > 8)
             {
                 MessageBox.Show("El DNI debe tener entre 7 y 8 dígitos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -71,7 +67,7 @@ namespace CAI_GrupoA_.CdEntregarCliente
                 return;
             }
 
-            // 4) No negativos ni cero
+            // 4. No negativos ni cero
             if (!long.TryParse(txtDniDestinatario.Text, out long dni) || dni <= 0)
             {
                 MessageBox.Show("El DNI no puede ser negativo o cero.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
@@ -79,7 +75,7 @@ namespace CAI_GrupoA_.CdEntregarCliente
                 return;
             }
 
-            // 5) Destinatario existe
+            // 5. Destinatario existe
             if (!_destinatariosValidos.Contains(txtDniDestinatario.Text))
             {
                 MessageBox.Show("El DNI ingresado no corresponde a un destinatario existente.", "Información",
@@ -89,49 +85,44 @@ namespace CAI_GrupoA_.CdEntregarCliente
 
             var dniTexto = txtDniDestinatario.Text;
 
-            // 6) Evitar duplicados por DNI
+            // 6. Evitar duplicados
             if (_dnisAgregados.Contains(dniTexto) || YaCargadoEnLista(dniTexto))
             {
-                MessageBox.Show("Las encomiendas para este DNI ya fueron cargadas.", "Información",
-                                MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show("Las encomiendas para este DNI ya fueron cargadas.",
+                    "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 return;
             }
 
             // Generar filas fake determinísticas por DNI
-            var rng = new Random(dniTexto.GetHashCode());
+            var rng = new Random(txtDniDestinatario.Text.GetHashCode());
             int cantidad = rng.Next(2, 5); // 2..4 filas
 
             for (int i = 0; i < cantidad; i++)
             {
-                string nroGuia = $"#FR{rng.Next(1, 999):000}";
+                string nroGuia = $"#AG{rng.Next(1, 999):000}";
                 string talle = _talles[rng.Next(_talles.Length)];
-                string dniDest = dniTexto;
+                string dniDest = txtDniDestinatario.Text;
                 string cuitRem = CuitFake(rng);
                 string fecha = FechaFake(rng);
 
-                // Orden de columnas: NroGuia, Talle, DNI Dest., CUIT Remitente, Fecha
                 lvEncomiendas.Items.Add(new ListViewItem(new[] { nroGuia, talle, dniDest, cuitRem, fecha }));
             }
 
-            // Marcar el DNI como ya cargado
             _dnisAgregados.Add(dniTexto);
         }
 
         private bool YaCargadoEnLista(string dni)
         {
-            // Valida si ya hay filas con ese DNI en la columna 3 (índice 2)
-            return lvEncomiendas.Items
-                .Cast<ListViewItem>()
+            return lvEncomiendas.Items.Cast<ListViewItem>()
                 .Any(it => it.SubItems.Count > 2 && it.SubItems[2].Text == dni);
         }
 
-        private void btnConfirmarEntrega_Click(object sender, EventArgs e)
+        private void btnConfirmarEntrega_Click_1(object sender, EventArgs e)
         {
-            // ¿Hay al menos una guía marcada?
             var seleccionadas = lvEncomiendas.Items
-                .Cast<ListViewItem>()
-                .Where(it => it.Checked)
-                .ToList();
+               .Cast<ListViewItem>()
+               .Where(it => it.Checked)
+               .ToList();
 
             if (seleccionadas.Count == 0)
             {
@@ -151,14 +142,8 @@ namespace CAI_GrupoA_.CdEntregarCliente
                 MessageBoxIcon.Information
             );
 
-            // Eliminar solo las seleccionadas
             foreach (var item in seleccionadas)
                 lvEncomiendas.Items.Remove(item);
-
-            // Opcional: si querés permitir volver a cargar ese DNI cuando ya no queden filas suyas
-            // podés removerlo de _dnisAgregados cuando no existan más filas con ese DNI:
-            // var restantesDnis = lvEncomiendas.Items.Cast<ListViewItem>().Select(i => i.SubItems[2].Text).ToHashSet();
-            // _dnisAgregados.RemoveWhere(d => !restantesDnis.Contains(d));
         }
     }
 }
