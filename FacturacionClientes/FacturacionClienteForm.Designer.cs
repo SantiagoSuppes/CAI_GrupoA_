@@ -45,7 +45,6 @@
             lblMontoTotal = new Label();
             txtMontoTotal = new TextBox();
             btnGenerarFactura = new Button();
-            btnVolverMenu = new Button();
             groupBox1 = new GroupBox();
             groupBox2 = new GroupBox();
             SuspendLayout();
@@ -198,7 +197,7 @@
             // 
             // btnGenerarFactura
             // 
-            btnGenerarFactura.Location = new Point(198, 457);
+            btnGenerarFactura.Location = new Point(314, 457);
             btnGenerarFactura.Margin = new Padding(4, 3, 4, 3);
             btnGenerarFactura.Name = "btnGenerarFactura";
             btnGenerarFactura.Size = new Size(128, 27);
@@ -206,16 +205,6 @@
             btnGenerarFactura.Text = "Generar Factura";
             btnGenerarFactura.UseVisualStyleBackColor = true;
             btnGenerarFactura.Click += btnGenerarFactura_Click;
-            // 
-            // btnVolverMenu
-            // 
-            btnVolverMenu.Location = new Point(425, 457);
-            btnVolverMenu.Margin = new Padding(4, 3, 4, 3);
-            btnVolverMenu.Name = "btnVolverMenu";
-            btnVolverMenu.Size = new Size(128, 27);
-            btnVolverMenu.TabIndex = 14;
-            btnVolverMenu.Text = "Volver al Menú";
-            btnVolverMenu.UseVisualStyleBackColor = true;
             // 
             // groupBox1
             // 
@@ -245,7 +234,6 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
             ClientSize = new Size(792, 519);
-            Controls.Add(btnVolverMenu);
             Controls.Add(btnGenerarFactura);
             Controls.Add(txtMontoTotal);
             Controls.Add(lblMontoTotal);
@@ -289,7 +277,6 @@
         private System.Windows.Forms.Label lblMontoTotal;
         private System.Windows.Forms.TextBox txtMontoTotal;
         private System.Windows.Forms.Button btnGenerarFactura;
-        private System.Windows.Forms.Button btnVolverMenu;
         private System.Windows.Forms.GroupBox groupBox1;
         private System.Windows.Forms.GroupBox groupBox2;
     }

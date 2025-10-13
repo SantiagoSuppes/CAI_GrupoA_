@@ -48,8 +48,6 @@
             label4 = new Label();
             label3 = new Label();
             button2 = new Button();
-            button3 = new Button();
-            button1 = new Button();
             label1 = new Label();
             panel1.SuspendLayout();
             panel2.SuspendLayout();
@@ -234,26 +232,6 @@
             button2.UseVisualStyleBackColor = true;
             button2.Click += button2_Click;
             // 
-            // button3
-            // 
-            button3.Location = new Point(238, 546);
-            button3.Margin = new Padding(4, 3, 4, 3);
-            button3.Name = "button3";
-            button3.Size = new Size(126, 29);
-            button3.TabIndex = 4;
-            button3.Text = "Volver al menu";
-            button3.UseVisualStyleBackColor = true;
-            // 
-            // button1
-            // 
-            button1.Location = new Point(390, 546);
-            button1.Name = "button1";
-            button1.Size = new Size(75, 29);
-            button1.TabIndex = 6;
-            button1.Text = "Deshacer";
-            button1.UseVisualStyleBackColor = true;
-            button1.Click += button1_Click_1;
-            // 
             // label1
             // 
             label1.AutoSize = true;
@@ -271,8 +249,6 @@
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
             ClientSize = new Size(607, 612);
-            Controls.Add(button1);
-            Controls.Add(button3);
             Controls.Add(button2);
             Controls.Add(panel2);
             Controls.Add(panel1);

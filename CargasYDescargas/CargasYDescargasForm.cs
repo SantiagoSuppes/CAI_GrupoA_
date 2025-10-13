@@ -35,32 +35,33 @@ namespace CAI_GrupoA_.CargasYDescargas
         private Dictionary<string, List<(string NGuia, string Destinatario, string Remitente, string Estado, bool EsCarga)>> guiasPorPatente
             = new Dictionary<string, List<(string, string, string, string, bool)>>()
         {
-            {
-                "AB-123-CD", new List<(string, string, string, string, bool)>()
                 {
-                    ("G001", "Cliente A", "Transporte López", "Pendiente", false),
-                    ("G002", "Cliente B", "Transporte López", "Pendiente", true),
-                    ("G003", "Cliente C", "Transporte López", "Pendiente", true),
-                    ("G004", "Cliente D", "Transporte López", "Pendiente", false)
-                }
-            },
-            {
-                "AC-456-BD", new List<(string, string, string, string, bool)>()
-                {
-                    ("G010", "Cliente E", "Logística Pérez", "Pendiente", false),
-                    ("G011", "Cliente F", "Logística Pérez", "Pendiente", true),
-                    ("G012", "Cliente G", "Logística Pérez", "Pendiente", false)
-                }
-            },
-            {
-                "AA-111-AA", new List<(string, string, string, string, bool)>()
-                {
-                    ("G020", "Cliente H", "Camiones del Sur", "Pendiente", true),
-                    ("G021", "Cliente I", "Camiones del Sur", "Pendiente", false),
-                    ("G022", "Cliente J", "Camiones del Sur", "Pendiente", true),
-                    ("G023", "Cliente K", "Camiones del Sur", "Pendiente", false)
-                }
-            }
+        "AB-123-CD", new List<(string, string, string, string, bool)>()
+        {
+            ("G001", "Mariana Torres",   "Cliente A", "Pendiente", false),
+            ("G002", "Julián Gómez",     "Cliente B", "Pendiente", true),
+            ("G003", "Lucía Fernández",  "Cliente C", "Pendiente", true),
+            ("G004", "Santiago Romero",  "Cliente D", "Pendiente", false)
+        }
+    },
+    {
+        "AC-456-BD", new List<(string, string, string, string, bool)>()
+        {
+            ("G010", "Paula Domínguez",  "Cliente E", "Pendiente", false),
+            ("G011", "Martín Acosta",    "Cliente F", "Pendiente", true),
+            ("G012", "Valeria Quiroga",  "Cliente G", "Pendiente", false)
+        }
+    },
+    {
+        "AA-111-AA", new List<(string, string, string, string, bool)>()
+        {
+            ("G020", "Federico Rivas",   "Cliente H", "Pendiente", true),
+            ("G021", "Agustina López",   "Cliente I", "Pendiente", false),
+            ("G022", "Tomás Benítez",    "Cliente J", "Pendiente", true),
+            ("G023", "Carolina Méndez",  "Cliente K", "Pendiente", false)
+        }
+    }
+    
         };
 
         // BOTÓN BUSCAR
