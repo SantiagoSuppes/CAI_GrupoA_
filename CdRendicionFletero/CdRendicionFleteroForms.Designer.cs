@@ -72,9 +72,9 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI Semibold", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(109, 24);
+            label1.Location = new Point(95, 18);
             label1.Name = "label1";
-            label1.Size = new Size(601, 38);
+            label1.Size = new Size(475, 30);
             label1.TabIndex = 0;
             label1.Text = "Centro de Distribución - Rendición de Fleteros";
             // 
@@ -83,18 +83,21 @@
             groupBox1.Controls.Add(btnBuscarViajesAsignados);
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(txtDniFletero);
-            groupBox1.Location = new Point(12, 78);
+            groupBox1.Location = new Point(10, 58);
+            groupBox1.Margin = new Padding(3, 2, 3, 2);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(795, 127);
+            groupBox1.Padding = new Padding(3, 2, 3, 2);
+            groupBox1.Size = new Size(696, 95);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = "Datos de Fletero";
             // 
             // btnBuscarViajesAsignados
             // 
-            btnBuscarViajesAsignados.Location = new Point(484, 41);
+            btnBuscarViajesAsignados.Location = new Point(424, 31);
+            btnBuscarViajesAsignados.Margin = new Padding(3, 2, 3, 2);
             btnBuscarViajesAsignados.Name = "btnBuscarViajesAsignados";
-            btnBuscarViajesAsignados.Size = new Size(256, 50);
+            btnBuscarViajesAsignados.Size = new Size(224, 38);
             btnBuscarViajesAsignados.TabIndex = 2;
             btnBuscarViajesAsignados.Text = "Buscar viajes asignados";
             btnBuscarViajesAsignados.UseVisualStyleBackColor = true;
@@ -103,17 +106,18 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(56, 41);
+            label2.Location = new Point(49, 31);
             label2.Name = "label2";
-            label2.Size = new Size(35, 20);
+            label2.Size = new Size(27, 15);
             label2.TabIndex = 1;
             label2.Text = "DNI";
             // 
             // txtDniFletero
             // 
-            txtDniFletero.Location = new Point(56, 64);
+            txtDniFletero.Location = new Point(49, 48);
+            txtDniFletero.Margin = new Padding(3, 2, 3, 2);
             txtDniFletero.Name = "txtDniFletero";
-            txtDniFletero.Size = new Size(384, 27);
+            txtDniFletero.Size = new Size(336, 23);
             txtDniFletero.TabIndex = 0;
             txtDniFletero.TextChanged += txtDniFletero_TextChanged;
             // 
@@ -121,9 +125,11 @@
             // 
             groupBox2.Controls.Add(lvDetalle);
             groupBox2.Controls.Add(label3);
-            groupBox2.Location = new Point(12, 211);
+            groupBox2.Location = new Point(10, 158);
+            groupBox2.Margin = new Padding(3, 2, 3, 2);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(795, 196);
+            groupBox2.Padding = new Padding(3, 2, 3, 2);
+            groupBox2.Size = new Size(696, 147);
             groupBox2.TabIndex = 2;
             groupBox2.TabStop = false;
             groupBox2.Text = "Encomiendas a recibir";
@@ -132,10 +138,9 @@
             // 
             lvDetalle.CheckBoxes = true;
             lvDetalle.Columns.AddRange(new ColumnHeader[] { nguia, tipoCaja, estado, domicilio });
-            lvDetalle.Location = new Point(24, 52);
-            lvDetalle.Margin = new Padding(3, 4, 3, 4);
+            lvDetalle.Location = new Point(21, 39);
             lvDetalle.Name = "lvDetalle";
-            lvDetalle.Size = new Size(746, 127);
+            lvDetalle.Size = new Size(653, 96);
             lvDetalle.TabIndex = 43;
             lvDetalle.UseCompatibleStateImageBehavior = false;
             lvDetalle.View = View.Details;
@@ -163,9 +168,9 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(24, 28);
+            label3.Location = new Point(21, 21);
             label3.Name = "label3";
-            label3.Size = new Size(118, 20);
+            label3.Size = new Size(91, 15);
             label3.TabIndex = 3;
             label3.Text = "Detalle de Guías";
             // 
@@ -173,9 +178,11 @@
             // 
             groupBox3.Controls.Add(lvDistribucionesRealizadas);
             groupBox3.Controls.Add(label4);
-            groupBox3.Location = new Point(12, 413);
+            groupBox3.Location = new Point(10, 310);
+            groupBox3.Margin = new Padding(3, 2, 3, 2);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(795, 187);
+            groupBox3.Padding = new Padding(3, 2, 3, 2);
+            groupBox3.Size = new Size(696, 140);
             groupBox3.TabIndex = 44;
             groupBox3.TabStop = false;
             groupBox3.Text = "Entregas en ejecución";
@@ -184,10 +191,9 @@
             // 
             lvDistribucionesRealizadas.CheckBoxes = true;
             lvDistribucionesRealizadas.Columns.AddRange(new ColumnHeader[] { columnHeader2, columnHeader1, columnHeader3, columnHeader4 });
-            lvDistribucionesRealizadas.Location = new Point(24, 52);
-            lvDistribucionesRealizadas.Margin = new Padding(3, 4, 3, 4);
+            lvDistribucionesRealizadas.Location = new Point(21, 39);
             lvDistribucionesRealizadas.Name = "lvDistribucionesRealizadas";
-            lvDistribucionesRealizadas.Size = new Size(746, 120);
+            lvDistribucionesRealizadas.Size = new Size(653, 91);
             lvDistribucionesRealizadas.TabIndex = 43;
             lvDistribucionesRealizadas.UseCompatibleStateImageBehavior = false;
             lvDistribucionesRealizadas.View = View.Details;
@@ -218,9 +224,9 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(24, 28);
+            label4.Location = new Point(21, 21);
             label4.Name = "label4";
-            label4.Size = new Size(271, 20);
+            label4.Size = new Size(212, 15);
             label4.TabIndex = 3;
             label4.Text = "Detalle de hojas de ruta de distribución";
             // 
@@ -230,9 +236,11 @@
             groupBox4.Controls.Add(lvRetirosNuevos);
             groupBox4.Controls.Add(label6);
             groupBox4.Controls.Add(label5);
-            groupBox4.Location = new Point(12, 606);
+            groupBox4.Location = new Point(10, 454);
+            groupBox4.Margin = new Padding(3, 2, 3, 2);
             groupBox4.Name = "groupBox4";
-            groupBox4.Size = new Size(795, 291);
+            groupBox4.Padding = new Padding(3, 2, 3, 2);
+            groupBox4.Size = new Size(696, 218);
             groupBox4.TabIndex = 45;
             groupBox4.TabStop = false;
             groupBox4.Text = "Viajes a realizar";
@@ -241,10 +249,9 @@
             // 
             lvDistNuevos.CheckBoxes = true;
             lvDistNuevos.Columns.AddRange(new ColumnHeader[] { columnHeader9, columnHeader10, columnHeader11, columnHeader12 });
-            lvDistNuevos.Location = new Point(24, 178);
-            lvDistNuevos.Margin = new Padding(3, 4, 3, 4);
+            lvDistNuevos.Location = new Point(21, 134);
             lvDistNuevos.Name = "lvDistNuevos";
-            lvDistNuevos.Size = new Size(746, 98);
+            lvDistNuevos.Size = new Size(653, 74);
             lvDistNuevos.TabIndex = 47;
             lvDistNuevos.UseCompatibleStateImageBehavior = false;
             lvDistNuevos.View = View.Details;
@@ -276,10 +283,9 @@
             // 
             lvRetirosNuevos.CheckBoxes = true;
             lvRetirosNuevos.Columns.AddRange(new ColumnHeader[] { columnHeader5, columnHeader6, columnHeader7, columnHeader8 });
-            lvRetirosNuevos.Location = new Point(24, 52);
-            lvRetirosNuevos.Margin = new Padding(3, 4, 3, 4);
+            lvRetirosNuevos.Location = new Point(21, 39);
             lvRetirosNuevos.Name = "lvRetirosNuevos";
-            lvRetirosNuevos.Size = new Size(746, 98);
+            lvRetirosNuevos.Size = new Size(653, 74);
             lvRetirosNuevos.TabIndex = 44;
             lvRetirosNuevos.UseCompatibleStateImageBehavior = false;
             lvRetirosNuevos.View = View.Details;
@@ -310,35 +316,37 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(24, 154);
+            label6.Location = new Point(21, 116);
             label6.Name = "label6";
-            label6.Size = new Size(276, 20);
+            label6.Size = new Size(215, 15);
             label6.TabIndex = 46;
             label6.Text = "Detalle de Hojas de ruta de Distribución";
             // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(24, 28);
+            label5.Location = new Point(21, 21);
             label5.Name = "label5";
-            label5.Size = new Size(236, 20);
+            label5.Size = new Size(182, 15);
             label5.TabIndex = 3;
             label5.Text = "Detalle de Hojas de ruta de Retiro";
             // 
             // button2
             // 
-            button2.Location = new Point(643, 903);
+            button2.Location = new Point(563, 677);
+            button2.Margin = new Padding(3, 2, 3, 2);
             button2.Name = "button2";
-            button2.Size = new Size(164, 53);
+            button2.Size = new Size(144, 40);
             button2.TabIndex = 46;
             button2.Text = "Volver al Menú";
             button2.UseVisualStyleBackColor = true;
             // 
             // btnConfirmar
             // 
-            btnConfirmar.Location = new Point(313, 903);
+            btnConfirmar.Location = new Point(274, 677);
+            btnConfirmar.Margin = new Padding(3, 2, 3, 2);
             btnConfirmar.Name = "btnConfirmar";
-            btnConfirmar.Size = new Size(164, 53);
+            btnConfirmar.Size = new Size(144, 40);
             btnConfirmar.TabIndex = 47;
             btnConfirmar.Text = "Confirmar";
             btnConfirmar.UseVisualStyleBackColor = true;
@@ -346,9 +354,10 @@
             // 
             // CdRendicionFleteroForms
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(826, 962);
+            AutoScroll = true;
+            ClientSize = new Size(723, 562);
             Controls.Add(btnConfirmar);
             Controls.Add(button2);
             Controls.Add(groupBox4);
@@ -356,6 +365,7 @@
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             Controls.Add(label1);
+            Margin = new Padding(3, 2, 3, 2);
             Name = "CdRendicionFleteroForms";
             Text = "CdRendicionFleteroForms";
             groupBox1.ResumeLayout(false);

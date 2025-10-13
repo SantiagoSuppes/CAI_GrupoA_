@@ -250,6 +250,7 @@
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
+            AutoScroll = true;
             ClientSize = new Size(610, 396);
             Controls.Add(txtDestino);
             Controls.Add(txtModalidad);
@@ -270,7 +271,7 @@
             Controls.Add(label2);
             Controls.Add(label1);
             Margin = new Padding(3, 2, 3, 2);
-            Name = "guiaEstadoHistorialForm";
+            Name = "GuiaEstadoHistorialForm";
             Text = "guiaEstadoHistorialForm";
             ResumeLayout(false);
             PerformLayout();

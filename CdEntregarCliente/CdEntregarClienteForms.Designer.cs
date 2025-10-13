@@ -48,9 +48,9 @@
             // 
             label2.AutoSize = true;
             label2.Font = new Font("Segoe UI", 14.25F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(179, 9);
+            label2.Location = new Point(157, 7);
             label2.Name = "label2";
-            label2.Size = new Size(397, 32);
+            label2.Size = new Size(309, 25);
             label2.TabIndex = 6;
             label2.Text = "Centro de Distribución - Entregas";
             // 
@@ -59,18 +59,21 @@
             groupBox1.Controls.Add(btnBuscarEncomiendaDestinatario);
             groupBox1.Controls.Add(txtDniDestinatario);
             groupBox1.Controls.Add(label1);
-            groupBox1.Location = new Point(56, 61);
+            groupBox1.Location = new Point(49, 46);
+            groupBox1.Margin = new Padding(3, 2, 3, 2);
             groupBox1.Name = "groupBox1";
-            groupBox1.Size = new Size(653, 125);
+            groupBox1.Padding = new Padding(3, 2, 3, 2);
+            groupBox1.Size = new Size(571, 94);
             groupBox1.TabIndex = 7;
             groupBox1.TabStop = false;
             groupBox1.Text = "Datos de Destinatario";
             // 
             // btnBuscarEncomiendaDestinatario
             // 
-            btnBuscarEncomiendaDestinatario.Location = new Point(368, 42);
+            btnBuscarEncomiendaDestinatario.Location = new Point(322, 32);
+            btnBuscarEncomiendaDestinatario.Margin = new Padding(3, 2, 3, 2);
             btnBuscarEncomiendaDestinatario.Name = "btnBuscarEncomiendaDestinatario";
-            btnBuscarEncomiendaDestinatario.Size = new Size(234, 50);
+            btnBuscarEncomiendaDestinatario.Size = new Size(205, 38);
             btnBuscarEncomiendaDestinatario.TabIndex = 2;
             btnBuscarEncomiendaDestinatario.Text = "Buscar Encomiendas a Entregar";
             btnBuscarEncomiendaDestinatario.UseVisualStyleBackColor = true;
@@ -78,25 +81,27 @@
             // 
             // txtDniDestinatario
             // 
-            txtDniDestinatario.Location = new Point(23, 65);
+            txtDniDestinatario.Location = new Point(20, 49);
+            txtDniDestinatario.Margin = new Padding(3, 2, 3, 2);
             txtDniDestinatario.Name = "txtDniDestinatario";
-            txtDniDestinatario.Size = new Size(292, 27);
+            txtDniDestinatario.Size = new Size(256, 23);
             txtDniDestinatario.TabIndex = 1;
             // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(23, 42);
+            label1.Location = new Point(20, 32);
             label1.Name = "label1";
-            label1.Size = new Size(35, 20);
+            label1.Size = new Size(27, 15);
             label1.TabIndex = 0;
             label1.Text = "DNI";
             // 
             // btnConfirmarEntrega
             // 
-            btnConfirmarEntrega.Location = new Point(260, 392);
+            btnConfirmarEntrega.Location = new Point(228, 294);
+            btnConfirmarEntrega.Margin = new Padding(3, 2, 3, 2);
             btnConfirmarEntrega.Name = "btnConfirmarEntrega";
-            btnConfirmarEntrega.Size = new Size(234, 68);
+            btnConfirmarEntrega.Size = new Size(205, 51);
             btnConfirmarEntrega.TabIndex = 3;
             btnConfirmarEntrega.Text = "Confirmar Entrega";
             btnConfirmarEntrega.UseVisualStyleBackColor = true;
@@ -106,10 +111,9 @@
             // 
             lvEncomiendas.CheckBoxes = true;
             lvEncomiendas.Columns.AddRange(new ColumnHeader[] { columnHeader1, columnHeader2, columnHeader3, columnHeader4, columnHeader5 });
-            lvEncomiendas.Location = new Point(56, 224);
-            lvEncomiendas.Margin = new Padding(3, 4, 3, 4);
+            lvEncomiendas.Location = new Point(49, 168);
             lvEncomiendas.Name = "lvEncomiendas";
-            lvEncomiendas.Size = new Size(653, 142);
+            lvEncomiendas.Size = new Size(572, 108);
             lvEncomiendas.TabIndex = 43;
             lvEncomiendas.UseCompatibleStateImageBehavior = false;
             lvEncomiendas.View = View.Details;
@@ -141,24 +145,27 @@
             // 
             // button3
             // 
-            button3.Location = new Point(595, 410);
+            button3.Location = new Point(521, 308);
+            button3.Margin = new Padding(3, 2, 3, 2);
             button3.Name = "button3";
-            button3.Size = new Size(114, 50);
+            button3.Size = new Size(100, 38);
             button3.TabIndex = 44;
             button3.Text = "Volver al Menú";
             button3.UseVisualStyleBackColor = true;
             // 
-            // cdEntregarClienteForms
+            // CdEntregarClienteForms
             // 
-            AutoScaleDimensions = new SizeF(8F, 20F);
+            AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(772, 472);
+            AutoScroll = true;
+            ClientSize = new Size(676, 354);
             Controls.Add(button3);
             Controls.Add(lvEncomiendas);
             Controls.Add(btnConfirmarEntrega);
             Controls.Add(groupBox1);
             Controls.Add(label2);
-            Name = "cdEntregarClienteForms";
+            Margin = new Padding(3, 2, 3, 2);
+            Name = "CdEntregarClienteForms";
             Text = "cdEntregarClienteForms";
             groupBox1.ResumeLayout(false);
             groupBox1.PerformLayout();
