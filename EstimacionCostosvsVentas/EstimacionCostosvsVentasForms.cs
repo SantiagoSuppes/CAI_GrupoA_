@@ -122,10 +122,21 @@ namespace CAI_GrupoA_.EstimacionCostosvsVentas
             _mostrandoPopup = true;
             try
             {
+                if (dgvResultados.Items.Count == 0)
+                {
+                    MessageBox.Show(this, "No hay datos para generar el reporte.", "Advertencia",
+                        MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    return;
+                }
+
                 MessageBox.Show(this, "Reporte Generado Correctamente", "Reporte",
                     MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-            finally { _mostrandoPopup = false; }
+            finally
+            {
+                _mostrandoPopup = false;
+            }
         }
+
     }
 }
