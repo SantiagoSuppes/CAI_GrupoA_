@@ -9,6 +9,7 @@ using CAI_GrupoA_.FacturacionClientes;
 using CAI_GrupoA_.CdRendicionFletero;
 using CAI_GrupoA_.EstimacionCostosvsVentas;
 using CAI_GrupoA_.GuiaEstadoHistorial;
+using CAI_GrupoA_.AgenciaEntregarCliente;
 
 namespace CAI_GrupoA_
 {
@@ -25,7 +26,6 @@ namespace CAI_GrupoA_
             ApplicationConfiguration.Initialize();
 
             Application.Run(new LogInForm());
-
             Application.Run(new MenuPrincipalForm());
 
         }
