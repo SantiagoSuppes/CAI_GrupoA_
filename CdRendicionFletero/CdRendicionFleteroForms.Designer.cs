@@ -76,7 +76,7 @@
             label1.Size = new Size(485, 30);
             label1.TabIndex = 0;
             label1.Text = "🚚 Entrega y recepción de pedidos última milla";
-            label1.Click += label1_Click;
+            //label1.Click += label1_Click;
             // 
             // groupBox1
             // 
@@ -119,7 +119,7 @@
             txtDniFletero.Name = "txtDniFletero";
             txtDniFletero.Size = new Size(336, 23);
             txtDniFletero.TabIndex = 0;
-            txtDniFletero.TextChanged += txtDniFletero_TextChanged;
+            //txtDniFletero.TextChanged += txtDniFletero_TextChanged;
             // 
             // groupBox2
             // 
@@ -186,7 +186,7 @@
             groupBox3.TabIndex = 44;
             groupBox3.TabStop = false;
             groupBox3.Text = "Hojas de Ruta Cumplidas";
-            groupBox3.Enter += groupBox3_Enter;
+            //groupBox3.Enter += groupBox3_Enter;
             // 
             // lvDistribucionesRealizadas
             // 
@@ -339,7 +339,7 @@
             btnConfirmar.TabIndex = 47;
             btnConfirmar.Text = "Confirmar";
             btnConfirmar.UseVisualStyleBackColor = true;
-            btnConfirmar.Click += btnConfirmar_Click;
+            //btnConfirmar.Click += btnConfirmar_Click;
             // 
             // CdRendicionFleteroForms
             // 
