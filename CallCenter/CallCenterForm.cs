@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CAI_GrupoA_.Entidades;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
@@ -14,353 +15,245 @@ namespace CAI_GrupoA_.CallCenter
 {
     public partial class CallCenterForm : Form
     {
-        private readonly Dictionary<string, List<string>> clientesPrueba = new Dictionary<string, List<string>>();
-        private static readonly string[] _tiposCaja = { "S", "M", "L", "XXL" };
-        private static readonly string[] _modalidades = { "Domicilio", "Agencia", "CD" };
-
-        private readonly Dictionary<string, List<string>> _agenciasPorProv = new()
-        {
-            ["Buenos Aires"] = new() { "Agencia Quilmes", "Agencia La Plata" },
-            ["Córdoba"] = new() { "Agencia Centro", "Agencia Nueva Córdoba" },
-            ["Santa Fe"] = new() { "Agencia Rosario" }
-        };
-
-        private readonly Dictionary<string, List<string>> _cdsPorProv = new()
-        {
-            ["Buenos Aires"] = new() { "CD Norte", "CD Sur" },
-            ["Córdoba"] = new() { "CD Córdoba 1" },
-            ["Santa Fe"] = new() { "CD Rosario" }
-        };
-
-        private readonly Dictionary<string, string> _codigoPorCD = new()
-        {
-            ["CD Norte"] = "CD01",
-            ["CD Sur"] = "CD02",
-            ["CD Córdoba 1"] = "CD03",
-            ["CD Rosario"] = "CD04"
-        };
-        private readonly Dictionary<string, int> _secuenciaPorCD = new();
-
         public CallCenterForm()
         {
             InitializeComponent();
-            CargarClientes();
-            InitDestino();
-            InicializarTipoCaja();
+
+            cmbProvincia.Items.Clear();
+            cmbProvincia.Items.AddRange(modelo.GetProvincias());
+
+            cmbModalidad.Items.Clear();
+            cmbModalidad.Items.AddRange(modelo.GetModalidades());
+
+            cmbTipoCaja.Items.Clear();
+            cmbTipoCaja.Items.AddRange(modelo.GetTiposCaja());
+
+            // Estado inicial
+            cmbCD.Enabled = false;
+            cmbAgencia.Enabled = false;
+            txtCalleYAltura.Enabled = false;
         }
 
-        private static void Msg(string m) => MessageBox.Show(m, "Validación");
+        private readonly CallCenterModelo modelo = new();
 
-        private void CargarClientes()
+        private void buscarClienteButton_Click(object sender, EventArgs e)
         {
-            clientesPrueba["30123456789"] = new List<string>
-            {
-                "Av. Corrientes 1234, CABA",
-                "Calle Falsa 123, Lanús",
-                "Ruta 3 Km 45, Estación Central"
-            };
-
-            clientesPrueba["27876543210"] = new List<string>
-            {
-                "Av. San Martín 200, Córdoba",
-                "Parque Industrial 45, Córdoba"
-            };
-
-            clientesPrueba["33111222334"] = new List<string>
-            {
-                "Calle 9 de Julio 555, Rosario"
-            };
-        }
-
-        private bool ValidarCuit(out string cuitInput)
-        {
-            cuitInput = cuitTextBox.Text.Trim();
             clienteListView.Items.Clear();
+            DirSeleccionadaTextBox.Text = "";
 
-            if (string.IsNullOrEmpty(cuitInput))
+            string raw = cuitTextBox.Text;
+            string cuit = CallCenterModelo.NormalizarCuit(raw);
+
+            if (!CallCenterModelo.EsCuitBasico(cuit))
             {
-                MessageBox.Show("Por favor ingrese un CUIT.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
+                MessageBox.Show("CUIT inválido. Debe tener 11 dígitos (puede ingresar con guiones).", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return;
             }
 
-            if (!Regex.IsMatch(cuitInput, @"^\d{2}-?\d{8}-?\d{1}$"))
+            var cliente = modelo.BuscarClientePorCuit(cuit);
+            if (cliente == null)
             {
-                MessageBox.Show("El formato del CUIT no es válido. Ejemplo válido: 30-12345678-9", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                return false;
+                MessageBox.Show("Cliente no encontrado para el CUIT ingresado.", "No encontrado", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
             }
-            return true;
-        }
 
-        private void BuscarClienteButton_Click(object sender, EventArgs e)
-        {
-            if (ValidarCuit(out string cuitInput))
+            // Mostrar direcciones del cliente en la lista
+            foreach (var dir in cliente.Direcciones)
             {
-                string cuitDigits = Regex.Replace(cuitInput, @"\D", "");
-                List<string> direcciones = ObtenerDireccionesPorCUIT(cuitDigits);
-
-                clienteListView.Items.Clear();
-
-                if (direcciones.Count == 0)
-                {
-                    MessageBox.Show("No se encontraron direcciones para este CUIT.", "Información", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                }
-                else
-                {
-                    clienteListView.BeginUpdate();
-                    foreach (var dir in direcciones)
-                    {
-                        clienteListView.Items.Add(dir);
-                    }
-                    clienteListView.EndUpdate();
-                }
+                string prov = dir.Provincia.ToString();
+                string texto = $"{dir.CalleYAltura} - {dir.Localidad} ({prov})";
+                var item = new ListViewItem(texto) { Tag = dir };
+                clienteListView.Items.Add(item);
             }
-        }
-
-        private List<string> ObtenerDireccionesPorCUIT(string cuitSinGuiones)
-        {
-            if (clientesPrueba.TryGetValue(cuitSinGuiones, out var direcciones))
-            {
-                return [.. direcciones];
-            }
-            return new List<string>();
         }
 
         private void clienteListView_SelectedIndexChanged(object sender, EventArgs e)
         {
-            DirSeleccionadaTextBox.Text = clienteListView.SelectedItems.Count > 0
-                ? clienteListView.SelectedItems[0].Text
-                : string.Empty;
+            if (clienteListView.SelectedItems.Count == 0)
+            {
+                DirSeleccionadaTextBox.Text = "";
+                return;
+            }
+
+            var item = clienteListView.SelectedItems[0];
+            DirSeleccionadaTextBox.Text = item.Text;
         }
 
-        // ======== Modalidad y destino ========
-        private void InitDestino()
+        private void cmbProvincia_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            cmbModalidad.Items.Clear();
-            cmbModalidad.Items.AddRange(_modalidades);
 
-            var provincias = _agenciasPorProv.Keys.Union(_cdsPorProv.Keys).Distinct().OrderBy(x => x).ToArray();
-            cmbProvincia.Items.Clear();
-            cmbProvincia.Items.AddRange(provincias);
-
-            cmbModalidad.SelectedIndexChanged += (_, __) => AplicarReglasModalidad();
-            cmbProvincia.SelectedIndexChanged += (_, __) => CargarDependientes();
-
-            AplicarReglasModalidad();
-        }
-
-        private void AplicarReglasModalidad()
-        {
-            string modalidad = cmbModalidad.Text;
-            bool esDom = modalidad == "Domicilio";
-            bool esAge = modalidad == "Agencia";
-            bool esCD = modalidad == "CD";
-
-            txtCalleYAltura.Enabled = esDom;
-            cmbAgencia.Enabled = esAge;
-            cmbCD.Enabled = esCD;
-
-            if (!esDom) txtCalleYAltura.Clear();
-            if (!esAge) { cmbAgencia.Items.Clear(); cmbAgencia.SelectedIndex = -1; cmbAgencia.Text = ""; }
-            if (!esCD) { cmbCD.Items.Clear(); cmbCD.SelectedIndex = -1; cmbCD.Text = ""; }
-
-            CargarDependientes();
-        }
-
-        private void CargarDependientes()
-        {
-            string prov = cmbProvincia.Text;
-            if (string.IsNullOrWhiteSpace(prov)) { cmbAgencia.Items.Clear(); cmbCD.Items.Clear(); return; }
-
-            cmbAgencia.Items.Clear();
-            if (_agenciasPorProv.TryGetValue(prov, out var ags)) cmbAgencia.Items.AddRange([.. ags]);
+            var prov = cmbProvincia.SelectedItem?.ToString();
 
             cmbCD.Items.Clear();
-            if (_cdsPorProv.TryGetValue(prov, out var cds)) cmbCD.Items.AddRange([.. cds]);
+            cmbAgencia.Items.Clear();
+
+            if (string.IsNullOrWhiteSpace(prov))
+            {
+                return;
+            }
+
+            var cds = modelo.GetCDs(prov);
+            if (cds != null && cds.Length > 0)
+                cmbCD.Items.AddRange(cds);
+
+            var ags = modelo.GetAgencias(prov);
+            if (ags != null && ags.Length > 0)
+                cmbAgencia.Items.AddRange(ags);
+
+            if (cmbAgencia.SelectedItem != null && !cmbAgencia.Items.Contains(cmbAgencia.SelectedItem))
+                cmbAgencia.SelectedIndex = -1;
+
+            if (cmbCD.SelectedItem != null && !cmbCD.Items.Contains(cmbCD.SelectedItem))
+                cmbCD.SelectedIndex = -1;
         }
 
-        // ======== Validación de destinatario ========
-        private bool ValidarDestinatario()
+        private void cmbModalidad_SelectedIndexChanged(object? sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtNombreYApellido.Text) || txtNombreYApellido.Text.Trim().Length < 2)
+            var modalidad = cmbModalidad.SelectedItem?.ToString();
+            if (string.Equals(modalidad, "Domicilio", StringComparison.OrdinalIgnoreCase))
             {
-                Msg("Nombre y Apellido requerido.");
-                txtNombreYApellido.Focus();
-                return false;
+                txtCalleYAltura.Enabled = true;
+                cmbAgencia.Enabled = false;
+                cmbCD.Enabled = false;
             }
-
-            string dni = new string(txtDNI.Text.Where(char.IsDigit).ToArray());
-            if (dni.Length < 7 || dni.Length > 8)
+            else if (string.Equals(modalidad, "Agencia", StringComparison.OrdinalIgnoreCase))
             {
-                Msg("DNI inválido. Use 7–8 dígitos.");
-                txtDNI.Focus();
-                return false;
+                txtCalleYAltura.Enabled = false;
+                cmbAgencia.Enabled = true;
+                cmbCD.Enabled = false;
             }
-
-            string telefono = txtTelefono.Text.Trim();
-            if (telefono.Length < 6 || telefono.Length > 15 || !telefono.All(char.IsDigit))
+            else if (string.Equals(modalidad, "CD", StringComparison.OrdinalIgnoreCase))
             {
-                Msg("Teléfono inválido. Solo números 6–15 dígitos.");
-                txtTelefono.Focus();
-                return false;
+                txtCalleYAltura.Enabled = false;
+                cmbAgencia.Enabled = false;
+                cmbCD.Enabled = true;
             }
-
-            if (string.IsNullOrWhiteSpace(cmbProvincia.Text))
+            else
             {
-                Msg("Seleccioná la provincia.");
-                cmbProvincia.DroppedDown = true;
-                return false;
+                // Default
+                txtCalleYAltura.Enabled = true;
+                cmbAgencia.Enabled = false;
+                cmbCD.Enabled = false;
             }
-
-            if (string.IsNullOrWhiteSpace(txtLocalidad.Text) || txtLocalidad.Text.Trim().Length < 2)
-            {
-                Msg("Ingrese Localidad de destino.");
-                txtLocalidad.Focus();
-                return false;
-            }
-
-            if (!ReqCodigoPostal(txtCodigoPostal))
-            {
-                Msg("Código Postal inválido. Use 4 dígitos.");
-                txtCodigoPostal.Focus();
-                return false;
-            }
-
-            if (string.IsNullOrWhiteSpace(cmbModalidad.Text))
-            {
-                Msg("Seleccioná la modalidad de entrega.");
-                cmbModalidad.DroppedDown = true;
-                return false;
-            }
-
-            switch (cmbModalidad.Text)
-            {
-                case "Domicilio":
-                    if (string.IsNullOrWhiteSpace(txtCalleYAltura.Text))
-                    {
-                        Msg("Ingresá calle y altura.");
-                        txtCalleYAltura.Focus();
-                        return false;
-                    }
-                    break;
-                case "Agencia":
-                    if (cmbAgencia.SelectedIndex < 0)
-                    {
-                        Msg("Seleccioná una agencia válida.");
-                        cmbAgencia.DroppedDown = true;
-                        return false;
-                    }
-                    break;
-                case "CD":
-                    if (cmbCD.SelectedIndex < 0)
-                    {
-                        Msg("Seleccioná un CD válido.");
-                        cmbCD.DroppedDown = true;
-                        return false;
-                    }
-                    break;
-            }
-            return true;
-        }
-
-        private static bool ReqCodigoPostal(TextBox tb)
-        {
-            var s = (tb?.Text ?? "").Trim().ToUpperInvariant();
-            if (string.IsNullOrWhiteSpace(s)) return false;
-            bool digits4 = s.All(char.IsDigit) && s.Length == 4;
-            bool cpa8 = s.Length == 8 && s.All(char.IsLetterOrDigit);
-            return digits4 || cpa8;
-        }
-
-        // ======== Agregar detalle ========
-        private void InicializarTipoCaja()
-        {
-            cmbTipoCaja.Items.Clear();
-            cmbTipoCaja.Items.AddRange([.. _tiposCaja]);
-            cmbTipoCaja.SelectedIndex = -1;
         }
 
         private void btnAgregar_Click(object sender, EventArgs e)
         {
-            if (cmbTipoCaja.SelectedIndex < 0)
+            if (cmbTipoCaja.SelectedItem == null)
             {
-                Msg("Seleccioná el tipo de caja.");
-                cmbTipoCaja.DroppedDown = true;
+                MessageBox.Show("Seleccione un tipo de caja.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            if (!int.TryParse(nudCantidad.Text, out int cantidad) || cantidad <= 0)
+            int qty = (int)nudCantidad.Value;
+            if (qty <= 0)
             {
-                Msg("Ingresá una cantidad válida (mayor a cero).");
-                nudCantidad.Focus();
+                MessageBox.Show("Ingrese una cantidad mayor que cero.", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            string tipoCaja = cmbTipoCaja.SelectedItem.ToString();
-            var existente = lvDetalle.Items.Cast<ListViewItem>()
-                .FirstOrDefault(i => string.Equals(i.SubItems[0].Text, tipoCaja, StringComparison.OrdinalIgnoreCase));
+            string tipoText = cmbTipoCaja.SelectedItem.ToString();
 
-            if (existente != null)
+            TamañoCajaEnum tam = TamañoCajaEnum.S;
+            try
             {
-                int actual = int.Parse(existente.SubItems[1].Text);
-                existente.SubItems[1].Text = (actual + cantidad).ToString();
+                tam = (TamañoCajaEnum)Enum.Parse(typeof(TamañoCajaEnum), tipoText, true);
             }
-            else
+            catch
             {
-                var item = new ListViewItem(tipoCaja);
-                item.SubItems.Add(cantidad.ToString());
-                lvDetalle.Items.Add(item);
             }
 
+            var detalle = new CallCenterModelo.DetalleCaja { Tam = tam, Qty = qty };
+            var item = new ListViewItem(new[] { tipoText, qty.ToString() }) { Tag = detalle };
+            lvDetalle.Items.Add(item);
+
+            // Reset campos de detalle
+            nudCantidad.Value = 1;
             cmbTipoCaja.SelectedIndex = -1;
-            cmbTipoCaja.Text = "";
-            nudCantidad.Text = "1";
-        }
-
-        private string GenerarNumeroGuia(string cdNombre)
-        {
-            var prefijo = _codigoPorCD.TryGetValue(cdNombre, out var cod) ? cod : "CD00";
-            int next = _secuenciaPorCD.TryGetValue(prefijo, out var cur) ? cur + 1 : 1;
-            _secuenciaPorCD[prefijo] = next;
-            return $"{prefijo}-{next:0000}";
         }
 
         private void btnRegistrarPedido_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrEmpty(DirSeleccionadaTextBox.Text))
+            var dto = new CallCenterModelo.RegistroEnvioDto
             {
-                Msg("Buscá un cliente y seleccioná una dirección.");
+                Cuit = cuitTextBox.Text,
+                DireccionCliente = DirSeleccionadaTextBox.Text,
+                NombreApellido = txtNombreYApellido.Text,
+                Dni = txtDNI.Text,
+                Telefono = txtTelefono.Text,
+                CodigoPostal = txtCodigoPostal.Text,
+                Modalidad = cmbModalidad.SelectedItem?.ToString(),
+                Provincia = cmbProvincia.SelectedItem?.ToString(),
+                Localidad = txtLocalidad.Text,
+                CalleYAltura = txtCalleYAltura.Text,
+                Agencia = cmbAgencia.SelectedItem?.ToString(),
+                CD = cmbCD.SelectedItem?.ToString()
+            };
+
+            var detalle = new List<CallCenterModelo.DetalleCaja>();
+            foreach (ListViewItem it in lvDetalle.Items)
+            {
+                if (it.Tag is CallCenterModelo.DetalleCaja dc)
+                {
+                    detalle.Add(dc);
+                }
+                else
+                {
+                    // Fallback: intentar crear desde texto
+                    var tipoText = it.SubItems[0].Text;
+                    var qtyText = it.SubItems.Count > 1 ? it.SubItems[1].Text : "0";
+                    if (int.TryParse(qtyText, out int q))
+                    {
+                        try
+                        {
+                            var tam = (TamañoCajaEnum)Enum.Parse(typeof(TamañoCajaEnum), tipoText, true);
+                            detalle.Add(new CallCenterModelo.DetalleCaja { Tam = tam, Qty = q });
+                        }
+                        catch
+                        {
+                            // ignorar
+                        }
+                    }
+                }
+            }
+
+            var errores = modelo.Validar(dto, detalle);
+            if (errores != null && errores.Count > 0)
+            {
+                MessageBox.Show(string.Join(Environment.NewLine, errores), "Errores de validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
-            else if (!ValidarDestinatario()) return;
-            else if (lvDetalle.Items.Count == 0)
+
+            var guia = modelo.CrearGuia(dto, detalle);
+            if (guia != null)
             {
-                Msg("Agregá al menos un tipo de caja al detalle.");
+                MessageBox.Show($"Guía creada: {guia.NumeroGuia}", "OK", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LimpiarFormulario();
             }
             else
             {
-                var nroGuia = GenerarNumeroGuia(cmbCD.Text);
-                Msg($"Pedido registrado correctamente.\nN° de guía: {nroGuia}");
-                LimpiarControles(this);
+                MessageBox.Show("Ocurrió un error al crear la guía.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
             }
         }
 
-        private static void LimpiarControles(Control root)
+        private void LimpiarFormulario()
         {
-            foreach (Control c in root.Controls)
-            {
-                switch (c)
-                {
-                    case TextBox tb: tb.Clear(); break;
-                    case ComboBox cb: cb.SelectedIndex = -1; cb.Text = ""; break;
-                    case NumericUpDown nud: nud.Value = nud.Minimum; break;
-                    case CheckBox chk: chk.Checked = false; break;
-                    case RadioButton rb: rb.Checked = false; break;
-                    case ListView lv: lv.Items.Clear(); break;
-                    case DataGridView dg: dg.Rows.Clear(); break;
-                    case DateTimePicker dt: dt.Value = DateTime.Today; break;
-                }
-                if (c.HasChildren) LimpiarControles(c);
-            }
+            cuitTextBox.Clear();
+            clienteListView.Items.Clear();
+            DirSeleccionadaTextBox.Clear();
+
+            txtNombreYApellido.Clear();
+            txtDNI.Clear();
+            txtTelefono.Clear();
+            txtCodigoPostal.Clear();
+            cmbModalidad.SelectedIndex = -1;
+            cmbProvincia.SelectedIndex = -1;
+            txtLocalidad.Clear();
+            txtCalleYAltura.Clear();
+            cmbAgencia.Items.Clear();
+            cmbCD.Items.Clear();
+
+            lvDetalle.Items.Clear();
         }
     }
 }

@@ -52,7 +52,7 @@ namespace CAI_GrupoA_.LogIn
 
         private void ingresarButton_Click(object sender, EventArgs e)
         {
-            usuarios.Add(new user { usuario = "admin", contraseña = "password" });
+            usuarios.Add(new user { usuario = "admin", contraseña = "admin" });
 
             user usuarioIngresado = new user
             {

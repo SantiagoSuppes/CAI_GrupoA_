@@ -8,14 +8,12 @@ namespace CAI_GrupoA_.Entidades
 {
     public class DireccionEnt
     {
+        public ProvinciaEnum Provincia { get; set; }
         public string Localidad { get; set; }
         public int CodigoPostal { get; set; }
-
         public TipoPuntoEnum TipoPunto { get; set; }
-
         public string CalleYAltura { get; set; }
 
-        public ProvinciaEnum Provincia { get; set; }
     }
 }
 
