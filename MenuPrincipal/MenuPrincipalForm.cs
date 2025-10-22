@@ -64,7 +64,7 @@ namespace CAI_GrupoA_.MenuPrincipal
             dtpFecha.Value = DateTime.Today;
 
             // Usuario ficticio para la sesión actual
-            txtUsuario.Text = "operador.logistica"; // o "admin.finanzas" si querés probar
+            txtUsuario.Text = "admin.finanzas"; // o "admin.finanzas" si querés probar
             txtUsuario.ReadOnly = true;
 
             // Inicializar sesión en el modelo
