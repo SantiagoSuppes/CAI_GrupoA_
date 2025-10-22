@@ -1,65 +1,29 @@
-﻿using System;
+﻿// Archivo: CdRecepcionPaquetes/CdRecepcionPaquetesForm.cs
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Windows.Forms;
+using CAI_GrupoA_.Entidades;
 
 namespace CAI_GrupoA_.CdRecepcionPaquetes
 {
     public partial class CdRecepcionPaquetesForm : Form
     {
-        // ========= Modelos y datos =========
-        private sealed class Cliente
+        private readonly CdRecepcionPaquetesModelo _svc = new CdRecepcionPaquetesModelo();
+
+        public CdRecepcionPaquetesForm()
         {
-            public string Cuit { get; init; } = string.Empty;   // almacenado sin guiones, 11 dígitos
-            public string RazonSocial { get; init; } = string.Empty;
+            InitializeComponent();
         }
-
-        private readonly List<Cliente> _clientes = new()
-        {
-            new Cliente { Cuit = "20123456780", RazonSocial = "Transporte TUTASA S.A." },
-            new Cliente { Cuit = "27234567892", RazonSocial = "Logística Andina SRL" },
-            new Cliente { Cuit = "20345678900", RazonSocial = "Distribuidora Central S.A." },
-            new Cliente { Cuit = "23321098761", RazonSocial = "Envíos Express SRL" },
-            new Cliente { Cuit = "30765432108", RazonSocial = "Comercial del Plata S.A." }
-        };
-
-        private static readonly string[] _tiposCaja = { "S", "M", "L", "XXL" };
-        private static readonly string[] _modalidades = { "Domicilio", "Agencia", "CD" };
-
-        private readonly Dictionary<string, List<string>> _agenciasPorProv = new()
-        {
-            ["Buenos Aires"] = new() { "Agencia Quilmes", "Agencia La Plata" },
-            ["Córdoba"] = new() { "Agencia Centro", "Agencia Nueva Córdoba" },
-            ["Santa Fe"] = new() { "Agencia Rosario" }
-        };
-        private readonly Dictionary<string, List<string>> _cdsPorProv = new()
-        {
-            ["Buenos Aires"] = new() { "CD Norte", "CD Sur" },
-            ["Córdoba"] = new() { "CD Córdoba 1" },
-            ["Santa Fe"] = new() { "CD Rosario" }
-        };
-
-        // ===== Numeración por CD origen =====
-        private readonly Dictionary<string, string> _codigoPorCD = new()
-        {
-            ["CD Norte"] = "CD01",
-            ["CD Sur"] = "CD02",
-            ["CD Córdoba 1"] = "CD03",
-            ["CD Rosario"] = "CD04"
-        };
-        private readonly Dictionary<string, int> _secuenciaPorCD = new(); // prefijo -> último número
-
-        // ========= Load =========
-        public CdRecepcionPaquetesForm() => InitializeComponent();
 
         private void CdRecepcionPaquetesForm_Load(object sender, EventArgs e)
         {
             InitListView();
             InitCajas();
             InitDestino();
-
-            // permitir dígitos y guiones en CUIT
             txtCuit.KeyPress += txtCuit_KeyPress;
+
+            cmbModalidad.SelectedIndexChanged += CmbModalidad_SelectedIndexChanged;
+            cmbProvincia.SelectedIndexChanged += CmbProvincia_SelectedIndexChanged;
         }
 
         private void InitListView()
@@ -76,7 +40,7 @@ namespace CAI_GrupoA_.CdRecepcionPaquetes
         private void InitCajas()
         {
             cmbTipoCaja.Items.Clear();
-            cmbTipoCaja.Items.AddRange(_tiposCaja);
+            cmbTipoCaja.Items.AddRange(_svc.GetTiposCaja());
             nudCantidad.Minimum = 1;
             nudCantidad.Maximum = 1000;
             nudCantidad.Value = 1;
@@ -85,50 +49,74 @@ namespace CAI_GrupoA_.CdRecepcionPaquetes
         private void InitDestino()
         {
             cmbModalidad.Items.Clear();
-            cmbModalidad.Items.AddRange(_modalidades);
+            cmbModalidad.Items.AddRange(_svc.GetModalidades());
 
-            var provincias = _agenciasPorProv.Keys.Union(_cdsPorProv.Keys).Distinct().OrderBy(x => x).ToArray();
             cmbProvincia.Items.Clear();
-            cmbProvincia.Items.AddRange(provincias);
-
-            cmbModalidad.SelectedIndexChanged += (_, __) => AplicarReglasModalidad();
-            cmbProvincia.SelectedIndexChanged += (_, __) => CargarDependientes();
+            cmbProvincia.Items.AddRange(_svc.GetProvincias());
 
             AplicarReglasModalidad();
+            CargarDependientes();
         }
 
-        // ========= Buscar cliente =========
+        // Buscar cliente
         private void btnBuscar_Click(object sender, EventArgs e)
         {
             txtCliente.Clear();
 
-            string cuit = NormalizarCuit(txtCuit.Text); // admite "20-12345678-0"
-            if (!EsCuitBasico(cuit))
-            { Msg("CUIT inválido. Debe tener 11 dígitos."); txtCuit.Focus(); return; }
+            string cuit = CdRecepcionPaquetesModelo.NormalizarCuit(txtCuit.Text);
+            if (!CdRecepcionPaquetesModelo.EsCuitBasico(cuit))
+            {
+                Msg("CUIT inválido. Debe tener 11 dígitos.");
+                txtCuit.Focus();
+                return;
+            }
 
-            var cli = _clientes.FirstOrDefault(x => x.Cuit == cuit);
-            if (cli is null)
-            { Msg("No se encontró ningún cliente con ese CUIT."); txtCuit.Clear(); return; }
+            var cli = _svc.BuscarClientePorCuit(cuit);
+            if (cli == null)
+            {
+                Msg("No se encontró ningún cliente con ese CUIT.");
+                txtCuit.Clear();
+                return;
+            }
 
             txtCliente.Text = cli.RazonSocial;
         }
 
-        // ========= Agregar detalle =========
+        // Agregar ítem al detalle
         private void btnAgregar_Click(object sender, EventArgs e)
         {
             string tipo = (cmbTipoCaja.Text ?? "").Trim();
             int qty = (int)nudCantidad.Value;
 
-            if (string.IsNullOrWhiteSpace(tipo)) { Msg("Seleccioná el tipo de caja."); cmbTipoCaja.Focus(); return; }
-            if (qty <= 0) { Msg("La cantidad debe ser mayor a cero."); nudCantidad.Focus(); return; }
-
-            var it = lvDetalle.Items.Cast<ListViewItem>()
-                     .FirstOrDefault(i => string.Equals(i.SubItems[0].Text, tipo, StringComparison.OrdinalIgnoreCase));
-
-            if (it != null)
+            if (string.IsNullOrWhiteSpace(tipo))
             {
-                int actual = int.Parse(it.SubItems[1].Text);
-                it.SubItems[1].Text = (actual + qty).ToString();
+                Msg("Seleccioná el tipo de caja.");
+                cmbTipoCaja.Focus();
+                return;
+            }
+            if (qty <= 0)
+            {
+                Msg("La cantidad debe ser mayor a cero.");
+                nudCantidad.Focus();
+                return;
+            }
+
+            // buscar si ya existe fila con ese tipo
+            ListViewItem existente = null;
+            foreach (ListViewItem it in lvDetalle.Items)
+            {
+                if (string.Equals(it.SubItems[0].Text, tipo, StringComparison.OrdinalIgnoreCase))
+                {
+                    existente = it;
+                    break;
+                }
+            }
+
+            if (existente != null)
+            {
+                int actual = 0;
+                int.TryParse(existente.SubItems[1].Text, out actual);
+                existente.SubItems[1].Text = (actual + qty).ToString();
             }
             else
             {
@@ -142,47 +130,34 @@ namespace CAI_GrupoA_.CdRecepcionPaquetes
             nudCantidad.Value = 1;
         }
 
-        // ========= Modalidad / Provincia =========
-        private void AplicarReglasModalidad()
-        {
-            string modalidad = cmbModalidad.Text;
-
-            bool esDom = modalidad == "Domicilio";
-            bool esAge = modalidad == "Agencia";
-            bool esCD = modalidad == "CD";
-
-            txtCalleAltura.Enabled = esDom;
-            cmbAgencia.Enabled = esAge;
-            cmbCD.Enabled = esCD;
-
-            if (!esDom) txtCalleAltura.Clear();
-            if (!esAge) { cmbAgencia.Items.Clear(); cmbAgencia.SelectedIndex = -1; cmbAgencia.Text = ""; }
-            if (!esCD) { cmbCD.Items.Clear(); cmbCD.SelectedIndex = -1; cmbCD.Text = ""; }
-
-            CargarDependientes();
-        }
-
-        private void CargarDependientes()
-        {
-            string prov = cmbProvincia.Text;
-            if (string.IsNullOrWhiteSpace(prov)) { cmbAgencia.Items.Clear(); cmbCD.Items.Clear(); return; }
-
-            cmbAgencia.Items.Clear();
-            if (_agenciasPorProv.TryGetValue(prov, out var ags)) cmbAgencia.Items.AddRange(ags.ToArray());
-
-            cmbCD.Items.Clear();
-            if (_cdsPorProv.TryGetValue(prov, out var cds)) cmbCD.Items.AddRange(cds.ToArray());
-        }
-
-        // ========= Confirmar / Enviar =========
+        // Confirmar registro
         private void button3_Click(object sender, EventArgs e)
         {
-            if (!ValidarTodo()) return;
+            var dto = new CdRecepcionPaquetesModelo.RegistroEnvioDto
+            {
+                Cuit = txtCuit.Text,
+                NombreApellido = nombreApellido.Text,
+                Dni = dni.Text,
+                Telefono = telefono.Text,
+                CodigoPostal = codigoPostal.Text,
+                Modalidad = cmbModalidad.Text,
+                Provincia = cmbProvincia.Text,
+                Localidad = txtLocalidad.Text,
+                CalleYAltura = txtCalleAltura.Text,
+                Agencia = cmbAgencia.Text,
+                CD = cmbCD.Text
+            };
 
-            var cdNombre = ObtenerCDOrigenPreferido();
-            var nroGuia = GenerarNumeroGuia(cdNombre);
+            List<CdRecepcionPaquetesModelo.DetalleCaja> detalle = ParseDetalle();
+            List<string> errores = _svc.Validar(dto, detalle);
+            if (errores.Count > 0)
+            {
+                Msg(string.Join("\n", errores));
+                return;
+            }
 
-            Msg($"Envío registrado correctamente.\nN° de guía: {nroGuia}");
+            var guia = _svc.CrearGuia(dto, detalle);
+            Msg("Envío registrado correctamente.\nN° de guía: " + guia.NumeroGuia);
 
             LimpiarControles(this);
             nudCantidad.Value = 1;
@@ -191,131 +166,118 @@ namespace CAI_GrupoA_.CdRecepcionPaquetes
             InitDestino();
         }
 
-        // ========= Numeración =========
-        private string GenerarNumeroGuia(string cdNombre)
+        private List<CdRecepcionPaquetesModelo.DetalleCaja> ParseDetalle()
         {
-            var prefijo = _codigoPorCD.TryGetValue(cdNombre, out var cod) ? cod : "CD00";
-            int next = _secuenciaPorCD.TryGetValue(prefijo, out var cur) ? cur + 1 : 1;
-            _secuenciaPorCD[prefijo] = next;
-            return $"{prefijo}-{next:0000}";
-        }
-
-        private string ObtenerCDOrigenPreferido()
-        {
-            if (cmbModalidad.Text == "CD" && cmbCD.SelectedIndex >= 0)
-                return cmbCD.Text;
-
-            return cmbProvincia.Text switch
-            {
-                "Córdoba" => "CD Córdoba 1",
-                "Santa Fe" => "CD Rosario",
-                "Buenos Aires" => "CD Norte",
-                _ => "CD Norte"
-            };
-        }
-
-        private bool ValidarTodo()
-        {
-            if (string.IsNullOrWhiteSpace(txtCuit.Text)) { Msg("Ingrese CUIT."); txtCuit.Focus(); return false; }
-            if (string.IsNullOrWhiteSpace(txtCliente.Text)) { Msg("Busque un cliente válido."); return false; }
-
-            if (!ReqTexto(nombreApellido, 2)) { Msg("Nombre y Apellido requerido."); nombreApellido.Focus(); return false; }
-            if (!ReqDni(dni)) { Msg("DNI inválido. Use 7–8 dígitos."); dni.Focus(); return false; }
-            if (!ReqTelefono(telefono)) { Msg("Teléfono inválido. Solo números 6–15 dígitos."); telefono.Focus(); return false; }
-            if (!ReqCodigoPostal(codigoPostal)) { Msg("Código Postal inválido."); codigoPostal.Focus(); return false; }
-
-            if (!ValidarDestinatario()) return false;
-
-            if (lvDetalle.Items.Count == 0) { Msg("Agregue al menos un tipo de caja."); return false; }
+            var list = new List<CdRecepcionPaquetesModelo.DetalleCaja>();
             foreach (ListViewItem it in lvDetalle.Items)
-                if (!int.TryParse(it.SubItems[1].Text, out int q) || q <= 0)
-                { Msg($"Cantidad inválida en '{it.SubItems[0].Text}'."); return false; }
-
-            return true;
-        }
-
-        private bool ValidarDestinatario()
-        {
-            if (string.IsNullOrWhiteSpace(cmbModalidad.Text)) { Msg("Seleccioná la modalidad de entrega."); return false; }
-            if (string.IsNullOrWhiteSpace(cmbProvincia.Text)) { Msg("Seleccioná la provincia."); return false; }
-            if (string.IsNullOrWhiteSpace(txtLocalidad.Text)) { Msg("Ingresá la localidad de destino."); return false; }
-
-            switch (cmbModalidad.Text)
             {
-                case "Domicilio":
-                    if (string.IsNullOrWhiteSpace(txtCalleAltura.Text)) { Msg("Ingresá calle y altura."); return false; }
-                    break;
-                case "Agencia":
-                    if (cmbAgencia.SelectedIndex < 0) { Msg("Seleccioná una agencia válida."); return false; }
-                    break;
-                case "CD":
-                    if (cmbCD.SelectedIndex < 0) { Msg("Seleccioná un CD válido."); return false; }
-                    break;
+                TamañoCajaEnum tam;
+                int q;
+                if (Enum.TryParse<TamañoCajaEnum>(it.SubItems[0].Text.Trim(), true, out tam)
+                    && int.TryParse(it.SubItems[1].Text, out q)
+                    && q > 0)
+                {
+                    var d = new CdRecepcionPaquetesModelo.DetalleCaja();
+                    d.Tam = tam;
+                    d.Qty = q;
+                    list.Add(d);
+                }
             }
-            return true;
+            return list;
         }
 
-        // ========= Utilitarios =========
+        // Dependencias UI
+        private void CmbModalidad_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            AplicarReglasModalidad();
+        }
+
+        private void CmbProvincia_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            CargarDependientes();
+        }
+
+        private void AplicarReglasModalidad()
+        {
+            string modalidad = cmbModalidad.Text;
+
+            bool esDom = modalidad == TipoPuntoEnum.Domicilio.ToString();
+            bool esAge = modalidad == TipoPuntoEnum.Agencia.ToString();
+            bool esCD = modalidad == TipoPuntoEnum.CD.ToString();
+
+            txtCalleAltura.Enabled = esDom;
+            cmbAgencia.Enabled = esAge;
+            cmbCD.Enabled = esCD;
+
+            if (!esDom) txtCalleAltura.Clear();
+            if (!esAge)
+            {
+                cmbAgencia.Items.Clear();
+                cmbAgencia.SelectedIndex = -1;
+                cmbAgencia.Text = "";
+            }
+            if (!esCD)
+            {
+                cmbCD.Items.Clear();
+                cmbCD.SelectedIndex = -1;
+                cmbCD.Text = "";
+            }
+
+            CargarDependientes();
+        }
+
+        private void CargarDependientes()
+        {
+            string prov = cmbProvincia.Text;
+
+            cmbAgencia.Items.Clear();
+            string[] ags = _svc.GetAgencias(prov);
+            if (ags.Length > 0) cmbAgencia.Items.AddRange(ags);
+
+            cmbCD.Items.Clear();
+            string[] cds = _svc.GetCDs(prov);
+            if (cds.Length > 0) cmbCD.Items.AddRange(cds);
+        }
+
+        // Utilitarios UI
         private static void LimpiarControles(Control root)
         {
             foreach (Control c in root.Controls)
             {
-                switch (c)
+                if (c is TextBox) ((TextBox)c).Clear();
+                else if (c is ComboBox)
                 {
-                    case TextBox tb: tb.Clear(); break;
-                    case ComboBox cb: cb.SelectedIndex = -1; cb.Text = ""; break;
-                    case NumericUpDown nud: nud.Value = nud.Minimum; break;
-                    case CheckBox chk: chk.Checked = false; break;
-                    case RadioButton rb: rb.Checked = false; break;
-                    case ListView lv: lv.Items.Clear(); break;
-                    case DataGridView dg: dg.Rows.Clear(); break;
-                    case DateTimePicker dt: dt.Value = DateTime.Today; break;
+                    var cb = (ComboBox)c;
+                    cb.SelectedIndex = -1;
+                    cb.Text = "";
                 }
+                else if (c is NumericUpDown)
+                {
+                    var nud = (NumericUpDown)c;
+                    nud.Value = nud.Minimum;
+                }
+                else if (c is CheckBox) ((CheckBox)c).Checked = false;
+                else if (c is RadioButton) ((RadioButton)c).Checked = false;
+                else if (c is ListView) ((ListView)c).Items.Clear();
+                else if (c is DataGridView) ((DataGridView)c).Rows.Clear();
+                else if (c is DateTimePicker) ((DateTimePicker)c).Value = DateTime.Today;
+
                 if (c.HasChildren) LimpiarControles(c);
             }
         }
 
-        // Acepta 20-12345678-0 o 20123456780
-        private static string NormalizarCuit(string s)
-            => new string((s ?? "").Where(char.IsDigit).ToArray());
-
-        private static bool EsCuitBasico(string cuitSinSeparadores)
-            => !string.IsNullOrWhiteSpace(cuitSinSeparadores) && cuitSinSeparadores.Length == 11;
-
-        private static string DigitsOnly(string s)
-            => new string((s ?? "").Where(char.IsDigit).ToArray());
-
-        private static bool ReqTexto(TextBox tb, int minLen = 1)
-            => tb != null && !string.IsNullOrWhiteSpace(tb.Text) && tb.Text.Trim().Length >= minLen;
-
-        private static bool ReqDni(TextBox tb)
-            => DigitsOnly(tb?.Text).Length is >= 7 and <= 8;
-
-        private static bool ReqTelefono(TextBox tb)
+        private static void Msg(string m)
         {
-            var s = (tb?.Text ?? "").Trim();
-            return s.Length is >= 6 and <= 15 && s.All(char.IsDigit);
+            MessageBox.Show(m, "Validación");
         }
 
-        private static bool ReqCodigoPostal(TextBox tb)
-        {
-            var s = (tb?.Text ?? "").Trim().ToUpperInvariant();
-            if (string.IsNullOrWhiteSpace(s)) return false;
-            bool digits4 = s.All(char.IsDigit) && s.Length == 4;
-            bool cpa8 = s.Length == 8 && s.All(char.IsLetterOrDigit);
-            return digits4 || cpa8;
-        }
-
-        private static void Msg(string m) => MessageBox.Show(m, "Validación");
-
-        // Solo dígitos, backspace y guion para el CUIT
         private void txtCuit_KeyPress(object sender, KeyPressEventArgs e)
         {
             if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && e.KeyChar != '-')
                 e.Handled = true;
         }
 
-        // ========= Stubs Designer =========
+        // Stubs Designer
         private void groupBox1_Enter(object sender, EventArgs e) { }
         private void groupBox2_Enter(object sender, EventArgs e) { }
         private void groupBox3_Enter(object sender, EventArgs e) { }
@@ -327,7 +289,7 @@ namespace CAI_GrupoA_.CdRecepcionPaquetes
         private void comboBox4_SelectedIndexChanged(object sender, EventArgs e) { }
         private void cuit_TextChanged(object sender, EventArgs e) { }
 
-        private void button1_Click(object sender, EventArgs e) => btnBuscar_Click(sender, e);
-        private void button2_Click(object sender, EventArgs e) => btnAgregar_Click(sender, e);
+        private void button1_Click(object sender, EventArgs e) { btnBuscar_Click(sender, e); }
+        private void button2_Click(object sender, EventArgs e) { btnAgregar_Click(sender, e); }
     }
 }
