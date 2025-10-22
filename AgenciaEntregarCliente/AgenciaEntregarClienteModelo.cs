@@ -5,7 +5,7 @@ using System.Windows.Forms;
 using CAI_GrupoA_.Entidades;
 
 namespace CAI_GrupoA_.AgenciaEntregarCliente
-{
+{//hola
     internal class AgenciaEntregarClienteModelo
     {
         private long ultimoDNIConsultado = -1;
@@ -147,6 +147,7 @@ namespace CAI_GrupoA_.AgenciaEntregarCliente
             return (prov, loc);
         }
 
+        // prueba 
         private static TEnum RandomEnum<TEnum>(Random r) where TEnum : struct, Enum
         {
             var values = (TEnum[])Enum.GetValues(typeof(TEnum));
