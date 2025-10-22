@@ -8,8 +8,23 @@ using CAI_GrupoA_.CdRendicionFletero;     // <-- importa el modelo
 namespace CAI_GrupoA_.CdRendicionFletero
 {//hola
     public partial class CdRendicionFleteroForms : Form
+
     {
+
+
         private readonly CdRendicionFleteroModelo modelo = new();
+
+        private void CdRendicionFleteroForms_Load(object sender, EventArgs e)
+        {
+            // vacío por ahora
+        }
+        public CdRendicionFleteroForms()
+        {
+            InitializeComponent();
+            this.Load += CdRendicionFleteroForms_Load;
+            btnBuscarViajesAsignados.Click += btnBuscarViajesAsignados_Click;
+        }
+
 
         private void btnBuscarViajesAsignados_Click(object sender, EventArgs e)
         {
