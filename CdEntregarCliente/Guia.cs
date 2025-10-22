@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace CAI_GrupoA_.AgenciaEntregarCliente;
+namespace CAI_GrupoA_.CdEntregarCliente;
 internal class Guia
 {
     public string NroGuia { get; set; } 

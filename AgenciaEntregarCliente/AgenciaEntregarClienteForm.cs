@@ -69,7 +69,7 @@ namespace CAI_GrupoA_.AgenciaEntregarCliente
                 return;
             }
 
-            var guiasSeleccionadas = itemsSeleccionados.Select(t => t.Tag).Cast<Guia>().ToList();
+            var guiasSeleccionadas = itemsSeleccionados.Select(t => t.Tag).Cast<GuiaEnt>().ToList();
             if (!modelo.Entregar(guiasSeleccionadas))
             {
                 return;

@@ -1,12 +1,12 @@
-﻿namespace CAI_GrupoA_.AgenciaEntregarCliente;
-internal class AgenciaEntregarClienteModelo
+﻿namespace CAI_GrupoA_.CdEntregarCliente;
+internal class CdEntregarClienteModelo
 {
     private long ultimoDNIConsultado = -1;
-    private readonly Dictionary<long, List<GuiaEnt>> guiasPorDNI = new();
+    private readonly Dictionary<long, List<Guia>> guiasPorDNI = new();
     private static readonly string[] _talles = { "S", "M", "L", "XL", "XXL" };
 
 
-    public List<GuiaEnt> Guias { get; set; }
+    public List<Guia> Guias { get; set; }
     
 
 
@@ -30,7 +30,7 @@ internal class AgenciaEntregarClienteModelo
         var rng = new Random((int)dni);
         int cantidad = rng.Next(2, 5); // 2..4 filas
 
-        var guias = new List<GuiaEnt>();
+        var guias = new List<Guia>();
         for (int i = 0; i < cantidad; i++)
         {
             guias.Add(new()
@@ -48,7 +48,7 @@ internal class AgenciaEntregarClienteModelo
         return true;
     }
 
-    public bool Entregar(List<GuiaEnt> seleccionadas)
+    public bool Entregar(List<Guia> seleccionadas)
     {
         foreach (var guia in seleccionadas)
         {
