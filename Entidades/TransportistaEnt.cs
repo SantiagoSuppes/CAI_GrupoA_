@@ -8,7 +8,10 @@ namespace CAI_GrupoA_.Entidades
 {
     public class TransportistaEnt
     {
-        public string Empresa { get; set; }
-        public string Patente { get; set; }
+        // Campos usados por el formulario y modelo
+        public string Nombre { get; set; } = "";
+        public string Empresa { get; set; } = "";
+        public string Patente { get; set; } = "";
+        public string Cuit { get; set; } = "";
     }
 }

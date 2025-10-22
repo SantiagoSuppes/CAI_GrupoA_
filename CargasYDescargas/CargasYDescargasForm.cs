@@ -1,150 +1,114 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using CAI_GrupoA_.Entidades;
 
 namespace CAI_GrupoA_.CargasYDescargas
 {
     public partial class CargasYDescargasForm : Form
     {
-        // Diccionarios para guardar los estados originales
-        private Dictionary<string, string> estadosOriginalesDescarga = new Dictionary<string, string>();
-        private Dictionary<string, string> estadosOriginalesCarga = new Dictionary<string, string>();
+        private readonly CargasYDescargasModelo modelo = new();
 
         public CargasYDescargasForm()
         {
             InitializeComponent();
         }
 
-        private void Form1_Load(object sender, EventArgs e)
-        {
-
-        }
-
-        private void listView1_SelectedIndexChanged(object sender, EventArgs e)
-        {
-
-        }
-
-        // Simulación de datos de guías por patente
-        private Dictionary<string, List<(string NGuia, string Destinatario, string Remitente, string Estado, bool EsCarga)>> guiasPorPatente
-            = new Dictionary<string, List<(string, string, string, string, bool)>>()
-        {
-                {
-        "AB-123-CD", new List<(string, string, string, string, bool)>()
-        {
-            ("G001", "Mariana Torres",   "Cliente A", "Pendiente", false),
-            ("G002", "Julián Gómez",     "Cliente B", "Pendiente", true),
-            ("G003", "Lucía Fernández",  "Cliente C", "Pendiente", true),
-            ("G004", "Santiago Romero",  "Cliente D", "Pendiente", false)
-        }
-    },
-    {
-        "AC-456-BD", new List<(string, string, string, string, bool)>()
-        {
-            ("G010", "Paula Domínguez",  "Cliente E", "Pendiente", false),
-            ("G011", "Martín Acosta",    "Cliente F", "Pendiente", true),
-            ("G012", "Valeria Quiroga",  "Cliente G", "Pendiente", false)
-        }
-    },
-    {
-        "AA-111-AA", new List<(string, string, string, string, bool)>()
-        {
-            ("G020", "Federico Rivas",   "Cliente H", "Pendiente", true),
-            ("G021", "Agustina López",   "Cliente I", "Pendiente", false),
-            ("G022", "Tomás Benítez",    "Cliente J", "Pendiente", true),
-            ("G023", "Carolina Méndez",  "Cliente K", "Pendiente", false)
-        }
-    }
-    
-        };
-
-        // BOTÓN BUSCAR
+        // Evento: BOTÓN BUSCAR
         private void button1_Click(object sender, EventArgs e)
         {
-            if (string.IsNullOrWhiteSpace(txtPatente.Text))
+            string patente = txtPatente.Text.Trim().ToUpper();
+
+            var (valida, mensajeVal) = modelo.ValidarPatente(patente);
+            if (!valida)
             {
-                MessageBox.Show("Debe ingresar una patente antes de buscar.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show(mensajeVal, "Error", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
             }
 
-            string patente = txtPatente.Text.Trim().ToUpper();
-
-            Dictionary<string, string> datosEmpresas = new Dictionary<string, string>()
+            var (encontradas, mensajeBusq) = modelo.BuscarGuiasPorPatente(patente);
+            if (!encontradas)
             {
-                { "AB-123-CD", "Transporte López S.A." },
-                { "AC-456-BD", "Logística Pérez SRL" },
-                { "AA-111-AA", "Camiones del Sur" }
-            };
-
-            if (!datosEmpresas.ContainsKey(patente))
-            {
-                MessageBox.Show("No se encontró información para la patente ingresada.", "Patente no encontrada", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(mensajeBusq, "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
                 txtEmpresa.Text = "";
                 listView1.Items.Clear();
                 listView2.Items.Clear();
                 return;
             }
 
-            txtEmpresa.Text = datosEmpresas[patente];
-            MessageBox.Show($"Se encontró la empresa: {datosEmpresas[patente]}", "Búsqueda exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            txtEmpresa.Text = modelo.TransportistaActual?.Empresa ?? "";
 
-            // Limpiar listViews y diccionarios de estados originales
             listView1.Items.Clear();
             listView2.Items.Clear();
-            estadosOriginalesDescarga.Clear();
-            estadosOriginalesCarga.Clear();
 
-            // Cargar guías con estado según tipo
-            if (guiasPorPatente.ContainsKey(patente))
+            foreach (var g in modelo.Guias)
             {
-                foreach (var guia in guiasPorPatente[patente])
+                if (g.EsCarga)
                 {
-                    string estadoInicial = guia.EsCarga
-                        ? "En espera de viaje en CD Central"
-                        : "En distribución por transportista";
-
-                    if (guia.EsCarga)
-                    {
-                        var item = new ListViewItem(guia.NGuia);
-                        item.SubItems.Add(guia.Destinatario);
-                        item.SubItems.Add(guia.Remitente);
-                        item.SubItems.Add(estadoInicial);
-                        listView2.Items.Add(item);
-                        estadosOriginalesCarga[guia.NGuia] = estadoInicial; // Guardar estado original
-                    }
-                    else
-                    {
-                        var item = new ListViewItem(guia.Destinatario);
-                        item.SubItems.Add(guia.Remitente);
-                        item.SubItems.Add(estadoInicial);
-                        item.SubItems.Add(guia.NGuia);
-                        listView1.Items.Add(item);
-                        estadosOriginalesDescarga[guia.NGuia] = estadoInicial; // Guardar estado original
-                    }
+                    var it = new ListViewItem(g.NGuia);
+                    it.SubItems.Add(g.Destinatario);
+                    it.SubItems.Add(g.Remitente);
+                    it.SubItems.Add(g.Estado);
+                    listView2.Items.Add(it);
+                }
+                else
+                {
+                    var it = new ListViewItem(g.Destinatario);
+                    it.SubItems.Add(g.Remitente);
+                    it.SubItems.Add(g.Estado);
+                    it.SubItems.Add(g.NGuia);
+                    listView1.Items.Add(it);
                 }
             }
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        // Evento: BOTÓN ACEPTAR (registrar cambios)
+        private void button2_Click(object sender, EventArgs e)
         {
+            if (modelo.Guias.Count == 0)
+            {
+                MessageBox.Show("No hay guías cargadas.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
+            }
 
+            var guias = new List<GuiaEnt>();
+            foreach (ListViewItem item in listView1.Items)
+                guias.Add(new GuiaEnt { NGuia = item.SubItems[3].Text, EsCarga = false });
+            foreach (ListViewItem item in listView2.Items)
+                guias.Add(new GuiaEnt { NGuia = item.SubItems[0].Text, EsCarga = true });
+
+            var (exito, mensajeReg) = modelo.RegistrarCargaDescarga(guias);
+            if (!exito)
+            {
+                MessageBox.Show(mensajeReg, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            foreach (ListViewItem item in listView1.Items)
+                item.SubItems[2].Text = "En centro de distribución X";
+
+            foreach (ListViewItem item in listView2.Items)
+                item.SubItems[3].Text = "En distribución por transportista";
+
+            MessageBox.Show(mensajeReg, "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        // EVENTO DEL TEXTBOX DE PATENTE
+        // Evento: BOTÓN DESHACER
+        private void button1_Click_1(object sender, EventArgs e)
+        {
+            button1_Click(sender, e); // reutiliza la búsqueda original
+        }
+
+        // Evento: TXT PATENTE (formateo automático)
         private void txtPatente_TextChanged(object sender, EventArgs e)
         {
             int sel = txtPatente.SelectionStart;
             string texto = txtPatente.Text.ToUpper().Replace("-", "");
-
             if (texto.Length > 7) texto = texto.Substring(0, 7);
 
-            StringBuilder sb = new StringBuilder();
+            StringBuilder sb = new();
             for (int i = 0; i < texto.Length; i++)
             {
                 char c = texto[i];
@@ -170,60 +134,5 @@ namespace CAI_GrupoA_.CargasYDescargas
             txtPatente.SelectionStart = Math.Min(nuevaPos, txtPatente.Text.Length);
             txtPatente.TextChanged += txtPatente_TextChanged;
         }
-
-        // BOTÓN ACEPTAR
-        private void button2_Click(object sender, EventArgs e)
-        {
-            DialogResult resultado = MessageBox.Show(
-                "¿Está seguro que desea registrar la carga y descarga de las guías del camión?",
-                "Confirmación",
-                MessageBoxButtons.YesNo,
-                MessageBoxIcon.Question
-            );
-
-            if (resultado == DialogResult.Yes)
-            {
-                foreach (ListViewItem item in listView1.Items) // DESCARGA
-                {
-                    item.SubItems[2].Text = "En centro de distribución X";
-                }
-
-                foreach (ListViewItem item in listView2.Items) // CARGA
-                {
-                    item.SubItems[3].Text = "En distribución por transportista";
-                }
-
-                MessageBox.Show("Los estados de las guías se actualizaron correctamente.", "Actualización exitosa", MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
-        }
-
-        // BOTÓN DESHACER
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-            foreach (ListViewItem item in listView1.Items) // DESCARGA
-            {
-                string nGuia = item.SubItems[3].Text;
-                if (estadosOriginalesDescarga.ContainsKey(nGuia))
-                    item.SubItems[2].Text = estadosOriginalesDescarga[nGuia];
-            }
-
-            foreach (ListViewItem item in listView2.Items) // CARGA
-            {
-                string nGuia = item.SubItems[0].Text;
-                if (estadosOriginalesCarga.ContainsKey(nGuia))
-                    item.SubItems[3].Text = estadosOriginalesCarga[nGuia];
-            }
-
-            MessageBox.Show("Se deshicieron los cambios y se restauraron los estados originales.", "Deshacer completado", MessageBoxButtons.OK, MessageBoxIcon.Information);
-        }
     }
-} 
-
-
-
-
-
-
-
-
-
+}
