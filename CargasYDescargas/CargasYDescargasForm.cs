@@ -47,7 +47,7 @@ namespace CAI_GrupoA_.CargasYDescargas
             {
                 if (g.EsCarga)
                 {
-                    var it = new ListViewItem(g.NGuia);
+                    var it = new ListViewItem(g.NumeroGuia);
                     it.SubItems.Add(g.Destinatario);
                     it.SubItems.Add(g.Remitente);
                     it.SubItems.Add(g.Estado);
@@ -58,7 +58,7 @@ namespace CAI_GrupoA_.CargasYDescargas
                     var it = new ListViewItem(g.Destinatario);
                     it.SubItems.Add(g.Remitente);
                     it.SubItems.Add(g.Estado);
-                    it.SubItems.Add(g.NGuia);
+                    it.SubItems.Add(g.NumeroGuia);
                     listView1.Items.Add(it);
                 }
             }
@@ -75,9 +75,9 @@ namespace CAI_GrupoA_.CargasYDescargas
 
             var guias = new List<GuiaEnt>();
             foreach (ListViewItem item in listView1.Items)
-                guias.Add(new GuiaEnt { NGuia = item.SubItems[3].Text, EsCarga = false });
+                guias.Add(new GuiaEnt { NumeroGuia = item.SubItems[3].Text, EsCarga = false });
             foreach (ListViewItem item in listView2.Items)
-                guias.Add(new GuiaEnt { NGuia = item.SubItems[0].Text, EsCarga = true });
+                guias.Add(new GuiaEnt { NumeroGuia = item.SubItems[0].Text, EsCarga = true });
 
             var (exito, mensajeReg) = modelo.RegistrarCargaDescarga(guias);
             if (!exito)
@@ -95,13 +95,8 @@ namespace CAI_GrupoA_.CargasYDescargas
             MessageBox.Show(mensajeReg, "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        // Evento: BOTÓN DESHACER
-        private void button1_Click_1(object sender, EventArgs e)
-        {
-            button1_Click(sender, e); // reutiliza la búsqueda original
-        }
 
-        // Evento: TXT PATENTE (formateo automático)
+        // Evento: TXT PATENTE (formato automático)
         private void txtPatente_TextChanged(object sender, EventArgs e)
         {
             int sel = txtPatente.SelectionStart;

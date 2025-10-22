@@ -42,23 +42,23 @@ namespace CAI_GrupoA_.CargasYDescargas
             {
                 "AB-123-CD" => new List<GuiaEnt>
                 {
-                    new() { NGuia = "G001", Destinatario = "Mariana Torres", Remitente = "Cliente A", Estado = "Pendiente", EsCarga = false },
-                    new() { NGuia = "G002", Destinatario = "Julián Gómez", Remitente = "Cliente B", Estado = "Pendiente", EsCarga = true },
-                    new() { NGuia = "G003", Destinatario = "Lucía Fernández", Remitente = "Cliente C", Estado = "Pendiente", EsCarga = true },
-                    new() { NGuia = "G004", Destinatario = "Santiago Romero", Remitente = "Cliente D", Estado = "Pendiente", EsCarga = false }
+                    new() { NumeroGuia = "G001", Destinatario = "Mariana Torres", Remitente = "Cliente A", Estado = "Pendiente", EsCarga = false },
+                    new() { NumeroGuia = "G002", Destinatario = "Julián Gómez", Remitente = "Cliente B", Estado = "Pendiente", EsCarga = true },
+                    new() { NumeroGuia = "G003", Destinatario = "Lucía Fernández", Remitente = "Cliente C", Estado = "Pendiente", EsCarga = true },
+                    new() { NumeroGuia = "G004", Destinatario = "Santiago Romero", Remitente = "Cliente D", Estado = "Pendiente", EsCarga = false }
                 },
                 "AC-456-BD" => new List<GuiaEnt>
                 {
-                    new() { NGuia = "G010", Destinatario = "Paula Domínguez", Remitente = "Cliente E", Estado = "Pendiente", EsCarga = false },
-                    new() { NGuia = "G011", Destinatario = "Martín Acosta", Remitente = "Cliente F", Estado = "Pendiente", EsCarga = true },
-                    new() { NGuia = "G012", Destinatario = "Valeria Quiroga", Remitente = "Cliente G", Estado = "Pendiente", EsCarga = false }
+                    new() { NumeroGuia = "G010", Destinatario = "Paula Domínguez", Remitente = "Cliente E", Estado = "Pendiente", EsCarga = false },
+                    new() { NumeroGuia = "G011", Destinatario = "Martín Acosta", Remitente = "Cliente F", Estado = "Pendiente", EsCarga = true },
+                    new() { NumeroGuia = "G012", Destinatario = "Valeria Quiroga", Remitente = "Cliente G", Estado = "Pendiente", EsCarga = false }
                 },
                 "AA-111-AA" => new List<GuiaEnt>
                 {
-                    new() { NGuia = "G020", Destinatario = "Federico Rivas", Remitente = "Cliente H", Estado = "Pendiente", EsCarga = true },
-                    new() { NGuia = "G021", Destinatario = "Agustina López", Remitente = "Cliente I", Estado = "Pendiente", EsCarga = false },
-                    new() { NGuia = "G022", Destinatario = "Tomás Benítez", Remitente = "Cliente J", Estado = "Pendiente", EsCarga = true },
-                    new() { NGuia = "G023", Destinatario = "Carolina Méndez", Remitente = "Cliente K", Estado = "Pendiente", EsCarga = false }
+                    new() { NumeroGuia = "G020", Destinatario = "Federico Rivas", Remitente = "Cliente H", Estado = "Pendiente", EsCarga = true },
+                    new() { NumeroGuia = "G021", Destinatario = "Agustina López", Remitente = "Cliente I", Estado = "Pendiente", EsCarga = false },
+                    new() { NumeroGuia = "G022", Destinatario = "Tomás Benítez", Remitente = "Cliente J", Estado = "Pendiente", EsCarga = true },
+                    new() { NumeroGuia = "G023", Destinatario = "Carolina Méndez", Remitente = "Cliente K", Estado = "Pendiente", EsCarga = false }
                 },
                 _ => new List<GuiaEnt>()
             };
