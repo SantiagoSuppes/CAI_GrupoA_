@@ -1,139 +1,68 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
+using CAI_GrupoA_.Entidades;           // Entidades tipadas (GuiaEnt, DireccionEnt, enums)
+using CAI_GrupoA_.CdEntregarCliente;   // Tu modelo
 
 namespace CAI_GrupoA_.CdEntregarCliente
 {
     public partial class CdEntregarClienteForms : Form
     {
+        private readonly CdEntregarClienteModelo _modelo = new();
+
         public CdEntregarClienteForms()
         {
             InitializeComponent();
         }
 
-        // Padrón de destinatarios válidos (simulado)
-        private readonly HashSet<string> _destinatariosValidos = new HashSet<string>
-        {
-            "44997021","30111222","23333444","40999888","36555111"
-        };
-
-        // Control de DNI ya cargados para evitar duplicados
-        private readonly HashSet<string> _dnisAgregados = new HashSet<string>();
-
-        // Datos fake
-        private static readonly string[] _talles = { "S", "M", "L", "XL", "XXL" };
-
-        private static string CuitFake(Random r) => $"{r.Next(20, 28)}-{r.Next(10000000, 99999999)}-{r.Next(0, 9)}";
-        private static string FechaFake(Random r)
-        {
-            var d = new DateTime(r.Next(2022, 2026), r.Next(1, 13), r.Next(1, 28));
-            return d.ToString("dd/MM/yyyy");
-        }
-
         private void CdEntregarClienteForms_Load(object sender, EventArgs e)
         {
-            // Configuración recomendada del ListView
+            // ListView de guías
             lvEncomiendas.View = View.Details;
             lvEncomiendas.CheckBoxes = true;
             lvEncomiendas.FullRowSelect = true;
+            lvEncomiendas.GridLines = true;
+
+            lvEncomiendas.Columns.Clear();
+            lvEncomiendas.Columns.Add("# Guía", 110);
+            lvEncomiendas.Columns.Add("Tamaño", 80);
+            lvEncomiendas.Columns.Add("Destino (Tipo)", 120);
+            lvEncomiendas.Columns.Add("Localidad / CP", 160);
+            lvEncomiendas.Columns.Add("Fecha Imposición", 120);
         }
 
         private void btnBuscarEncomiendaDestinatario_Click(object sender, EventArgs e)
         {
-            // 1) Campo vacío
-            if (string.IsNullOrWhiteSpace(txtDniDestinatario.Text))
+            var raw = (txtDniDestinatario.Text ?? "").Trim();
+
+            // Validación básica local (numérico > 0). El modelo valida largo (8–10) y muestra mensaje si no cumple.
+            if (!long.TryParse(raw, out var dni) || dni <= 0)
             {
-                MessageBox.Show("Debe ingresar un DNI antes de buscar.", "Atención", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                MessageBox.Show("Ingrese un DNI válido (solo números).", "Validación", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 txtDniDestinatario.Focus();
                 return;
             }
 
-            // 2) Solo números
-            if (!txtDniDestinatario.Text.All(char.IsDigit))
-            {
-                MessageBox.Show("El DNI solo puede contener números.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtDniDestinatario.Clear();
-                txtDniDestinatario.Focus();
+            // Consulta al modelo (puede mostrar su propio mensaje si el rango no es válido)
+            if (!_modelo.BuscarEncomiendas(dni))
                 return;
-            }
 
-            // 3) Longitud válida
-            if (txtDniDestinatario.Text.Length < 7 || txtDniDestinatario.Text.Length > 8)
+            // Poblar la lista con las guías devueltas por el modelo
+            lvEncomiendas.Items.Clear();
+            foreach (var g in _modelo.Guias)
             {
-                MessageBox.Show("El DNI debe tener entre 7 y 8 dígitos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtDniDestinatario.Focus();
-                return;
+                lvEncomiendas.Items.Add(ItemFromGuia(g));
             }
-
-            // 4) No negativos ni cero
-            if (!long.TryParse(txtDniDestinatario.Text, out long dni) || dni <= 0)
-            {
-                MessageBox.Show("El DNI no puede ser negativo o cero.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                txtDniDestinatario.Focus();
-                return;
-            }
-
-            // 5) Destinatario existe
-            if (!_destinatariosValidos.Contains(txtDniDestinatario.Text))
-            {
-                MessageBox.Show("El DNI ingresado no corresponde a un destinatario existente.", "Información",
-                                MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            var dniTexto = txtDniDestinatario.Text;
-
-            // 6) Evitar duplicados por DNI
-            if (_dnisAgregados.Contains(dniTexto) || YaCargadoEnLista(dniTexto))
-            {
-                MessageBox.Show("Las encomiendas para este DNI ya fueron cargadas.", "Información",
-                                MessageBoxButtons.OK, MessageBoxIcon.Information);
-                return;
-            }
-
-            // Generar filas fake determinísticas por DNI
-            var rng = new Random(dniTexto.GetHashCode());
-            int cantidad = rng.Next(2, 5); // 2..4 filas
-
-            for (int i = 0; i < cantidad; i++)
-            {
-                string nroGuia = $"#FR{rng.Next(1, 999):000}";
-                string talle = _talles[rng.Next(_talles.Length)];
-                string dniDest = dniTexto;
-                string cuitRem = CuitFake(rng);
-                string fecha = FechaFake(rng);
-
-                // Orden de columnas: NroGuia, Talle, DNI Dest., CUIT Remitente, Fecha
-                lvEncomiendas.Items.Add(new ListViewItem(new[] { nroGuia, talle, dniDest, cuitRem, fecha }));
-            }
-
-            // Marcar el DNI como ya cargado
-            _dnisAgregados.Add(dniTexto);
-        }
-
-        private bool YaCargadoEnLista(string dni)
-        {
-            // Valida si ya hay filas con ese DNI en la columna 3 (índice 2)
-            return lvEncomiendas.Items
-                .Cast<ListViewItem>()
-                .Any(it => it.SubItems.Count > 2 && it.SubItems[2].Text == dni);
         }
 
         private void btnConfirmarEntrega_Click(object sender, EventArgs e)
         {
-            // ¿Hay al menos una guía marcada?
-            var seleccionadas = lvEncomiendas.Items
+            var itemsSeleccionados = lvEncomiendas.Items
                 .Cast<ListViewItem>()
-                .Where(it => it.Checked)
+                .Where(i => i.Checked)
                 .ToList();
 
-            if (seleccionadas.Count == 0)
+            if (itemsSeleccionados.Count == 0)
             {
                 MessageBox.Show(
                     "No puede confirmar una entrega sin haber seleccionado ninguna guía",
@@ -144,21 +73,43 @@ namespace CAI_GrupoA_.CdEntregarCliente
                 return;
             }
 
+            var guiasSeleccionadas = itemsSeleccionados
+                .Select(i => i.Tag as GuiaEnt)
+                .Where(g => g != null)
+                .ToList();
+
+            if (!_modelo.Entregar(guiasSeleccionadas))
+                return;
+
+            // Quitar SOLO los seleccionados, tal como pediste
+            foreach (var it in itemsSeleccionados)
+                lvEncomiendas.Items.Remove(it);
+
             MessageBox.Show(
                 "Se ha completado la entrega al cliente seleccionado",
                 "Entrega confirmada",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information
             );
+        }
 
-            // Eliminar solo las seleccionadas
-            foreach (var item in seleccionadas)
-                lvEncomiendas.Items.Remove(item);
+        // -------- Helper de mapeo a ListView --------
+        private ListViewItem ItemFromGuia(GuiaEnt g)
+        {
+            string tipoDestino = g.Destino?.TipoPunto.ToString() ?? "(s/d)";
+            string loc = g.Destino?.Localidad ?? "(s/d)";
+            string cp = (g.Destino?.CodigoPostal > 0) ? g.Destino.CodigoPostal.ToString() : "(s/d)";
+            string locCp = $"{loc} / CP {cp}";
+            string fecha = g.FechaImposicion.ToShortDateString();
 
-            // Opcional: si querés permitir volver a cargar ese DNI cuando ya no queden filas suyas
-            // podés removerlo de _dnisAgregados cuando no existan más filas con ese DNI:
-            // var restantesDnis = lvEncomiendas.Items.Cast<ListViewItem>().Select(i => i.SubItems[2].Text).ToHashSet();
-            // _dnisAgregados.RemoveWhere(d => !restantesDnis.Contains(d));
+            var item = new ListViewItem(g.NumeroGuia ?? "(sin nro)");
+            item.SubItems.Add(g.TamañoCaja.ToString());
+            item.SubItems.Add(tipoDestino);
+            item.SubItems.Add(locCp);
+            item.SubItems.Add(fecha);
+            item.Tag = g; // mantiene la entidad para confirmar entrega
+
+            return item;
         }
     }
 }
