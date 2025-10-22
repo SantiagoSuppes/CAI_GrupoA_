@@ -131,7 +131,7 @@ namespace CAI_GrupoA_.CdEntregarCliente
 
             return (prov, loc);
         }
-
+        //hola
         private static TEnum RandomEnum<TEnum>(Random r) where TEnum : struct, Enum
         {
             var values = (TEnum[])Enum.GetValues(typeof(TEnum));

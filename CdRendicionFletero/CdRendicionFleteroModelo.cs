@@ -4,7 +4,7 @@ using System.Linq;
 using CAI_GrupoA_.Entidades;
 
 namespace CAI_GrupoA_.CdRendicionFletero
-{
+{//hola
     internal class CdRendicionFleteroModelo
     {
         private readonly Random _rng = new Random(12345);
