@@ -38,7 +38,6 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
             cmbTipoCaja.Items.AddRange(Enum.GetNames(typeof(TamañoCajaAgencia)));
             cmbTipoCaja.DropDownStyle = ComboBoxStyle.DropDownList;
 
-            // ✅ Asignamos directamente los valores del enum como DataSource
             cmbProvincia.DataSource = Enum.GetValues(typeof(Provincia));
             cmbProvincia.DropDownStyle = ComboBoxStyle.DropDownList;
 
@@ -54,7 +53,7 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
             cmbCD.Enabled = false;
             txtDomicilio.Enabled = false;
 
-            // ✅ Asignamos evento (una sola vez)
+           
             cmbProvincia.SelectedIndexChanged += cmbProvincia_SelectedIndexChanged;
             txtTelefonoDest.KeyPress += txtTelefonoDest_KeyPress;
         }
