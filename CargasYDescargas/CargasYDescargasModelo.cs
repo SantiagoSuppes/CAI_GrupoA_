@@ -1,23 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CAI_GrupoA_.Entidades;
-
+using System.Text.RegularExpressions;
 
 namespace CAI_GrupoA_.CargasYDescargas
 {
     internal class CargasYDescargasModelo
     {
-        public List<GuiaEnt> Guias { get; private set; } = new();
-        public TransportistaEnt? TransportistaActual { get; private set; }
+        public List<Guia> Guias { get; private set; } = new();
+        public Transportista? TransportistaActual { get; private set; }
 
-        //  Validar formato de patente (sin MessageBox)
+        // ✅ Validar formato de patente con regex
         public (bool exito, string mensaje) ValidarPatente(string patente)
         {
             if (string.IsNullOrWhiteSpace(patente))
                 return (false, "Debe ingresar una patente.");
 
-            if (patente.Length != 8 || patente.Count(c => c == '-') != 2)
+            var regex = new Regex(@"^[A-Z]{2}-\d{3}-[A-Z]{2}$");
+            if (!regex.IsMatch(patente))
                 return (false, "El formato de la patente es inválido. Debe ser del tipo 'AA-123-AA'.");
 
             return (true, "");
@@ -36,36 +36,36 @@ namespace CAI_GrupoA_.CargasYDescargas
         }
 
         // Datos simulados de guías
-        private List<GuiaEnt> ObtenerGuiasPorPatente(string patente)
+        private List<Guia> ObtenerGuiasPorPatente(string patente)
         {
             return patente switch
             {
-                "AB-123-CD" => new List<GuiaEnt>
+                "AB-123-CD" => new List<Guia>
                 {
                     new() { NumeroGuia = "G001", Destinatario = "Mariana Torres", Remitente = "Cliente A", Estado = "Pendiente", EsCarga = false },
                     new() { NumeroGuia = "G002", Destinatario = "Julián Gómez", Remitente = "Cliente B", Estado = "Pendiente", EsCarga = true },
                     new() { NumeroGuia = "G003", Destinatario = "Lucía Fernández", Remitente = "Cliente C", Estado = "Pendiente", EsCarga = true },
                     new() { NumeroGuia = "G004", Destinatario = "Santiago Romero", Remitente = "Cliente D", Estado = "Pendiente", EsCarga = false }
                 },
-                "AC-456-BD" => new List<GuiaEnt>
+                "AC-456-BD" => new List<Guia>
                 {
                     new() { NumeroGuia = "G010", Destinatario = "Paula Domínguez", Remitente = "Cliente E", Estado = "Pendiente", EsCarga = false },
                     new() { NumeroGuia = "G011", Destinatario = "Martín Acosta", Remitente = "Cliente F", Estado = "Pendiente", EsCarga = true },
                     new() { NumeroGuia = "G012", Destinatario = "Valeria Quiroga", Remitente = "Cliente G", Estado = "Pendiente", EsCarga = false }
                 },
-                "AA-111-AA" => new List<GuiaEnt>
+                "AA-111-AA" => new List<Guia>
                 {
                     new() { NumeroGuia = "G020", Destinatario = "Federico Rivas", Remitente = "Cliente H", Estado = "Pendiente", EsCarga = true },
                     new() { NumeroGuia = "G021", Destinatario = "Agustina López", Remitente = "Cliente I", Estado = "Pendiente", EsCarga = false },
                     new() { NumeroGuia = "G022", Destinatario = "Tomás Benítez", Remitente = "Cliente J", Estado = "Pendiente", EsCarga = true },
                     new() { NumeroGuia = "G023", Destinatario = "Carolina Méndez", Remitente = "Cliente K", Estado = "Pendiente", EsCarga = false }
                 },
-                _ => new List<GuiaEnt>()
+                _ => new List<Guia>()
             };
         }
 
         // Datos simulados de transportista
-        private TransportistaEnt ObtenerTransportistaPorPatente(string patente)
+        private Transportista ObtenerTransportistaPorPatente(string patente)
         {
             var empresas = new Dictionary<string, string>
             {
@@ -74,7 +74,7 @@ namespace CAI_GrupoA_.CargasYDescargas
                 { "AA-111-AA", "Camiones del Sur" }
             };
 
-            return new TransportistaEnt
+            return new Transportista
             {
                 Nombre = "Juan Pérez",
                 Empresa = empresas.ContainsKey(patente) ? empresas[patente] : "",
@@ -84,12 +84,11 @@ namespace CAI_GrupoA_.CargasYDescargas
         }
 
         // Registrar operación
-        public (bool exito, string mensaje) RegistrarCargaDescarga(List<GuiaEnt> guiasSeleccionadas)
+        public (bool exito, string mensaje) RegistrarCargaDescarga(List<Guia> guiasSeleccionadas)
         {
             if (guiasSeleccionadas.Count == 0)
                 return (false, "Debe haber al menos una guía para registrar la operación.");
 
-            // Simulación exitosa
             return (true, "Estados actualizados correctamente.");
         }
     }
