@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using CAI_GrupoA_.Entidades;              // <-- importa tus Entidades
-using CAI_GrupoA_.CdRendicionFletero;     // <-- importa el modelo
+using CAI_GrupoA_.CdRendicionFletero;
 
 namespace CAI_GrupoA_.CdRendicionFletero
-{//hola
+{
     public partial class CdRendicionFleteroForms : Form
 
     {
@@ -16,7 +15,6 @@ namespace CAI_GrupoA_.CdRendicionFletero
 
         private void CdRendicionFleteroForms_Load(object sender, EventArgs e)
         {
-            // vacío por ahora
         }
         public CdRendicionFleteroForms()
         {
@@ -35,10 +33,8 @@ namespace CAI_GrupoA_.CdRendicionFletero
                 return;
             }
 
-            // DNI entero (el modelo usa int)
             int dni = int.Parse(dniStr);
 
-            // Limpiar listas
             lvDetalle.Items.Clear();
             lvDistribucionesRealizadas.Items.Clear();
             lvRetirosNuevos.Items.Clear();
@@ -69,14 +65,8 @@ namespace CAI_GrupoA_.CdRendicionFletero
         // ---------------------------
         // Helpers de mapeo a ListView
         // ---------------------------
-        private ListViewItem ItemFromGuia(GuiaEnt g)
+        private ListViewItem ItemFromGuia(Guia g)
         {
-            // Columnas sugeridas:
-            // 0: NumeroGuia
-            // 1: TamañoCaja
-            // 2: Destino (TipoPunto)
-            // 3: Destino (Localidad y CP)
-            // 4: FechaImposicion
             var destinoTipo = g.Destino?.TipoPunto.ToString() ?? "(s/d)";
             var destinoUbic = $"{g.Destino?.Localidad ?? "(s/d)"} - CP {g.Destino?.CodigoPostal.ToString() ?? "(s/d)"}";
 
@@ -90,15 +80,8 @@ namespace CAI_GrupoA_.CdRendicionFletero
             });
         }
 
-        private ListViewItem ItemFromHoja(HojaDeRutaEnt h)
+        private ListViewItem ItemFromHoja(HojaDeRuta h)
         {
-            // Columnas sugeridas:
-            // 0: TipoHojaDeRuta
-            // 1: Estado
-            // 2: Origen (Tipo + Localidad)
-            // 3: Destino (Tipo + Localidad)
-            // 4: Fletero (Nombre + DNI)
-            // 5: Transportista (si hay dato)
             string origen = h.Origen is null
                 ? "(s/d)"
                 : $"{h.Origen.TipoPunto} - {h.Origen.Localidad}";
@@ -111,7 +94,7 @@ namespace CAI_GrupoA_.CdRendicionFletero
                 ? "(s/d)"
                 : $"{h.Fletero.Nombre} ({h.Fletero.DNI})";
 
-            // TransportistaEnt no tiene campos en tu precarga, mostramos s/d
+            // Transportista no tiene campos en tu precarga, mostramos s/d
             string transportista = "(s/d)";
 
             return new ListViewItem(new[]
@@ -123,6 +106,11 @@ namespace CAI_GrupoA_.CdRendicionFletero
                 fletero,
                 transportista
             });
+        }
+
+        private void btnConfirmar_Click(object sender, EventArgs e)
+        {
+            
         }
     }
 }

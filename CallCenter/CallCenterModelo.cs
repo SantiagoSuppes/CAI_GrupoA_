@@ -1,5 +1,5 @@
 ﻿using CAI_GrupoA_.AgenciaEntregarCliente;
-using CAI_GrupoA_.Entidades;
+using CAI_GrupoA_.CallCenter;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,49 +13,54 @@ namespace CAI_GrupoA_.CallCenter
     {
         // -------- Datos de prueba ----------
 
-        private readonly List<ClienteEnt> _clientes = new List<ClienteEnt>
+        private readonly List<Cliente> _clientes = new List<Cliente>
         {
-            new ClienteEnt
+            new Cliente
             {
                 Cuit = "20123456780",
-                Direcciones = new List<DireccionEnt>
+                RazonSocial = "Panadería El Trigal",
+                Direcciones = new List<Direccion>
                 {
-                    new DireccionEnt { Provincia = ProvinciaEnum.CiudadAutonomaDeBuenosAires, Localidad = "CABA", CalleYAltura = "Av. Corrientes 1234", CodigoPostal = 1001, TipoPunto = TipoPuntoEnum.Domicilio },
-                    new DireccionEnt { Provincia = ProvinciaEnum.BuenosAires, Localidad = "Lanús", CalleYAltura = "Calle Falsa 123", CodigoPostal = 1824, TipoPunto = TipoPuntoEnum.Domicilio },
-                    new DireccionEnt { Provincia = ProvinciaEnum.BuenosAires, Localidad = "Estación Central", CalleYAltura = "Ruta 3 Km 45", CodigoPostal = 1900, TipoPunto = TipoPuntoEnum.Domicilio }
+                    new Direccion { Provincia = ProvinciaEnum.CiudadAutonomaDeBuenosAires, Localidad = "CABA", CalleYAltura = "Av. Corrientes 1234", CodigoPostal = 1001, TipoPunto = TipoPuntoEnum.Domicilio },
+                    new Direccion { Provincia = ProvinciaEnum.BuenosAires, Localidad = "Lanús", CalleYAltura = "Calle Falsa 123", CodigoPostal = 1824, TipoPunto = TipoPuntoEnum.Domicilio },
+                    new Direccion { Provincia = ProvinciaEnum.BuenosAires, Localidad = "Estación Central", CalleYAltura = "Ruta 3 Km 45", CodigoPostal = 1900, TipoPunto = TipoPuntoEnum.Domicilio }
                 }
             },
-            new ClienteEnt
+            new Cliente
             {
                 Cuit = "27234567892",
-                Direcciones = new List<DireccionEnt>
+                RazonSocial = "Librería Ateneo",
+                Direcciones = new List<Direccion>
                 {
-                    new DireccionEnt { Provincia = ProvinciaEnum.Cordoba, Localidad = "Córdoba", CalleYAltura = "Av. San Martín 200", CodigoPostal = 5000, TipoPunto = TipoPuntoEnum.Domicilio },
-                    new DireccionEnt { Provincia = ProvinciaEnum.Cordoba, Localidad = "Córdoba", CalleYAltura = "Parque Industrial 45", CodigoPostal = 5001, TipoPunto = TipoPuntoEnum.Domicilio }
+                    new Direccion { Provincia = ProvinciaEnum.Cordoba, Localidad = "Córdoba", CalleYAltura = "Av. San Martín 200", CodigoPostal = 5000, TipoPunto = TipoPuntoEnum.Domicilio },
+                    new Direccion { Provincia = ProvinciaEnum.Cordoba, Localidad = "Córdoba", CalleYAltura = "Parque Industrial 45", CodigoPostal = 5001, TipoPunto = TipoPuntoEnum.Domicilio }
                 }
             },
-            new ClienteEnt
+            new Cliente
             {
                 Cuit = "20345678900",
-                Direcciones = new List<DireccionEnt>
+                RazonSocial = "Ferretería Don Pedro",
+                Direcciones = new List<Direccion>
                 {
-                    new DireccionEnt { Provincia = ProvinciaEnum.BuenosAires, Localidad = "La Plata", CalleYAltura = "Av. 7 1500", CodigoPostal = 1900, TipoPunto = TipoPuntoEnum.Domicilio }
+                    new Direccion { Provincia = ProvinciaEnum.BuenosAires, Localidad = "La Plata", CalleYAltura = "Av. 7 1500", CodigoPostal = 1900, TipoPunto = TipoPuntoEnum.Domicilio }
                 }
             },
-            new ClienteEnt
+            new Cliente
             {
                 Cuit = "23321098761",
-                Direcciones = new List<DireccionEnt>
+                RazonSocial = "Farmacia San Martín",
+                Direcciones = new List<Direccion>
                 {
-                    new DireccionEnt { Provincia = ProvinciaEnum.SantaFe, Localidad = "Rosario", CalleYAltura = "Calle 9 de Julio 555", CodigoPostal = 2000, TipoPunto = TipoPuntoEnum.Domicilio }
+                    new Direccion { Provincia = ProvinciaEnum.SantaFe, Localidad = "Rosario", CalleYAltura = "Calle 9 de Julio 555", CodigoPostal = 2000, TipoPunto = TipoPuntoEnum.Domicilio }
                 }
             },
-            new ClienteEnt
+            new Cliente
             {
                 Cuit = "30765432108",
-                Direcciones = new List<DireccionEnt>
+                RazonSocial = "Restaurante La Costa",
+                Direcciones = new List<Direccion>
                 {
-                    new DireccionEnt { Provincia = ProvinciaEnum.BuenosAires, Localidad = "Mar del Plata", CalleYAltura = "Av. Comercial 123", CodigoPostal = 7600, TipoPunto = TipoPuntoEnum.Domicilio }
+                    new Direccion { Provincia = ProvinciaEnum.BuenosAires, Localidad = "Mar del Plata", CalleYAltura = "Av. Comercial 123", CodigoPostal = 7600, TipoPunto = TipoPuntoEnum.Domicilio }
                 }
             }
         };
@@ -88,7 +93,7 @@ namespace CAI_GrupoA_.CallCenter
         private readonly Dictionary<string, int> _secuenciaPorCD =
             new Dictionary<string, int>();
 
-        private readonly List<GuiaEnt> _guias = new List<GuiaEnt>();
+        private readonly List<Guia> _guias = new List<Guia>();
 
 
         // -------- Catálogos ----------
@@ -138,7 +143,7 @@ namespace CAI_GrupoA_.CallCenter
             return !string.IsNullOrWhiteSpace(cuit) && cuit.Length == 11;
         }
 
-        public ClienteEnt BuscarClientePorCuit(string cuitNormalizado)
+        public Cliente BuscarClientePorCuit(string cuitNormalizado)
         {
             foreach (var c in _clientes)
                 if (c.Cuit == cuitNormalizado) return c;
@@ -217,7 +222,7 @@ namespace CAI_GrupoA_.CallCenter
         }
 
         // -------- Crear guía ----------
-        public GuiaEnt CrearGuia(RegistroEnvioDto dto, List<DetalleCaja> detalle)
+        public Guia CrearGuia(RegistroEnvioDto dto, List<DetalleCaja> detalle)
         {
             ProvinciaEnum prov;
             TryParseProvincia(dto.Provincia, out prov);
@@ -225,7 +230,7 @@ namespace CAI_GrupoA_.CallCenter
             string cdNombre = ObtenerCDOrigenPreferido(dto.Modalidad, dto.CD, prov);
             string nroGuia = GenerarNumeroGuia(cdNombre);
 
-            var origen = new DireccionEnt
+            var origen = new Direccion
             {
                 TipoPunto = TipoPuntoEnum.CD,
                 CalleYAltura = string.Empty,
@@ -234,7 +239,7 @@ namespace CAI_GrupoA_.CallCenter
                 Provincia = prov
             };
 
-            var destino = new DireccionEnt
+            var destino = new Direccion
             {
                 TipoPunto = ParseModalidad(dto.Modalidad),
                 CalleYAltura = (dto.CalleYAltura ?? "").Trim(),
@@ -245,15 +250,13 @@ namespace CAI_GrupoA_.CallCenter
 
             var tam = detalle[0].Tam;
 
-            var guia = new GuiaEnt
+            var guia = new Guia
             {
                 NumeroGuia = nroGuia,
                 FechaImposicion = DateTime.Now,
-                EstadoActual = EstadoActualEnum.EnCD_EnEsperaDeViaje,
                 TamañoCaja = tam,
                 Origen = origen,
                 Destino = destino,
-                HojaDeRuta = null
             };
 
             _guias.Add(guia);

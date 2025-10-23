@@ -32,6 +32,7 @@
             DirSeleccionadaTextBox = new TextBox();
             label15 = new Label();
             clienteListView = new ListView();
+            RazonSocial = new ColumnHeader();
             dirección = new ColumnHeader();
             buscarClienteButton = new Button();
             cuitTextBox = new TextBox();
@@ -112,7 +113,8 @@
             // 
             // clienteListView
             // 
-            clienteListView.Columns.AddRange(new ColumnHeader[] { dirección });
+            clienteListView.Columns.AddRange(new ColumnHeader[] { RazonSocial, dirección });
+            clienteListView.FullRowSelect = true;
             clienteListView.Location = new Point(22, 92);
             clienteListView.Margin = new Padding(3, 4, 3, 4);
             clienteListView.Name = "clienteListView";
@@ -121,6 +123,11 @@
             clienteListView.UseCompatibleStateImageBehavior = false;
             clienteListView.View = View.Details;
             clienteListView.SelectedIndexChanged += clienteListView_SelectedIndexChanged;
+            // 
+            // RazonSocial
+            // 
+            RazonSocial.Text = "Razón Social";
+            RazonSocial.Width = 150;
             // 
             // dirección
             // 
@@ -426,7 +433,7 @@
             // 
             // tipoCaja
             // 
-            tipoCaja.Text = "Tipo De Caja";
+            tipoCaja.Text = "Tamaño de Caja";
             tipoCaja.Width = 120;
             // 
             // Cantidad
@@ -465,16 +472,16 @@
             label13.AutoSize = true;
             label13.Location = new Point(23, 36);
             label13.Name = "label13";
-            label13.Size = new Size(93, 20);
+            label13.Size = new Size(115, 20);
             label13.TabIndex = 34;
-            label13.Text = "Tipo de Caja";
+            label13.Text = "Tamaño de Caja";
             // 
             // CallCenterForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
-            ClientSize = new Size(792, 749);
+            ClientSize = new Size(780, 966);
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(btnRegistrarPedido);
@@ -534,5 +541,6 @@
         private Label label13;
         private Label label14;
         private TextBox txtLocalidad;
+        private ColumnHeader RazonSocial;
     }
 }

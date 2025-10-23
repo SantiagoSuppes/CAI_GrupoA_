@@ -19,55 +19,25 @@ namespace CAI_GrupoA_.LogIn
             InitializeComponent();
         }
 
-        class user
-        {
-            public string usuario { get; set; }
-            public string contraseña { get; set; }
-        }
-        List<user> usuarios = new List<user>();
-
-
-
-        private bool validarUsuario(user usuarioIngresado)
-        {
-            bool flag;
-            if (string.IsNullOrEmpty(usuarioIngresado.usuario) || string.IsNullOrEmpty(usuarioIngresado.contraseña))
-            {
-                MessageBox.Show("Por favor, ingrese usuario y contraseña.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                flag = false;
-            }
-            else if (usuarios.Any(u => u.usuario == usuarioIngresado.usuario && u.contraseña == usuarioIngresado.contraseña))
-            {
-                MessageBox.Show("Inicio de sesión exitoso.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
-                flag = true;
-            }
-            else
-            {
-                MessageBox.Show("Usuario o contraseña incorrectos.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                flag = false;
-            }
-
-            return flag;
-        }
+        private LogInModelo logInModelo = new LogInModelo();
 
         private void ingresarButton_Click(object sender, EventArgs e)
         {
-            usuarios.Add(new user { usuario = "admin", contraseña = "admin" });
 
-            user usuarioIngresado = new user
+            Usuario usuarioIngresado = new Usuario
             {
                 usuario = usuarioTextBox.Text,
                 contraseña = contraseñaTextBox.Text
             };
 
-            bool accesoConcedido = validarUsuario(usuarioIngresado);
+            bool accesoConcedido = logInModelo.ValidarUsuario(usuarioIngresado);
 
             if (accesoConcedido)
             {
                 MenuPrincipalForm menu = new MenuPrincipalForm();
                 menu.Show();
 
-                this.Hide();
+                Hide();
             }
         }
     }

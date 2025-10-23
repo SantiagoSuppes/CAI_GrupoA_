@@ -57,12 +57,16 @@ namespace CAI_GrupoA_.CallCenter
                 return;
             }
 
-            // Mostrar direcciones del cliente en la lista
+            // Mostrar datos del cliente en la lista
             foreach (var dir in cliente.Direcciones)
             {
                 string prov = dir.Provincia.ToString();
-                string texto = $"{dir.CalleYAltura} - {dir.Localidad} ({prov})";
-                var item = new ListViewItem(texto) { Tag = dir };
+                string direccion = $"{dir.CalleYAltura} - {dir.Localidad} ({prov})";
+                
+                var item = new ListViewItem(cliente.RazonSocial);
+                item.SubItems.Add(direccion);
+                item.Tag = dir;
+                
                 clienteListView.Items.Add(item);
             }
         }
@@ -76,7 +80,7 @@ namespace CAI_GrupoA_.CallCenter
             }
 
             var item = clienteListView.SelectedItems[0];
-            DirSeleccionadaTextBox.Text = item.Text;
+            DirSeleccionadaTextBox.Text = item.SubItems[1].Text;
         }
 
         private void cmbProvincia_SelectedIndexChanged(object? sender, EventArgs e)

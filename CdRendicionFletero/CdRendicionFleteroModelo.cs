@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using CAI_GrupoA_.Entidades;
 
 namespace CAI_GrupoA_.CdRendicionFletero
 {//hola
@@ -9,15 +8,13 @@ namespace CAI_GrupoA_.CdRendicionFletero
     {
         private readonly Random _rng = new Random(12345);
 
-        private readonly List<FleteroEnt> _fleteros = new();
-        private readonly List<HojaDeRutaEnt> _hojas = new();
-        private readonly List<GuiaEnt> _guias = new();
-        private readonly List<GuiaHojaDeRutaEnt> _links = new();
+        private readonly List<Fletero> _fleteros = new();
+        private readonly List<HojaDeRuta> _hojas = new();
+        private readonly List<Guia> _guias = new();
 
-        public IReadOnlyList<FleteroEnt> Fleteros => _fleteros;
-        public IReadOnlyList<HojaDeRutaEnt> HojasDeRuta => _hojas;
-        public IReadOnlyList<GuiaEnt> Guias => _guias;
-        public IReadOnlyList<GuiaHojaDeRutaEnt> VinculosGuiaHoja => _links;
+        public IReadOnlyList<Fletero> Fleteros => _fleteros;
+        public IReadOnlyList<HojaDeRuta> HojasDeRuta => _hojas;
+        public IReadOnlyList<Guia> Guias => _guias;
 
         public CdRendicionFleteroModelo()
         {
@@ -43,40 +40,40 @@ namespace CAI_GrupoA_.CdRendicionFletero
             // 1) Fleteros: DNI int
             _fleteros.AddRange(new[]
             {
-                new FleteroEnt { Nombre = "Juan Gómez",  DNI = 40_999_888 },
-                new FleteroEnt { Nombre = "María López", DNI = 37_222_444 },
-                new FleteroEnt { Nombre = "Carlos Díaz", DNI = 33_888_777 },
+                new Fletero { Nombre = "Juan Gómez",  DNI = 40_999_888 },
+                new Fletero { Nombre = "María López", DNI = 37_222_444 },
+                new Fletero { Nombre = "Carlos Díaz", DNI = 33_888_777 },
             });
 
             // 2) Hojas de ruta (enums random para evitar miembros inexistentes)
             _hojas.AddRange(new[]
             {
-                new HojaDeRutaEnt
+                new HojaDeRuta
                 {
                     TipoHojaDeRuta = RandomEnum<TipoHojaDeRutaEnum>(),
                     Estado = RandomEnum<EstadoActualHojaDeRutaEnum>(),
                     Origen = DireccionCD("CABA", 1000, ProvinciaEnum.CiudadAutonomaDeBuenosAires, "CD Central 123"),
                     Destino = DireccionAgencia("Retiro", 1104, ProvinciaEnum.CiudadAutonomaDeBuenosAires, "Agencia Retiro 500"),
                     Fletero = _fleteros[0],
-                    Transportista = new TransportistaEnt()
+                    Transportista = new Transportista()
                 },
-                new HojaDeRutaEnt
+                new HojaDeRuta
                 {
                     TipoHojaDeRuta = RandomEnum<TipoHojaDeRutaEnum>(),
                     Estado = RandomEnum<EstadoActualHojaDeRutaEnum>(),
                     Origen = DireccionCD("Morón", 1708, ProvinciaEnum.BuenosAires, "CD Oeste 2500"),
                     Destino = DireccionAgencia("Rosario", 2000, ProvinciaEnum.SantaFe, "Agencia Rosario 220"),
                     Fletero = _fleteros[1],
-                    Transportista = new TransportistaEnt()
+                    Transportista = new Transportista()
                 },
-                new HojaDeRutaEnt
+                new HojaDeRuta
                 {
                     TipoHojaDeRuta = RandomEnum<TipoHojaDeRutaEnum>(),
                     Estado = RandomEnum<EstadoActualHojaDeRutaEnum>(),
                     Origen = DireccionCD("Córdoba", 5000, ProvinciaEnum.Cordoba, "CD Córdoba 800"),
                     Destino = DireccionAgencia("Nueva Córdoba", 5000, ProvinciaEnum.Cordoba, "Agencia NC 1400"),
                     Fletero = _fleteros[2],
-                    Transportista = new TransportistaEnt()
+                    Transportista = new Transportista()
                 }
             });
 
@@ -101,21 +98,20 @@ namespace CAI_GrupoA_.CdRendicionFletero
                                        DireccionAgencia("Rosario", 2000, ProvinciaEnum.SantaFe, "Agencia Rosario 220")),
             });
 
-            // 4) Asignación round-robin
+            // 4) Asignación round-robin: asociar hoja a cada guía
             for (int i = 0; i < _guias.Count; i++)
             {
                 var hoja = _hojas[i % _hojas.Count];
                 _guias[i].HojaDeRuta = hoja;
-                _links.Add(new GuiaHojaDeRutaEnt { Guia = _guias[i], HojaDeRuta = hoja });
             }
         }
 
         // ---------------------------
         // Generadores 
         // ---------------------------
-        public List<GuiaEnt> GenerarGuiasRandom(int dniDestinatario, int cantidad)
+        public List<Guia> GenerarGuiasRandom(int dniDestinatario, int cantidad)
         {
-            var list = new List<GuiaEnt>();
+            var list = new List<Guia>();
             for (int i = 0; i < cantidad; i++)
             {
                 var origen = DireccionCD("CABA", 1000, ProvinciaEnum.CiudadAutonomaDeBuenosAires, "CD Central 123");
@@ -123,7 +119,7 @@ namespace CAI_GrupoA_.CdRendicionFletero
                     ? DireccionDomicilio("Quilmes", 1878, ProvinciaEnum.BuenosAires, $"{RandomCalle()} {_rng.Next(100, 9999)}")
                     : DireccionAgencia("Rosario", 2000, ProvinciaEnum.SantaFe, $"{RandomCalle()} {_rng.Next(100, 9999)}");
 
-                list.Add(new GuiaEnt
+                list.Add(new Guia
                 {
                     NumeroGuia = $"AG{_rng.Next(1000, 9999)}-{_rng.Next(1000, 9999)}",
                     FechaImposicion = DateTime.Now.AddMinutes(-_rng.Next(0, 10_000)),
@@ -137,58 +133,58 @@ namespace CAI_GrupoA_.CdRendicionFletero
             return list;
         }
 
-        public List<HojaDeRutaEnt> GenerarHojasDeRutaRandom(int cantidad)
+        public List<HojaDeRuta> GenerarHojasDeRutaRandom(int cantidad)
         {
-            var list = new List<HojaDeRutaEnt>();
+            var list = new List<HojaDeRuta>();
             for (int i = 0; i < cantidad; i++)
             {
-                list.Add(new HojaDeRutaEnt
+                list.Add(new HojaDeRuta
                 {
                     TipoHojaDeRuta = RandomEnum<TipoHojaDeRutaEnum>(),
                     Estado = RandomEnum<EstadoActualHojaDeRutaEnum>(),
                     Origen = DireccionCD("CABA", 1000, ProvinciaEnum.CiudadAutonomaDeBuenosAires, "CD Central 123"),
                     Destino = DireccionAgencia("Ituzaingó", 1714, ProvinciaEnum.BuenosAires, "Agencia Ituzaingó 300"),
                     Fletero = RandomFletero(),
-                    Transportista = new TransportistaEnt()
+                    Transportista = new Transportista()
                 });
             }
             return list;
         }
 
-        public List<FleteroEnt> GenerarFleterosRandom(int cantidad)
+        public List<Fletero> GenerarFleterosRandom(int cantidad)
         {
-            var list = new List<FleteroEnt>();
+            var list = new List<Fletero>();
             for (int i = 0; i < cantidad; i++)
                 list.Add(RandomFletero());
             return list;
         }
 
-        public List<GuiaHojaDeRutaEnt> AsignarGuiasAHojas(IList<GuiaEnt> guias, IList<HojaDeRutaEnt> hojas)
+        public List<(Guia Guia, HojaDeRuta HojaDeRuta)> AsignarGuiasAHojas(IList<Guia> guias, IList<HojaDeRuta> hojas)
         {
-            var links = new List<GuiaHojaDeRutaEnt>();
+            var links = new List<(Guia Guia, HojaDeRuta HojaDeRuta)>();
             if (guias == null || hojas == null || hojas.Count == 0) return links;
 
             for (int i = 0; i < guias.Count; i++)
             {
                 var hoja = hojas[i % hojas.Count];
                 guias[i].HojaDeRuta = hoja;
-                links.Add(new GuiaHojaDeRutaEnt { Guia = guias[i], HojaDeRuta = hoja });
+                links.Add((guias[i], hoja));
             }
             return links;
         }
 
         // Filtros para UI
-        public IEnumerable<GuiaEnt> GuiasPorFletero(int dniFletero)
+        public IEnumerable<Guia> GuiasPorFletero(int dniFletero)
             => _guias.Where(g => g.HojaDeRuta?.Fletero?.DNI == dniFletero);
 
-        public IEnumerable<GuiaEnt> GuiasPorFletero(string dniStr)
-            => int.TryParse(dniStr, out var dni) ? GuiasPorFletero(dni) : Enumerable.Empty<GuiaEnt>();
+        public IEnumerable<Guia> GuiasPorFletero(string dniStr)
+            => int.TryParse(dniStr, out var dni) ? GuiasPorFletero(dni) : Enumerable.Empty<Guia>();
 
-        public IEnumerable<GuiaEnt> GuiasPorHoja(HojaDeRutaEnt hoja)
+        public IEnumerable<Guia> GuiasPorHoja(HojaDeRuta hoja)
             => _guias.Where(g => ReferenceEquals(g.HojaDeRuta, hoja));
 
-        private GuiaEnt Guia(string numero, TamañoCajaEnum tamaño, DireccionEnt origen, DireccionEnt destino)
-            => new GuiaEnt
+        private Guia Guia(string numero, TamañoCajaEnum tamaño, Direccion origen, Direccion destino)
+            => new Guia
             {
                 NumeroGuia = numero,
                 FechaImposicion = DateTime.Now.AddMinutes(-_rng.Next(0, 5000)),
@@ -199,14 +195,14 @@ namespace CAI_GrupoA_.CdRendicionFletero
                 HojaDeRuta = null
             };
 
-        private DireccionEnt DireccionCD(string localidad, int cp, ProvinciaEnum prov, string calle)
-            => new DireccionEnt { TipoPunto = TipoPuntoEnum.CD, Localidad = localidad, CodigoPostal = cp, Provincia = prov, CalleYAltura = calle };
+        private Direccion DireccionCD(string localidad, int cp, ProvinciaEnum prov, string calle)
+            => new Direccion { TipoPunto = TipoPuntoEnum.CD, Localidad = localidad, CodigoPostal = cp, Provincia = prov, CalleYAltura = calle };
 
-        private DireccionEnt DireccionAgencia(string localidad, int cp, ProvinciaEnum prov, string calle)
-            => new DireccionEnt { TipoPunto = TipoPuntoEnum.Agencia, Localidad = localidad, CodigoPostal = cp, Provincia = prov, CalleYAltura = calle };
+        private Direccion DireccionAgencia(string localidad, int cp, ProvinciaEnum prov, string calle)
+            => new Direccion { TipoPunto = TipoPuntoEnum.Agencia, Localidad = localidad, CodigoPostal = cp, Provincia = prov, CalleYAltura = calle };
 
-        private DireccionEnt DireccionDomicilio(string localidad, int cp, ProvinciaEnum prov, string calle)
-            => new DireccionEnt { TipoPunto = TipoPuntoEnum.Domicilio, Localidad = localidad, CodigoPostal = cp, Provincia = prov, CalleYAltura = calle };
+        private Direccion DireccionDomicilio(string localidad, int cp, ProvinciaEnum prov, string calle)
+            => new Direccion { TipoPunto = TipoPuntoEnum.Domicilio, Localidad = localidad, CodigoPostal = cp, Provincia = prov, CalleYAltura = calle };
 
         private string RandomCalle()
         {
@@ -220,11 +216,11 @@ namespace CAI_GrupoA_.CdRendicionFletero
             return values[_rng.Next(values.Length)];
         }
 
-        private FleteroEnt RandomFletero()
+        private Fletero RandomFletero()
         {
             string[] nombres = { "Juan Gómez", "María López", "Carlos Díaz", "Ana Fernández", "Luis Pérez" };
             var dni = _rng.Next(10_000_000, 99_999_999); // int
-            return new FleteroEnt { Nombre = nombres[_rng.Next(nombres.Length)], DNI = dni };
+            return new Fletero { Nombre = nombres[_rng.Next(nombres.Length)], DNI = dni };
         }
     }
 }

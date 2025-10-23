@@ -71,33 +71,29 @@
             // 
             label1.AutoSize = true;
             label1.Font = new Font("Segoe UI Semibold", 16.2F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label1.Location = new Point(103, 21);
+            label1.Location = new Point(118, 28);
             label1.Name = "label1";
-            label1.Size = new Size(485, 30);
+            label1.Size = new Size(622, 38);
             label1.TabIndex = 0;
             label1.Text = "🚚 Entrega y recepción de pedidos última milla";
-            //label1.Click += label1_Click;
             // 
             // groupBox1
             // 
             groupBox1.Controls.Add(btnBuscarViajesAsignados);
             groupBox1.Controls.Add(label2);
             groupBox1.Controls.Add(txtDniFletero);
-            groupBox1.Location = new Point(10, 58);
-            groupBox1.Margin = new Padding(3, 2, 3, 2);
+            groupBox1.Location = new Point(11, 77);
             groupBox1.Name = "groupBox1";
-            groupBox1.Padding = new Padding(3, 2, 3, 2);
-            groupBox1.Size = new Size(696, 95);
+            groupBox1.Size = new Size(795, 127);
             groupBox1.TabIndex = 1;
             groupBox1.TabStop = false;
             groupBox1.Text = "Datos de Fletero";
             // 
             // btnBuscarViajesAsignados
             // 
-            btnBuscarViajesAsignados.Location = new Point(424, 31);
-            btnBuscarViajesAsignados.Margin = new Padding(3, 2, 3, 2);
+            btnBuscarViajesAsignados.Location = new Point(485, 41);
             btnBuscarViajesAsignados.Name = "btnBuscarViajesAsignados";
-            btnBuscarViajesAsignados.Size = new Size(224, 38);
+            btnBuscarViajesAsignados.Size = new Size(256, 51);
             btnBuscarViajesAsignados.TabIndex = 2;
             btnBuscarViajesAsignados.Text = "Buscar viajes asignados";
             btnBuscarViajesAsignados.UseVisualStyleBackColor = true;
@@ -106,30 +102,26 @@
             // label2
             // 
             label2.AutoSize = true;
-            label2.Location = new Point(49, 31);
+            label2.Location = new Point(56, 41);
             label2.Name = "label2";
-            label2.Size = new Size(27, 15);
+            label2.Size = new Size(35, 20);
             label2.TabIndex = 1;
             label2.Text = "DNI";
             // 
             // txtDniFletero
             // 
-            txtDniFletero.Location = new Point(49, 48);
-            txtDniFletero.Margin = new Padding(3, 2, 3, 2);
+            txtDniFletero.Location = new Point(56, 64);
             txtDniFletero.Name = "txtDniFletero";
-            txtDniFletero.Size = new Size(336, 23);
+            txtDniFletero.Size = new Size(383, 27);
             txtDniFletero.TabIndex = 0;
-            //txtDniFletero.TextChanged += txtDniFletero_TextChanged;
             // 
             // groupBox2
             // 
             groupBox2.Controls.Add(lvDetalle);
             groupBox2.Controls.Add(label3);
-            groupBox2.Location = new Point(10, 158);
-            groupBox2.Margin = new Padding(3, 2, 3, 2);
+            groupBox2.Location = new Point(11, 211);
             groupBox2.Name = "groupBox2";
-            groupBox2.Padding = new Padding(3, 2, 3, 2);
-            groupBox2.Size = new Size(696, 147);
+            groupBox2.Size = new Size(795, 196);
             groupBox2.TabIndex = 2;
             groupBox2.TabStop = false;
             groupBox2.Text = "Guias recibidas";
@@ -138,9 +130,10 @@
             // 
             lvDetalle.CheckBoxes = true;
             lvDetalle.Columns.AddRange(new ColumnHeader[] { nguia, tipoCaja, estado, domicilio });
-            lvDetalle.Location = new Point(21, 39);
+            lvDetalle.Location = new Point(24, 52);
+            lvDetalle.Margin = new Padding(3, 4, 3, 4);
             lvDetalle.Name = "lvDetalle";
-            lvDetalle.Size = new Size(653, 96);
+            lvDetalle.Size = new Size(746, 127);
             lvDetalle.TabIndex = 43;
             lvDetalle.UseCompatibleStateImageBehavior = false;
             lvDetalle.View = View.Details;
@@ -168,9 +161,9 @@
             // label3
             // 
             label3.AutoSize = true;
-            label3.Location = new Point(21, 21);
+            label3.Location = new Point(24, 28);
             label3.Name = "label3";
-            label3.Size = new Size(135, 15);
+            label3.Size = new Size(173, 20);
             label3.TabIndex = 3;
             label3.Text = "Guías que trajo el fletero";
             // 
@@ -178,23 +171,21 @@
             // 
             groupBox3.Controls.Add(lvDistribucionesRealizadas);
             groupBox3.Controls.Add(label4);
-            groupBox3.Location = new Point(10, 310);
-            groupBox3.Margin = new Padding(3, 2, 3, 2);
+            groupBox3.Location = new Point(11, 413);
             groupBox3.Name = "groupBox3";
-            groupBox3.Padding = new Padding(3, 2, 3, 2);
-            groupBox3.Size = new Size(696, 140);
+            groupBox3.Size = new Size(795, 187);
             groupBox3.TabIndex = 44;
             groupBox3.TabStop = false;
             groupBox3.Text = "Hojas de Ruta Cumplidas";
-            //groupBox3.Enter += groupBox3_Enter;
             // 
             // lvDistribucionesRealizadas
             // 
             lvDistribucionesRealizadas.CheckBoxes = true;
             lvDistribucionesRealizadas.Columns.AddRange(new ColumnHeader[] { columnHeader2, columnHeader1, columnHeader3, columnHeader4 });
-            lvDistribucionesRealizadas.Location = new Point(21, 39);
+            lvDistribucionesRealizadas.Location = new Point(24, 52);
+            lvDistribucionesRealizadas.Margin = new Padding(3, 4, 3, 4);
             lvDistribucionesRealizadas.Name = "lvDistribucionesRealizadas";
-            lvDistribucionesRealizadas.Size = new Size(653, 91);
+            lvDistribucionesRealizadas.Size = new Size(746, 120);
             lvDistribucionesRealizadas.TabIndex = 43;
             lvDistribucionesRealizadas.UseCompatibleStateImageBehavior = false;
             lvDistribucionesRealizadas.View = View.Details;
@@ -225,9 +216,9 @@
             // label4
             // 
             label4.AutoSize = true;
-            label4.Location = new Point(21, 21);
+            label4.Location = new Point(24, 28);
             label4.Name = "label4";
-            label4.Size = new Size(225, 15);
+            label4.Size = new Size(288, 20);
             label4.TabIndex = 3;
             label4.Text = "Hojas de ruta que trajo firmadas el fletero";
             // 
@@ -237,11 +228,9 @@
             groupBox4.Controls.Add(lvRetirosNuevos);
             groupBox4.Controls.Add(label6);
             groupBox4.Controls.Add(label5);
-            groupBox4.Location = new Point(10, 454);
-            groupBox4.Margin = new Padding(3, 2, 3, 2);
+            groupBox4.Location = new Point(11, 605);
             groupBox4.Name = "groupBox4";
-            groupBox4.Padding = new Padding(3, 2, 3, 2);
-            groupBox4.Size = new Size(696, 218);
+            groupBox4.Size = new Size(795, 291);
             groupBox4.TabIndex = 45;
             groupBox4.TabStop = false;
             groupBox4.Text = "Viaje a realizar";
@@ -249,9 +238,10 @@
             // lvDistNuevos
             // 
             lvDistNuevos.Columns.AddRange(new ColumnHeader[] { columnHeader9, columnHeader10, columnHeader11, columnHeader12 });
-            lvDistNuevos.Location = new Point(21, 134);
+            lvDistNuevos.Location = new Point(24, 179);
+            lvDistNuevos.Margin = new Padding(3, 4, 3, 4);
             lvDistNuevos.Name = "lvDistNuevos";
-            lvDistNuevos.Size = new Size(653, 74);
+            lvDistNuevos.Size = new Size(746, 97);
             lvDistNuevos.TabIndex = 47;
             lvDistNuevos.UseCompatibleStateImageBehavior = false;
             lvDistNuevos.View = View.Details;
@@ -282,9 +272,10 @@
             // lvRetirosNuevos
             // 
             lvRetirosNuevos.Columns.AddRange(new ColumnHeader[] { columnHeader5, columnHeader6, columnHeader7, columnHeader8 });
-            lvRetirosNuevos.Location = new Point(21, 39);
+            lvRetirosNuevos.Location = new Point(24, 52);
+            lvRetirosNuevos.Margin = new Padding(3, 4, 3, 4);
             lvRetirosNuevos.Name = "lvRetirosNuevos";
-            lvRetirosNuevos.Size = new Size(653, 74);
+            lvRetirosNuevos.Size = new Size(746, 97);
             lvRetirosNuevos.TabIndex = 44;
             lvRetirosNuevos.UseCompatibleStateImageBehavior = false;
             lvRetirosNuevos.View = View.Details;
@@ -315,45 +306,43 @@
             // label6
             // 
             label6.AutoSize = true;
-            label6.Location = new Point(21, 116);
+            label6.Location = new Point(24, 155);
             label6.Name = "label6";
-            label6.Size = new Size(283, 15);
+            label6.Size = new Size(361, 20);
             label6.TabIndex = 46;
             label6.Text = "Lo que el fletero debe entregar en domicilio/agencia";
             // 
             // label5
             // 
             label5.AutoSize = true;
-            label5.Location = new Point(21, 21);
+            label5.Location = new Point(24, 28);
             label5.Name = "label5";
-            label5.Size = new Size(286, 15);
+            label5.Size = new Size(365, 20);
             label5.TabIndex = 3;
             label5.Text = "Lo que el fletero debe ir a buscar a domicilio/agencia";
             // 
             // btnConfirmar
             // 
-            btnConfirmar.Location = new Point(540, 687);
-            btnConfirmar.Margin = new Padding(3, 2, 3, 2);
+            btnConfirmar.Location = new Point(617, 916);
             btnConfirmar.Name = "btnConfirmar";
-            btnConfirmar.Size = new Size(144, 40);
+            btnConfirmar.Size = new Size(165, 53);
             btnConfirmar.TabIndex = 47;
             btnConfirmar.Text = "Confirmar";
             btnConfirmar.UseVisualStyleBackColor = true;
-            //btnConfirmar.Click += btnConfirmar_Click;
+            btnConfirmar.Click += btnConfirmar_Click;
             // 
             // CdRendicionFleteroForms
             // 
-            AutoScaleDimensions = new SizeF(7F, 15F);
+            AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
-            ClientSize = new Size(723, 738);
+            ClientSize = new Size(826, 984);
             Controls.Add(btnConfirmar);
             Controls.Add(groupBox4);
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(groupBox1);
             Controls.Add(label1);
-            Margin = new Padding(3, 2, 3, 2);
             Name = "CdRendicionFleteroForms";
             Text = "CdRendicionFleteroForms";
             groupBox1.ResumeLayout(false);
