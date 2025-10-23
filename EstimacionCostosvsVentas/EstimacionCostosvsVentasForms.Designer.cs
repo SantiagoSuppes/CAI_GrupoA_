@@ -1,79 +1,53 @@
-﻿namespace CAI_GrupoA_.EstimacionCostosvsVentas
+﻿using System.Drawing;
+using System.Windows.Forms;
+
+namespace CAI_GrupoA_.EstimacionCostosvsVentas
 {
-    partial class EstimacionCostosvsVentasForms
+    partial class EstimacionCostosvsVentasForm
     {
-        /// <summary>
-        /// Required designer variable.
-        /// </summary>
         private System.ComponentModel.IContainer components = null;
 
-        /// <summary>
-        /// Clean up any resources being used.
-        /// </summary>
-        /// <param name="disposing">true if managed resources should be disposed; otherwise, false.</param>
         protected override void Dispose(bool disposing)
         {
             if (disposing && (components != null))
-            {
                 components.Dispose();
-            }
             base.Dispose(disposing);
         }
 
         #region Windows Form Designer generated code
 
-        /// <summary>
-        /// Required method for Designer support - do not modify
-        /// the contents of this method with the code editor.
-        /// </summary>
         private void InitializeComponent()
         {
-            ListViewItem listViewItem13 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
-            ListViewItem listViewItem14 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
-            ListViewItem listViewItem15 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
-            ListViewItem listViewItem16 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
-            ListViewItem listViewItem17 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
-            ListViewItem listViewItem18 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
-            ListViewItem listViewItem19 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
-            ListViewItem listViewItem20 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
-            ListViewItem listViewItem21 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
-            ListViewItem listViewItem22 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
-            ListViewItem listViewItem23 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
-            ListViewItem listViewItem24 = new ListViewItem(new string[] { "" }, -1, Color.Empty, SystemColors.InactiveCaption, null);
             dgvResultados = new ListView();
             columnEmpresa = new ColumnHeader();
             columnVenta = new ColumnHeader();
             columnCosto = new ColumnHeader();
-            columGanancias = new ColumnHeader();
+            columnGanancia = new ColumnHeader();
             FiltrosBox = new GroupBox();
             btnFiltrar = new Button();
             cmbCategoria = new ComboBox();
             cmbEmpresa = new ComboBox();
             dtpPeriodo = new DateTimePicker();
-            label1 = new Label();
-            empresa = new Label();
-            Periodolabel = new Label();
+            labelCategoria = new Label();
+            labelEmpresa = new Label();
+            labelPeriodo = new Label();
             btnGenerarReporte = new Button();
-            label2 = new Label();
+            labelTitulo = new Label();
             FiltrosBox.SuspendLayout();
             SuspendLayout();
             // 
             // dgvResultados
             // 
-            dgvResultados.Columns.AddRange(new ColumnHeader[] { columnEmpresa, columnVenta, columnCosto, columGanancias });
+            dgvResultados.Columns.AddRange(new ColumnHeader[] { columnEmpresa, columnVenta, columnCosto, columnGanancia });
             dgvResultados.FullRowSelect = true;
             dgvResultados.GridLines = true;
             dgvResultados.HeaderStyle = ColumnHeaderStyle.Nonclickable;
-            dgvResultados.Items.AddRange(new ListViewItem[] { listViewItem13, listViewItem14, listViewItem15, listViewItem16, listViewItem17, listViewItem18, listViewItem19, listViewItem20, listViewItem21, listViewItem22, listViewItem23, listViewItem24 });
             dgvResultados.Location = new Point(34, 165);
-            dgvResultados.Margin = new Padding(4, 3, 4, 3);
             dgvResultados.Name = "dgvResultados";
-            dgvResultados.Scrollable = false;
             dgvResultados.Size = new Size(746, 257);
             dgvResultados.TabIndex = 6;
             dgvResultados.UseCompatibleStateImageBehavior = false;
             dgvResultados.View = View.Details;
-            //dgvResultados.SelectedIndexChanged += this.dgvResultados_SelectedIndexChanged;
             // 
             // columnEmpresa
             // 
@@ -83,20 +57,20 @@
             // columnVenta
             // 
             columnVenta.Text = "Venta ($)";
-            columnVenta.TextAlign = HorizontalAlignment.Center;
-            columnVenta.Width = 170;
+            columnVenta.TextAlign = HorizontalAlignment.Right;
+            columnVenta.Width = 120;
             // 
             // columnCosto
             // 
-            columnCosto.Text = "Costo($)";
-            columnCosto.TextAlign = HorizontalAlignment.Center;
-            columnCosto.Width = 200;
+            columnCosto.Text = "Costo ($)";
+            columnCosto.TextAlign = HorizontalAlignment.Right;
+            columnCosto.Width = 120;
             // 
-            // columGanancias
+            // columnGanancia
             // 
-            columGanancias.Text = "Ganancia";
-            columGanancias.TextAlign = HorizontalAlignment.Center;
-            columGanancias.Width = 90;
+            columnGanancia.Text = "Ganancia";
+            columnGanancia.TextAlign = HorizontalAlignment.Right;
+            columnGanancia.Width = 120;
             // 
             // FiltrosBox
             // 
@@ -104,23 +78,19 @@
             FiltrosBox.Controls.Add(cmbCategoria);
             FiltrosBox.Controls.Add(cmbEmpresa);
             FiltrosBox.Controls.Add(dtpPeriodo);
-            FiltrosBox.Controls.Add(label1);
-            FiltrosBox.Controls.Add(empresa);
-            FiltrosBox.Controls.Add(Periodolabel);
+            FiltrosBox.Controls.Add(labelCategoria);
+            FiltrosBox.Controls.Add(labelEmpresa);
+            FiltrosBox.Controls.Add(labelPeriodo);
             FiltrosBox.Location = new Point(34, 60);
-            FiltrosBox.Margin = new Padding(4, 3, 4, 3);
             FiltrosBox.Name = "FiltrosBox";
-            FiltrosBox.Padding = new Padding(4, 3, 4, 3);
             FiltrosBox.Size = new Size(746, 84);
             FiltrosBox.TabIndex = 5;
             FiltrosBox.TabStop = false;
             FiltrosBox.Text = "Filtros";
-           // FiltrosBox.Enter += this.FiltrosBox;
             // 
             // btnFiltrar
             // 
             btnFiltrar.Location = new Point(595, 28);
-            btnFiltrar.Margin = new Padding(4, 3, 4, 3);
             btnFiltrar.Name = "btnFiltrar";
             btnFiltrar.Size = new Size(125, 27);
             btnFiltrar.TabIndex = 6;
@@ -130,9 +100,8 @@
             // cmbCategoria
             // 
             cmbCategoria.FormattingEnabled = true;
-            cmbCategoria.Items.AddRange(new object[] { "Larga distancia", "Ultima milla" });
+            cmbCategoria.Items.AddRange(new object[] { "(Todas)", "Última Milla", "Larga Distancia" });
             cmbCategoria.Location = new Point(445, 30);
-            cmbCategoria.Margin = new Padding(4, 3, 4, 3);
             cmbCategoria.Name = "cmbCategoria";
             cmbCategoria.Size = new Size(127, 23);
             cmbCategoria.TabIndex = 5;
@@ -141,7 +110,6 @@
             // 
             cmbEmpresa.FormattingEnabled = true;
             cmbEmpresa.Location = new Point(230, 30);
-            cmbEmpresa.Margin = new Padding(4, 3, 4, 3);
             cmbEmpresa.Name = "cmbEmpresa";
             cmbEmpresa.Size = new Size(126, 23);
             cmbEmpresa.TabIndex = 4;
@@ -151,99 +119,89 @@
             dtpPeriodo.CustomFormat = "MM/yyyy";
             dtpPeriodo.Format = DateTimePickerFormat.Custom;
             dtpPeriodo.Location = new Point(77, 31);
-            dtpPeriodo.Margin = new Padding(4, 3, 4, 3);
             dtpPeriodo.Name = "dtpPeriodo";
             dtpPeriodo.Size = new Size(76, 23);
             dtpPeriodo.TabIndex = 3;
             // 
-            // label1
+            // labelCategoria
             // 
-            label1.AutoSize = true;
-            label1.Location = new Point(375, 34);
-            label1.Margin = new Padding(4, 0, 4, 0);
-            label1.Name = "label1";
-            label1.Size = new Size(61, 15);
-            label1.TabIndex = 2;
-            label1.Text = "Categoria:";
+            labelCategoria.AutoSize = true;
+            labelCategoria.Location = new Point(375, 34);
+            labelCategoria.Name = "labelCategoria";
+            labelCategoria.Size = new Size(64, 15);
+            labelCategoria.TabIndex = 2;
+            labelCategoria.Text = "Categoría:";
             // 
-            // empresa
+            // labelEmpresa
             // 
-            empresa.AutoSize = true;
-            empresa.Location = new Point(172, 34);
-            empresa.Margin = new Padding(4, 0, 4, 0);
-            empresa.Name = "empresa";
-            empresa.Size = new Size(55, 15);
-            empresa.TabIndex = 1;
-            empresa.Text = "Empresa:";
-            empresa.Click += Empresalabel_Click;
+            labelEmpresa.AutoSize = true;
+            labelEmpresa.Location = new Point(172, 34);
+            labelEmpresa.Name = "labelEmpresa";
+            labelEmpresa.Size = new Size(55, 15);
+            labelEmpresa.TabIndex = 1;
+            labelEmpresa.Text = "Empresa:";
             // 
-            // Periodolabel
+            // labelPeriodo
             // 
-            Periodolabel.AutoSize = true;
-            Periodolabel.Location = new Point(18, 34);
-            Periodolabel.Margin = new Padding(4, 0, 4, 0);
-            Periodolabel.Name = "Periodolabel";
-            Periodolabel.Size = new Size(51, 15);
-            Periodolabel.TabIndex = 0;
-            Periodolabel.Text = "Periodo:";
+            labelPeriodo.AutoSize = true;
+            labelPeriodo.Location = new Point(18, 34);
+            labelPeriodo.Name = "labelPeriodo";
+            labelPeriodo.Size = new Size(51, 15);
+            labelPeriodo.TabIndex = 0;
+            labelPeriodo.Text = "Periodo:";
             // 
             // btnGenerarReporte
             // 
             btnGenerarReporte.Location = new Point(655, 435);
-            btnGenerarReporte.Margin = new Padding(4, 3, 4, 3);
             btnGenerarReporte.Name = "btnGenerarReporte";
             btnGenerarReporte.Size = new Size(125, 27);
             btnGenerarReporte.TabIndex = 7;
             btnGenerarReporte.Text = "Generar Reporte";
             btnGenerarReporte.UseVisualStyleBackColor = true;
-            btnGenerarReporte.Click += btnGenerarReporte_Click;
             // 
-            // label2
+            // labelTitulo
             // 
-            label2.AutoSize = true;
-            label2.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
-            label2.Location = new Point(34, 20);
-            label2.Name = "label2";
-            label2.Size = new Size(313, 30);
-            label2.TabIndex = 8;
-            label2.Text = "📊 Reporte de Costos y Ventas";
+            labelTitulo.AutoSize = true;
+            labelTitulo.Font = new Font("Segoe UI Semibold", 15.75F, FontStyle.Bold, GraphicsUnit.Point, 0);
+            labelTitulo.Location = new Point(34, 20);
+            labelTitulo.Name = "labelTitulo";
+            labelTitulo.Size = new Size(313, 30);
+            labelTitulo.TabIndex = 8;
+            labelTitulo.Text = "📊 Reporte de Costos y Ventas";
             // 
-            // EstimacionCostosvsVentasForms
+            // EstimacionCostosvsVentasForm
             // 
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             AutoScroll = true;
             ClientSize = new Size(816, 486);
-            Controls.Add(label2);
+            Controls.Add(labelTitulo);
             Controls.Add(btnGenerarReporte);
             Controls.Add(dgvResultados);
             Controls.Add(FiltrosBox);
-            Margin = new Padding(4, 3, 4, 3);
-            Name = "EstimacionCostosvsVentasForms";
-            Text = "EstimacionCostosvsVentasForms";
-            Load += EstimacionCostosvsVentasForms_Load_1;
+            Name = "EstimacionCostosvsVentasForm";
+            Text = "Estimación de Costos vs Ventas";
             FiltrosBox.ResumeLayout(false);
             FiltrosBox.PerformLayout();
             ResumeLayout(false);
             PerformLayout();
-
         }
 
         #endregion
-        private System.Windows.Forms.ListView dgvResultados;
-        private System.Windows.Forms.ColumnHeader columnEmpresa;
-        private System.Windows.Forms.ColumnHeader columnVenta;
-        private System.Windows.Forms.ColumnHeader columnCosto;
-        private System.Windows.Forms.ColumnHeader columGanancias;
-        private System.Windows.Forms.GroupBox FiltrosBox;
-        private System.Windows.Forms.Button btnFiltrar;
-        private System.Windows.Forms.ComboBox cmbCategoria;
-        private System.Windows.Forms.ComboBox cmbEmpresa;
-        private System.Windows.Forms.DateTimePicker dtpPeriodo;
-        private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label empresa;
-        private System.Windows.Forms.Label Periodolabel;
+        private ListView dgvResultados;
+        private ColumnHeader columnEmpresa;
+        private ColumnHeader columnVenta;
+        private ColumnHeader columnCosto;
+        private ColumnHeader columnGanancia;
+        private GroupBox FiltrosBox;
+        private Button btnFiltrar;
+        private ComboBox cmbCategoria;
+        private ComboBox cmbEmpresa;
+        private DateTimePicker dtpPeriodo;
+        private Label labelCategoria;
+        private Label labelEmpresa;
+        private Label labelPeriodo;
         private Button btnGenerarReporte;
-        private Label label2;
+        private Label labelTitulo;
     }
 }
