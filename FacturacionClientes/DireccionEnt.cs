@@ -9,7 +9,7 @@ namespace CAI_GrupoA_.FacturacionClientes
 {
     internal class DireccionEnt
     {
-        public string CalleYAltura { get; set; }
+        public string CalleYAltura { get; set; } 
         public string Localidad { get; set; } 
         public ProvinciaEnum Provincia { get; set; }
     }

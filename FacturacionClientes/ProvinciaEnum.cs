@@ -13,7 +13,7 @@ namespace CAI_GrupoA_.FacturacionClientes
         Chaco = 3,
         Chubut = 4,
         Cordoba = 5,
-        Corrientes = 6, 
+        Corrientes = 6,  
         EntreRios = 7,
         Formosa = 8,
         Jujuy = 9,

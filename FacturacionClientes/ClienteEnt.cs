@@ -7,7 +7,7 @@ using CAI_GrupoA_.Entidades;
 
 namespace CAI_GrupoA_.FacturacionClientes
 {
-    internal class ClienteEnt 
+    internal class ClienteEnt  
     {
         public string Cuit { get; set; }
         public string RazonSocial { get; set; }

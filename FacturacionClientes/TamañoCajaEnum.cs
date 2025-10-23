@@ -11,6 +11,6 @@ namespace CAI_GrupoA_.FacturacionClientes
         S = 1,
         M = 2, 
         L = 3,
-        XL = 4,
+        XL = 4, 
     }
 }

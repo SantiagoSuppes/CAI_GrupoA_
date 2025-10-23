@@ -12,7 +12,7 @@ namespace CAI_GrupoA_.FacturacionClientes
         EnAgencia_ListaParaRetirar = 2,
         EnCD_ListaParaEntregar = 3,
         EnCD_EnEsperaDeViaje = 4,
-        EnAgencia_ListaParaEntregar = 5,
+        EnAgencia_ListaParaEntregar = 5, 
         Entregada = 6,
         EnRetiro = 7, 
         EnDistribucion = 8

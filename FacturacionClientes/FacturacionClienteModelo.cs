@@ -12,7 +12,7 @@ namespace CAI_GrupoA_.FacturacionClientes
     {
         
         private readonly Dictionary<string, ClienteEnt> _clientesPrueba = new();
-        public ClienteEnt ClienteActual { get; private set; }
+        public ClienteEnt ClienteActual { get; private set; } 
         public List<GuiaEnt> GuiasCliente { get; private set; } = new();
 
         public FacturacionClienteModelo() 

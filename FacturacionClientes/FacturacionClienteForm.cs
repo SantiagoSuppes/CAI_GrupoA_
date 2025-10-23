@@ -7,7 +7,7 @@ namespace CAI_GrupoA_.FacturacionClientes
     {
         private readonly FacturacionClienteModelo modelo = new();
 
-        public FacturacionClienteForm()
+        public FacturacionClienteForm() 
         {
             InitializeComponent();
         }

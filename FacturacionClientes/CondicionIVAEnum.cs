@@ -9,7 +9,7 @@ namespace CAI_GrupoA_.FacturacionClientes
     internal enum CondicionIVAEnum
     {
         ResponsableInscripto = 1,
-        Monotributo = 2,
+        Monotributo = 2, 
         Exento = 3,
         NoResponsable = 4
     }
