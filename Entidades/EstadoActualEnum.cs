@@ -18,3 +18,5 @@ namespace CAI_GrupoA_.Entidades
         EnDistribucion = 8
     }
 }
+
+//

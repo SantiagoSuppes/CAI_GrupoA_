@@ -14,3 +14,5 @@ namespace CAI_GrupoA_.Entidades
         public string Cuit { get; set; } 
     }
 }
+
+//
