@@ -15,7 +15,7 @@ namespace CAI_GrupoA_.FacturacionClientes
         public string Cuit { get; set; }
         public EstadoActualEnum EstadoActual { get; set; }
         public TamañoCajaEnum TamañoCaja { get; set; }
-        public DireccionEnt Origen { get; set; }
+        public DireccionEnt Origen { get; set; } 
         public DireccionEnt Destino { get; set; }
     }
 }

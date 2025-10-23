@@ -15,7 +15,7 @@ namespace CAI_GrupoA_.FacturacionClientes
         public ClienteEnt ClienteActual { get; private set; }
         public List<GuiaEnt> GuiasCliente { get; private set; } = new();
 
-        public FacturacionClienteModelo()
+        public FacturacionClienteModelo() 
         {
             CargarClientesDePrueba();
         }

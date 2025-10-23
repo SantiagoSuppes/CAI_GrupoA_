@@ -9,7 +9,7 @@ namespace CAI_GrupoA_.FacturacionClientes
     internal enum TamañoCajaEnum
     {
         S = 1,
-        M = 2,
+        M = 2, 
         L = 3,
         XL = 4,
     }

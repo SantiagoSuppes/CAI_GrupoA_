@@ -14,7 +14,7 @@ namespace CAI_GrupoA_.FacturacionClientes
         EnCD_EnEsperaDeViaje = 4,
         EnAgencia_ListaParaEntregar = 5,
         Entregada = 6,
-        EnRetiro = 7,
+        EnRetiro = 7, 
         EnDistribucion = 8
     }
 }
