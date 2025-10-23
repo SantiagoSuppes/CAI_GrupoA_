@@ -33,8 +33,8 @@ namespace CAI_GrupoA_.FacturacionClientes
 
             foreach (var guia in modelo.GuiasCliente)
             {
-                var item = new ListViewItem(guia.NumeroGuia);
-                item.SubItems.Add(guia.FechaImposicion.ToShortDateString());
+                var item = new ListViewItem(guia.NroGuia);
+                item.SubItems.Add(guia.Fecha.ToShortDateString());
                 item.SubItems.Add("$ 3500,00");
                 lstGuiasCliente.Items.Add(item);
             }
