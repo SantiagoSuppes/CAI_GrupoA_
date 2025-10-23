@@ -2,31 +2,31 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using CAI_GrupoA_.Entidades;
+
 
 namespace CAI_GrupoA_.ImposicionEnAgencia
 {
     public class ImposicionEnAgenciaModelo
     {
         private int _contadorGuias = 1;
-        private readonly Dictionary<string, ClienteEnt> _clientesPorCUIT = new();
-        public Dictionary<string, GuiaEnt> Guias { get; } = new();
+        private readonly Dictionary<string, Cliente> _clientesPorCUIT = new();
+        public Dictionary<string, GuiaAgenciaImposicion> Guias { get; } = new();
 
         public ImposicionEnAgenciaModelo()
         {
             // Clientes precargados
-            CrearCliente("20-35123456-7", "Juan Pérez S.A.", "Av. Belgrano 1200", CondicionIVAEnum.ResponsableInscripto);
-            CrearCliente("27-40333444-5", "Distribuidora López", "Ruta 9 km 44", CondicionIVAEnum.Monotributo);
-            CrearCliente("30-70998877-9", "Agro Sur SRL", "Calle 25 de Mayo 950", CondicionIVAEnum.Exento);
+            CrearCliente("20-35123456-7", "Juan Pérez S.A.", "Av. Belgrano 1200", CondicionIVA.ResponsableInscripto);
+            CrearCliente("27-40333444-5", "Distribuidora López", "Ruta 9 km 44", CondicionIVA.Monotributo);
+            CrearCliente("30-70998877-9", "Agro Sur SRL", "Calle 25 de Mayo 950", CondicionIVA.Exento);
         }
 
         // ======================================================
         // CLIENTES
         // ======================================================
-        public bool TryGetCliente(string cuit, out ClienteEnt cliente)
+        public bool TryGetCliente(string cuit, out Cliente cliente)
             => _clientesPorCUIT.TryGetValue(NormalizarCUIT(cuit), out cliente);
 
-        public void CrearCliente(string cuit, string razonSocial, string domicilioFiscal, CondicionIVAEnum condicion)
+        public void CrearCliente(string cuit, string razonSocial, string domicilioFiscal, CondicionIVA condicion)
         {
             if (string.IsNullOrWhiteSpace(cuit) || !EsCUITValido(cuit))
                 throw new ArgumentException("El CUIT es obligatorio y debe tener 11 dígitos (con o sin guiones).");
@@ -36,7 +36,7 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
                 throw new ArgumentException("La razón social no puede contener números.");
 
             var key = NormalizarCUIT(cuit);
-            _clientesPorCUIT[key] = new ClienteEnt
+            _clientesPorCUIT[key] = new Cliente
             {
                 Cuit = key,
                 RazonSocial = razonSocial.Trim(),
@@ -49,12 +49,12 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
         // ======================================================
         // GUÍAS
         // ======================================================
-        public GuiaEnt CrearGuia(
+        public GuiaAgenciaImposicion CrearGuia(
             string cuitRemitente,
-            DireccionEnt origen,
-            DireccionEnt destino,
-            TamañoCajaEnum tamaño,
-            EstadoActualEnum estado = EstadoActualEnum.EnAgencia_ListaParaRetirar)
+            Direccion origen,
+            Direccion destino,
+            TamañoCajaAgencia tamaño,
+            EstadoActual estado = EstadoActual.EnAgencia)
         {
             string errores = ValidarCampos(cuitRemitente, origen, destino);
             if (!string.IsNullOrEmpty(errores))
@@ -63,7 +63,7 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
             if (!TryGetCliente(cuitRemitente, out var clienteRemitente))
                 throw new ArgumentException($"No se encontró el cliente con CUIT {cuitRemitente}");
 
-            var guia = new GuiaEnt
+            var guia = new GuiaAgenciaImposicion
             {
                 NumeroGuia = GenerarNumeroGuia("AGC01"),
                 FechaImposicion = DateTime.Now,
@@ -81,7 +81,7 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
         // ======================================================
         // VALIDACIONES
         // ======================================================
-        private string ValidarCampos(string cuitR, DireccionEnt origen, DireccionEnt destino)
+        private string ValidarCampos(string cuitR, Direccion origen, Direccion destino)
         {
             var sb = new StringBuilder();
 

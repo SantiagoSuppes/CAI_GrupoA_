@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using CAI_GrupoA_.Entidades;
 
 namespace CAI_GrupoA_.ImposicionEnAgencia
 {
@@ -11,16 +10,16 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
     {
         public ImposicionEnAgenciaModelo modelo = new();
 
-        private readonly Dictionary<ProvinciaEnum, (List<string> Agencias, List<string> CDs)> zonasPorProvincia = new()
+        private readonly Dictionary<Provincia, (List<string> Agencias, List<string> CDs)> zonasPorProvincia = new()
         {
-            { ProvinciaEnum.CiudadAutonomaDeBuenosAires, (new List<string>{ "Agencia Retiro", "Agencia Palermo" }, new List<string>{ "CD Central" }) },
-            { ProvinciaEnum.BuenosAires, (new List<string>{ "Agencia Morón", "Agencia Ituzaingó" }, new List<string>{ "CD Oeste" }) },
-            { ProvinciaEnum.Cordoba, (new List<string>{ "Agencia Córdoba Centro", "Agencia Nueva Córdoba" }, new List<string>{ "CD Córdoba" }) },
-            { ProvinciaEnum.Mendoza, (new List<string>{ "Agencia Mendoza Norte" }, new List<string>{ "CD Cuyo" }) },
-            { ProvinciaEnum.SantaFe, (new List<string>{ "Agencia Rosario", "Agencia Santa Fe" }, new List<string>{ "CD Litoral" }) },
+            { Provincia.CiudadAutonomaDeBuenosAires, (new List<string>{ "Agencia Retiro", "Agencia Palermo" }, new List<string>{ "CD Central" }) },
+            { Provincia.BuenosAires, (new List<string>{ "Agencia Morón", "Agencia Ituzaingó" }, new List<string>{ "CD Oeste" }) },
+            { Provincia.Cordoba, (new List<string>{ "Agencia Córdoba Centro", "Agencia Nueva Córdoba" }, new List<string>{ "CD Córdoba" }) },
+            { Provincia.Mendoza, (new List<string>{ "Agencia Mendoza Norte" }, new List<string>{ "CD Cuyo" }) },
+            { Provincia.SantaFe, (new List<string>{ "Agencia Rosario", "Agencia Santa Fe" }, new List<string>{ "CD Litoral" }) },
         };
 
-        private List<(TamañoCajaEnum Tamanio, int Cantidad)> cajasTemporales = new();
+        private List<(TamañoCajaAgencia Tamanio, int Cantidad)> cajasTemporales = new();
 
         public ImposicionEnAgenciaForm()
         {
@@ -36,13 +35,13 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
             lstGuiasGeneradas.Columns.Add("Cantidad", 100);
             lstGuiasGeneradas.Columns.Add("Tamaño", 120);
 
-            cmbTipoCaja.Items.AddRange(Enum.GetNames(typeof(TamañoCajaEnum)));
+            cmbTipoCaja.Items.AddRange(Enum.GetNames(typeof(TamañoCajaAgencia)));
             cmbTipoCaja.DropDownStyle = ComboBoxStyle.DropDownList;
 
-            cmbProvincia.Items.AddRange(Enum.GetNames(typeof(ProvinciaEnum)));
+            cmbProvincia.DataSource = Enum.GetValues(typeof(Provincia));
             cmbProvincia.DropDownStyle = ComboBoxStyle.DropDownList;
 
-            cmbModalidadEntrega.Items.AddRange(Enum.GetNames(typeof(TipoPuntoEnum)));
+            cmbModalidadEntrega.Items.AddRange(Enum.GetNames(typeof(TipoPunto)));
             cmbModalidadEntrega.DropDownStyle = ComboBoxStyle.DropDownList;
 
             cmbAgencia.DropDownStyle = ComboBoxStyle.DropDownList;
@@ -54,6 +53,7 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
             cmbCD.Enabled = false;
             txtDomicilio.Enabled = false;
 
+           
             cmbProvincia.SelectedIndexChanged += cmbProvincia_SelectedIndexChanged;
             txtTelefonoDest.KeyPress += txtTelefonoDest_KeyPress;
         }
@@ -93,12 +93,19 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
             cmbAgencia.Items.Clear();
             cmbCD.Items.Clear();
 
-            if (Enum.TryParse<ProvinciaEnum>(cmbProvincia.Text, out var provincia) &&
-                zonasPorProvincia.TryGetValue(provincia, out var datos))
+         
+            if (cmbProvincia.SelectedItem == null)
+                return;
+
+            var provinciaSeleccionada = (Provincia)cmbProvincia.SelectedItem;
+
+           
+            if (zonasPorProvincia.TryGetValue(provinciaSeleccionada, out var datos))
             {
                 cmbAgencia.Items.AddRange(datos.Agencias.ToArray());
                 cmbCD.Items.AddRange(datos.CDs.ToArray());
             }
+
         }
 
         private void cmbModalidadEntrega_SelectedIndexChanged(object sender, EventArgs e)
@@ -107,11 +114,11 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
             cmbAgencia.Enabled = false;
             cmbCD.Enabled = false;
 
-            if (Enum.TryParse<TipoPuntoEnum>(cmbModalidadEntrega.Text, out var tipo))
+            if (Enum.TryParse<TipoPunto>(cmbModalidadEntrega.Text, out var tipo))
             {
-                if (tipo == TipoPuntoEnum.Agencia) cmbAgencia.Enabled = true;
-                else if (tipo == TipoPuntoEnum.CD) cmbCD.Enabled = true;
-                else if (tipo == TipoPuntoEnum.Domicilio) txtDomicilio.Enabled = true;
+                if (tipo == TipoPunto.Agencia) cmbAgencia.Enabled = true;
+                else if (tipo == TipoPunto.CD) cmbCD.Enabled = true;
+                else if (tipo == TipoPunto.Domicilio) txtDomicilio.Enabled = true;
             }
         }
 
@@ -123,7 +130,7 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
                 return;
             }
 
-            var tamaño = (TamañoCajaEnum)Enum.Parse(typeof(TamañoCajaEnum), cmbTipoCaja.Text);
+            var tamaño = (TamañoCajaAgencia)Enum.Parse(typeof(TamañoCajaAgencia), cmbTipoCaja.Text);
             int cantidad = (int)numCantidad.Value;
 
             cajasTemporales.Add((tamaño, cantidad));
@@ -146,30 +153,30 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
                     return;
                 }
 
-                if (!Enum.TryParse<TipoPuntoEnum>(cmbModalidadEntrega.Text, out var tipoEntrega))
+                if (!Enum.TryParse<TipoPunto>(cmbModalidadEntrega.Text, out var tipoEntrega))
                 {
                     MessageBox.Show("Debe seleccionar una modalidad de entrega válida.",
                         "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                if (!Enum.TryParse<ProvinciaEnum>(cmbProvincia.Text, out var provincia))
+                if (!Enum.TryParse<Provincia>(cmbProvincia.Text, out var provincia))
                 {
                     MessageBox.Show("Debe seleccionar una provincia válida.",
                         "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                     return;
                 }
 
-                var origen = new DireccionEnt
+                var origen = new Direccion
                 {
-                    Provincia = ProvinciaEnum.BuenosAires,
+                    Provincia = Provincia.BuenosAires,
                     Localidad = "Imposición Agencia",
                     CodigoPostal = 1000,
-                    TipoPunto = TipoPuntoEnum.Agencia,
+                    TipoPunto = TipoPunto.Agencia,
                     CalleYAltura = "Sede Central 123"
                 };
 
-                var destino = new DireccionEnt
+                var destino = new Direccion
                 {
                     Provincia = provincia,
                     Localidad = txtLocalidad.Text,
@@ -184,7 +191,7 @@ namespace CAI_GrupoA_.ImposicionEnAgencia
                     origen,
                     destino,
                     primeraCaja.Tamanio,
-                    EstadoActualEnum.EnAgencia_ListaParaRetirar
+                    EstadoActual.EnAgencia
                 );
 
                 lstGuiasGeneradas.Items.Clear();

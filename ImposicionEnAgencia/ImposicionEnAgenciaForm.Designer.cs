@@ -309,6 +309,7 @@
             cmbProvincia.Name = "cmbProvincia";
             cmbProvincia.Size = new Size(230, 23);
             cmbProvincia.TabIndex = 13;
+            cmbProvincia.SelectedIndexChanged += cmbProvincia_SelectedIndexChanged;
             // 
             // txtDNIDest
             // 
