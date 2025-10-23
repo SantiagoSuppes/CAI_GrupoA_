@@ -19,3 +19,4 @@ namespace CAI_GrupoA_.Entidades
         public List<DireccionEnt> Direcciones { get; set; } = new();
     }
 }
+//
