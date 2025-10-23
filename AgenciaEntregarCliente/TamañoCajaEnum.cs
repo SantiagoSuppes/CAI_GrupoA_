@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CAI_GrupoA_.AgenciaEntregarCliente
 {
-    internal enum TamañoCajaEnum
+    internal enum TamañoCajaAgenciaEnum
     {
         S = 1,
         M = 2,
@@ -14,4 +14,5 @@ namespace CAI_GrupoA_.AgenciaEntregarCliente
         XL = 4
     }
 }
+
 

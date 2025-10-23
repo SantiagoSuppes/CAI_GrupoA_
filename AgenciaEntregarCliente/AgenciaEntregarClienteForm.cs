@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using CAI_GrupoA_.AgenciaEntregarCliente;
 
 namespace CAI_GrupoA_.AgenciaEntregarCliente
 {
@@ -13,14 +12,23 @@ namespace CAI_GrupoA_.AgenciaEntregarCliente
         public AgenciaEntregarClienteForm()
         {
             InitializeComponent();
+            Load += AgenciaEntregarClienteForm_Load;
+            btnBuscarEncomiendaDestinatario.Click += btnBuscarEncomiendaDestinatario_Click;
+            btnConfirmarEntrega.Click += btnConfirmarEntrega_Click;
         }
 
         private void AgenciaEntregarClienteForm_Load(object sender, EventArgs e)
         {
-            
+            ConfigurarLista();
+        }
+
+        private void ConfigurarLista()
+        {
             lvEncomiendas.View = View.Details;
             lvEncomiendas.FullRowSelect = true;
             lvEncomiendas.CheckBoxes = true;
+            lvEncomiendas.GridLines = true;
+
             lvEncomiendas.Columns.Clear();
             lvEncomiendas.Columns.Add("# Guía", 120);
             lvEncomiendas.Columns.Add("Tamaño", 80);
@@ -29,7 +37,7 @@ namespace CAI_GrupoA_.AgenciaEntregarCliente
             lvEncomiendas.Columns.Add("Fecha Imposición", 120);
         }
 
-        private void btnBuscarEncomiendaDestinatario_Click_1(object sender, EventArgs e)
+        private void btnBuscarEncomiendaDestinatario_Click(object sender, EventArgs e)
         {
             if (!long.TryParse(txtDniDestinatario.Text?.Trim(), out long dni) || dni <= 0)
             {
@@ -38,67 +46,49 @@ namespace CAI_GrupoA_.AgenciaEntregarCliente
                 return;
             }
 
-            if (!modelo.BuscarEncomiendas(dni))
-                return;
-
-           
-            lvEncomiendas.Items.Clear();
-            foreach (var guia in modelo.Guias)
+            var guias = modelo.BuscarPorDni(dni);
+            if (guias.Count == 0)
             {
-                lvEncomiendas.Items.Add(ItemFromGuia(guia));
+                MessageBox.Show("No se encontraron guías para el DNI ingresado.", "Sin resultados", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                return;
             }
+
+            lvEncomiendas.Items.Clear();
+            foreach (var g in guias)
+                lvEncomiendas.Items.Add(ItemDesdeGuia(g));
         }
 
-        private void btnConfirmarEntrega_Click_1(object sender, EventArgs e)
+        private void btnConfirmarEntrega_Click(object sender, EventArgs e)
         {
-            var itemsSeleccionados = lvEncomiendas.Items
-                .Cast<ListViewItem>()
+            var seleccionadas = lvEncomiendas.Items.Cast<ListViewItem>()
                 .Where(i => i.Checked)
-                .ToList();
-
-            if (itemsSeleccionados.Count == 0)
-            {
-                MessageBox.Show(
-                    "No puede confirmar una entrega sin haber seleccionado ninguna guía",
-                    "Operación inválida",
-                    MessageBoxButtons.OK,
-                    MessageBoxIcon.Warning
-                );
-                return;
-            }
-
-            var guiasSeleccionadas = itemsSeleccionados
-                .Select(i => i.Tag as Guia)
+                .Select(i => i.Tag as GuiaAgencia)
                 .Where(g => g != null)
                 .ToList();
 
-            if (!modelo.Entregar(guiasSeleccionadas))
+            if (seleccionadas.Count == 0)
+            {
+                MessageBox.Show("Debe seleccionar al menos una guía para confirmar la entrega.", "Aviso", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 return;
+            }
 
-            foreach (var item in itemsSeleccionados)
+            modelo.ConfirmarEntrega(seleccionadas);
+
+            foreach (var item in lvEncomiendas.Items.Cast<ListViewItem>().Where(i => i.Checked).ToList())
                 lvEncomiendas.Items.Remove(item);
 
-            MessageBox.Show(
-                "Se ha completado la entrega al cliente seleccionado",
-                "Entrega confirmada",
-                MessageBoxButtons.OK,
-                MessageBoxIcon.Information
-            );
+            MessageBox.Show("Entrega confirmada correctamente.", "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private ListViewItem ItemFromGuia(Guia g)
+        private ListViewItem ItemDesdeGuia(GuiaAgencia g)
         {
-            var item = new ListViewItem(g.NumeroGuia ?? "(sin nro)");
+            var item = new ListViewItem(g.NumeroGuia);
             item.SubItems.Add(g.TamañoCaja.ToString());
-            item.SubItems.Add(g.Remitente ?? "(s/d)");
-            item.SubItems.Add(g.Destinatario ?? "(s/d)");
+            item.SubItems.Add(g.Remitente);
+            item.SubItems.Add(g.Destinatario);
             item.SubItems.Add(g.FechaImposicion.ToShortDateString());
             item.Tag = g;
             return item;
-        }
-
-        private void lvEncomiendas_SelectedIndexChanged(object sender, EventArgs e)
-        {
         }
     }
 }

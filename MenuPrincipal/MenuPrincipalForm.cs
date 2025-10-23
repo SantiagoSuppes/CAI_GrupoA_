@@ -1,5 +1,4 @@
 ﻿using System;
-using System;
 using System.Windows.Forms;
 
 // === Referencias correctas según tu estructura ===
@@ -19,7 +18,7 @@ namespace CAI_GrupoA_.MenuPrincipal
 {
     public partial class MenuPrincipalForm : Form
     {
-        // 🔹 Modelo de validaciones y roles
+        // Modelo de validaciones y roles
         private readonly MenuPrincipalModelo modelo = new();
 
         public MenuPrincipalForm()
@@ -43,7 +42,7 @@ namespace CAI_GrupoA_.MenuPrincipal
             btnReportesCostos.Click += (s, e) =>
             {
                 if (!modelo.TieneAcceso("Reportes")) return;
-                Abrir(() => new EstimacionCostosvsVentasForms());
+                Abrir(() => new EstimacionCostosvsVentasForm()); // ✅ corregido (sin “s”)
             };
 
             btnFacturacion.Click += (s, e) =>
@@ -64,7 +63,7 @@ namespace CAI_GrupoA_.MenuPrincipal
             dtpFecha.Value = DateTime.Today;
 
             // Usuario ficticio para la sesión actual
-            txtUsuario.Text = "admin.finanzas"; // o "admin.finanzas" si querés probar
+            txtUsuario.Text = "admin.finanzas";
             txtUsuario.ReadOnly = true;
 
             // Inicializar sesión en el modelo
@@ -93,7 +92,6 @@ namespace CAI_GrupoA_.MenuPrincipal
             Close();
         }
 
-        // Handler para el label del menú
         private void lblMenu_Click(object sender, EventArgs e) { }
     }
 }

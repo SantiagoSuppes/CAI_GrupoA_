@@ -1,169 +1,65 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text.RegularExpressions;
 using System.Windows.Forms;
-
-using CAI_GrupoA_.AgenciaEntregarCliente;
 
 namespace CAI_GrupoA_.AgenciaEntregarCliente
 {
     internal class AgenciaEntregarClienteModelo
     {
-        private long ultimoDNIConsultado = -1;
+        private readonly Dictionary<long, List<GuiaAgencia>> _data = new();
 
-        // DNI -> Guías
-        private readonly Dictionary<long, List<Guia>> guiasPorDNI = new();
-
-        // Para la UI
-        public List<Guia> Guias { get; private set; } = new();
-
-        // =========================
-        // BÚSQUEDA
-        // =========================
-        public bool BuscarEncomiendas(long dni)
+        public List<GuiaAgencia> BuscarPorDni(long dni)
         {
-            // 8 a 10 dígitos
-            if (dni < 10000000L || dni > 9999999999L)
+            if (dni < 10000000L)
             {
-                MessageBox.Show("El DNI debe tener entre 8 y 10 dígitos.");
-                return false;
+                MessageBox.Show("El DNI ingresado no es válido.", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return new();
             }
 
-            ultimoDNIConsultado = dni;
+            if (_data.ContainsKey(dni))
+                return _data[dni];
 
-            if (guiasPorDNI.TryGetValue(dni, out var yaCargadas))
-            {
-                Guias = yaCargadas;
-                return true;
-            }
+            var random = new Random(unchecked((int)dni));
+            int cantidad = random.Next(2, 5);
+            var guias = new List<GuiaAgencia>();
 
-            // Generar datos determinísticos por DNI (2..4 guías)
-            var rng = new Random(unchecked((int)dni));
-            int cantidad = rng.Next(2, 5);
-
-            var nuevas = new List<Guia>();
             for (int i = 0; i < cantidad; i++)
             {
-                var g = GuiaFake(rng);
-                var error = ValidarGuia(g);
-                if (string.IsNullOrEmpty(error))
-                    nuevas.Add(g);
-            }
-
-            guiasPorDNI[dni] = nuevas;
-            Guias = nuevas;
-            return true;
-        }
-
-        // =========================
-        // ENTREGAR
-        // =========================
-        public bool Entregar(List<Guia> seleccionadas)
-        {
-            if (ultimoDNIConsultado < 0 || !guiasPorDNI.ContainsKey(ultimoDNIConsultado))
-                return false;
-
-            if (seleccionadas == null || seleccionadas.Count == 0)
-            {
-                MessageBox.Show("Debe seleccionar al menos una guía.", "Aviso",
-                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                return false;
-            }
-
-            var lista = guiasPorDNI[ultimoDNIConsultado];
-
-            // Validar seleccionadas
-            foreach (var g in seleccionadas.ToList())
-            {
-                var err = ValidarGuia(g);
-                if (!string.IsNullOrEmpty(err))
+                guias.Add(new GuiaAgencia
                 {
-                    MessageBox.Show($"La guía {g?.NumeroGuia ?? "(sin número)"} es inválida:\n{err}",
-                        "Guía inválida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                    seleccionadas.Remove(g);
-                }
+                    NumeroGuia = $"#AG{random.Next(0, 999):000}",
+                    TamañoCaja = (TamañoCajaAgenciaEnum)random.Next(1, 5),
+                    Remitente = RemitenteFake(random),
+                    Destinatario = DestinatarioFake(random),
+                    FechaImposicion = DateTime.Today.AddDays(-random.Next(1, 15))
+                });
             }
 
-            // Remover sólo las seleccionadas existentes
-            foreach (var g in seleccionadas)
-                lista.Remove(g);
-
-            Guias = lista; // refrescar UI
-            return true;
+            _data[dni] = guias;
+            return guias;
         }
 
-        // =========================
-        // VALIDACIÓN
-        // =========================
-        private string ValidarGuia(Guia g)
+        public void ConfirmarEntrega(List<GuiaAgencia> guias)
         {
-            if (g == null) return "La guía es nula.";
+            if (guias == null || guias.Count == 0) return;
 
-            // NumeroGuia: #AGddd
-            if (string.IsNullOrWhiteSpace(g.NumeroGuia) ||
-                !Regex.IsMatch(g.NumeroGuia, @"^#AG\d{3}$"))
-                return "Número de guía inválido (formato esperado: #AG000 a #AG999).";
-
-            if (g.FechaImposicion > DateTime.Now)
-                return "La fecha de imposición no puede ser futura.";
-
-            if (!Enum.IsDefined(typeof(TamañoCajaEnum), g.TamañoCaja))
-                return "Tamaño de caja inválido.";
-
-            if (string.IsNullOrWhiteSpace(g.Remitente) || g.Remitente.Trim().Length < 2)
-                return "El remitente es obligatorio.";
-
-            if (string.IsNullOrWhiteSpace(g.Destinatario) || g.Destinatario.Trim().Length < 2)
-                return "El destinatario es obligatorio.";
-
-            return string.Empty;
+            foreach (var g in guias)
+                Console.WriteLine($"Entrega confirmada: {g.NumeroGuia} para {g.Destinatario}");
         }
 
-        // =========================
-        // FAKES
-        // =========================
-        private Guia GuiaFake(Random rng)
+        private static string RemitenteFake(Random r)
         {
-            return new Guia
-            {
-                NumeroGuia = $"#AG{rng.Next(0, 1000):000}",
-                FechaImposicion = FechaFake(rng),
-                TamañoCaja = (Entidades.TamañoCajaEnum)RandomEnum<TamañoCajaEnum>(rng),
-                Remitente = RandomRemitente(rng),
-                Destinatario = RandomDestinatario(rng)
-            };
-        }
-
-        private static DateTime FechaFake(Random r)
-            => new DateTime(r.Next(2022, 2026), r.Next(1, 13), r.Next(1, 28))
-               .AddHours(r.Next(0, 24))
-               .AddMinutes(r.Next(0, 60));
-
-        private static string RandomRemitente(Random r)
-        {
-            string[] remitentes =
-            {
-                "Distribuidora López", "Agro Sur SRL", "Textiles Mitre",
-                "Electro Hogar SA", "Logística Andes", "Frigorífico Río"
-            };
+            string[] remitentes = { "Textiles Mitre", "Distribuidora López", "Logística Andes", "Electro Hogar SA" };
             return remitentes[r.Next(remitentes.Length)];
         }
 
-        private static string RandomDestinatario(Random r)
+        private static string DestinatarioFake(Random r)
         {
-            string[] destinatarios =
-            {
-                "Juan Pérez", "María Gómez", "Lucía Díaz", "Carlos Ruiz",
-                "Sofía Romero", "Hernán Torres", "Paula Rivas"
-            };
+            string[] destinatarios = { "Juan Pérez", "Lucía Díaz", "Carlos Ruiz", "María Gómez", "Sofía Romero" };
             return destinatarios[r.Next(destinatarios.Length)];
-        }
-
-        private static TEnum RandomEnum<TEnum>(Random r) where TEnum : struct, Enum
-        {
-            var values = (TEnum[])Enum.GetValues(typeof(TEnum));
-            return values[r.Next(values.Length)];
         }
     }
 }
+
+
