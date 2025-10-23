@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using CAI_GrupoA_.Entidades;
+
 
 namespace CAI_GrupoA_.FacturacionClientes
 {
@@ -12,10 +12,10 @@ namespace CAI_GrupoA_.FacturacionClientes
     {
         
         private readonly Dictionary<string, ClienteEnt> _clientesPrueba = new();
-        public ClienteEnt ClienteActual { get; private set; }
+        public ClienteEnt ClienteActual { get; private set; } 
         public List<GuiaEnt> GuiasCliente { get; private set; } = new();
 
-        public FacturacionClienteModelo()
+        public FacturacionClienteModelo() 
         {
             CargarClientesDePrueba();
         }
@@ -31,7 +31,7 @@ namespace CAI_GrupoA_.FacturacionClientes
                 Direcciones = new List<DireccionEnt>
                 {
                    new DireccionEnt { CalleYAltura = "Av. Corrientes 1234", Localidad = "CABA", Provincia = ProvinciaEnum.BuenosAires }
-                }
+                } 
             };
 
             _clientesPrueba["27876543210"] = new ClienteEnt
@@ -92,8 +92,8 @@ namespace CAI_GrupoA_.FacturacionClientes
             {
                 guias.Add(new GuiaEnt
                 {
-                    NumeroGuia = $"G-{rng.Next(100, 999)}",
-                    FechaImposicion = DateTime.Now.AddDays(-rng.Next(1, 10)),
+                    NroGuia = $"G-{rng.Next(100, 999)}",
+                    Fecha = DateTime.Now.AddDays(-rng.Next(1, 10)),
                     EstadoActual = EstadoActualEnum.Entregada,
                     TamañoCaja = (TamañoCajaEnum)rng.Next(0, 4),
                     Origen = ClienteActual.Direcciones.First(),
