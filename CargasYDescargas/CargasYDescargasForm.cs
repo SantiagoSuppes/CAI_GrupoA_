@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using CAI_GrupoA_.Entidades;
 
 namespace CAI_GrupoA_.CargasYDescargas
 {
@@ -16,7 +15,7 @@ namespace CAI_GrupoA_.CargasYDescargas
             InitializeComponent();
         }
 
-        // Evento: BOTÓN BUSCAR
+        // BOTÓN BUSCAR
         private void button1_Click(object sender, EventArgs e)
         {
             string patente = txtPatente.Text.Trim().ToUpper();
@@ -64,7 +63,7 @@ namespace CAI_GrupoA_.CargasYDescargas
             }
         }
 
-        // Evento: BOTÓN ACEPTAR (registrar cambios)
+        // BOTÓN ACEPTAR (registrar cambios)
         private void button2_Click(object sender, EventArgs e)
         {
             if (modelo.Guias.Count == 0)
@@ -73,11 +72,11 @@ namespace CAI_GrupoA_.CargasYDescargas
                 return;
             }
 
-            var guias = new List<GuiaEnt>();
+            var guias = new List<Guia>();
             foreach (ListViewItem item in listView1.Items)
-                guias.Add(new GuiaEnt { NumeroGuia = item.SubItems[3].Text, EsCarga = false });
+                guias.Add(new Guia { NumeroGuia = item.SubItems[3].Text, EsCarga = false });
             foreach (ListViewItem item in listView2.Items)
-                guias.Add(new GuiaEnt { NumeroGuia = item.SubItems[0].Text, EsCarga = true });
+                guias.Add(new Guia { NumeroGuia = item.SubItems[0].Text, EsCarga = true });
 
             var (exito, mensajeReg) = modelo.RegistrarCargaDescarga(guias);
             if (!exito)
@@ -95,8 +94,7 @@ namespace CAI_GrupoA_.CargasYDescargas
             MessageBox.Show(mensajeReg, "Éxito", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-
-        // Evento: TXT PATENTE (formato automático)
+        // FORMATO AUTOMÁTICO DE PATENTE
         private void txtPatente_TextChanged(object sender, EventArgs e)
         {
             int sel = txtPatente.SelectionStart;
