@@ -1,27 +1,29 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Forms; 
-using CAI_GrupoA_.Entidades;
+using System.Text.RegularExpressions;
+using System.Windows.Forms;
+
+using CAI_GrupoA_.AgenciaEntregarCliente;
 
 namespace CAI_GrupoA_.AgenciaEntregarCliente
-{//hola
+{
     internal class AgenciaEntregarClienteModelo
     {
         private long ultimoDNIConsultado = -1;
 
-        // Clave: DNI consultado -> Guías (tipadas con tu GuiaEnt real)
-        private readonly Dictionary<long, List<GuiaEnt>> guiasPorDNI = new();
+        // DNI -> Guías
+        private readonly Dictionary<long, List<Guia>> guiasPorDNI = new();
 
-        // Exposición para la UI
-        public List<GuiaEnt> Guias { get; private set; } = new();
+        // Para la UI
+        public List<Guia> Guias { get; private set; } = new();
 
         // =========================
         // BÚSQUEDA
         // =========================
         public bool BuscarEncomiendas(long dni)
         {
-            // Validación: 8 a 10 dígitos
+            // 8 a 10 dígitos
             if (dni < 10000000L || dni > 9999999999L)
             {
                 MessageBox.Show("El DNI debe tener entre 8 y 10 dígitos.");
@@ -40,10 +42,13 @@ namespace CAI_GrupoA_.AgenciaEntregarCliente
             var rng = new Random(unchecked((int)dni));
             int cantidad = rng.Next(2, 5);
 
-            var nuevas = new List<GuiaEnt>();
+            var nuevas = new List<Guia>();
             for (int i = 0; i < cantidad; i++)
             {
-                nuevas.Add(GuiaFake(rng));
+                var g = GuiaFake(rng);
+                var error = ValidarGuia(g);
+                if (string.IsNullOrEmpty(error))
+                    nuevas.Add(g);
             }
 
             guiasPorDNI[dni] = nuevas;
@@ -54,64 +59,79 @@ namespace CAI_GrupoA_.AgenciaEntregarCliente
         // =========================
         // ENTREGAR
         // =========================
-        public bool Entregar(List<GuiaEnt> seleccionadas)
+        public bool Entregar(List<Guia> seleccionadas)
         {
             if (ultimoDNIConsultado < 0 || !guiasPorDNI.ContainsKey(ultimoDNIConsultado))
                 return false;
 
-            var lista = guiasPorDNI[ultimoDNIConsultado];
-
-            // eliminamos solo las seleccionadas que existan en la lista actual
-            foreach (var g in seleccionadas.ToList())
+            if (seleccionadas == null || seleccionadas.Count == 0)
             {
-                lista.Remove(g);
+                MessageBox.Show("Debe seleccionar al menos una guía.", "Aviso",
+                    MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                return false;
             }
 
-            // refrescamos la lista expuesta a la UI
-            Guias = lista;
+            var lista = guiasPorDNI[ultimoDNIConsultado];
+
+            // Validar seleccionadas
+            foreach (var g in seleccionadas.ToList())
+            {
+                var err = ValidarGuia(g);
+                if (!string.IsNullOrEmpty(err))
+                {
+                    MessageBox.Show($"La guía {g?.NumeroGuia ?? "(sin número)"} es inválida:\n{err}",
+                        "Guía inválida", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    seleccionadas.Remove(g);
+                }
+            }
+
+            // Remover sólo las seleccionadas existentes
+            foreach (var g in seleccionadas)
+                lista.Remove(g);
+
+            Guias = lista; // refrescar UI
             return true;
         }
 
         // =========================
-        // HELPERS DE FAKES
+        // VALIDACIÓN
         // =========================
-        private GuiaEnt GuiaFake(Random rng)
+        private string ValidarGuia(Guia g)
         {
-            return new GuiaEnt
+            if (g == null) return "La guía es nula.";
+
+            // NumeroGuia: #AGddd
+            if (string.IsNullOrWhiteSpace(g.NumeroGuia) ||
+                !Regex.IsMatch(g.NumeroGuia, @"^#AG\d{3}$"))
+                return "Número de guía inválido (formato esperado: #AG000 a #AG999).";
+
+            if (g.FechaImposicion > DateTime.Now)
+                return "La fecha de imposición no puede ser futura.";
+
+            if (!Enum.IsDefined(typeof(TamañoCajaEnum), g.TamañoCaja))
+                return "Tamaño de caja inválido.";
+
+            if (string.IsNullOrWhiteSpace(g.Remitente) || g.Remitente.Trim().Length < 2)
+                return "El remitente es obligatorio.";
+
+            if (string.IsNullOrWhiteSpace(g.Destinatario) || g.Destinatario.Trim().Length < 2)
+                return "El destinatario es obligatorio.";
+
+            return string.Empty;
+        }
+
+        // =========================
+        // FAKES
+        // =========================
+        private Guia GuiaFake(Random rng)
+        {
+            return new Guia
             {
-                NumeroGuia = $"#AG{rng.Next(1, 999):000}",
+                NumeroGuia = $"#AG{rng.Next(0, 1000):000}",
                 FechaImposicion = FechaFake(rng),
-                EstadoActual = RandomEnum<EstadoActualEnum>(rng),
-                TamañoCaja = RandomEnum<TamañoCajaEnum>(rng),
-                Origen = DireccionCD(rng),
-                Destino = DireccionAgencia(rng),
-                HojaDeRuta = null
-            };
-        }
-
-        private DireccionEnt DireccionCD(Random rng)
-        {
-            var (prov, loc) = RandomProvinciaYLocalidad(rng);
-            return new DireccionEnt
-            {
-                TipoPunto = TipoPuntoEnum.CD,
-                Provincia = prov,
-                Localidad = loc,
-                CodigoPostal = rng.Next(1000, 9999),
-                CalleYAltura = $"{RandomCalle(rng)} {rng.Next(100, 9999)}"
-            };
-        }
-
-        private DireccionEnt DireccionAgencia(Random rng)
-        {
-            var (prov, loc) = RandomProvinciaYLocalidad(rng);
-            return new DireccionEnt
-            {
-                TipoPunto = TipoPuntoEnum.Agencia,
-                Provincia = prov,
-                Localidad = loc,
-                CodigoPostal = rng.Next(1000, 9999),
-                CalleYAltura = $"{RandomCalle(rng)} {rng.Next(100, 9999)}"
+                TamañoCaja = (Entidades.TamañoCajaEnum)RandomEnum<TamañoCajaEnum>(rng),
+                Remitente = RandomRemitente(rng),
+                Destinatario = RandomDestinatario(rng)
             };
         }
 
@@ -120,34 +140,26 @@ namespace CAI_GrupoA_.AgenciaEntregarCliente
                .AddHours(r.Next(0, 24))
                .AddMinutes(r.Next(0, 60));
 
-        private static string RandomCalle(Random r)
+        private static string RandomRemitente(Random r)
         {
-            string[] calles = { "San Martín", "Belgrano", "Rivadavia", "Mitre", "Sarmiento", "Lavalle", "9 de Julio" };
-            return calles[r.Next(calles.Length)];
-        }
-
-        private static (ProvinciaEnum, string) RandomProvinciaYLocalidad(Random r)
-        {
-            var provincias = (ProvinciaEnum[])Enum.GetValues(typeof(ProvinciaEnum));
-            var prov = provincias[r.Next(provincias.Length)];
-
-            string[] ba = { "Morón", "Ituzaingó", "Quilmes", "Lanús", "Tigre", "San Isidro" };
-            string[] sf = { "Rosario", "Santa Fe", "Rafaela", "Venado Tuerto" };
-            string[] cb = { "Córdoba", "Villa María", "Río Cuarto" };
-            string[] gen = { "Centro", "Norte", "Sur", "Oeste", "Este" };
-
-            string loc = prov switch
+            string[] remitentes =
             {
-                ProvinciaEnum.BuenosAires => ba[r.Next(ba.Length)],
-                ProvinciaEnum.SantaFe => sf[r.Next(sf.Length)],
-                ProvinciaEnum.Cordoba => cb[r.Next(cb.Length)],
-                _ => gen[r.Next(gen.Length)]
+                "Distribuidora López", "Agro Sur SRL", "Textiles Mitre",
+                "Electro Hogar SA", "Logística Andes", "Frigorífico Río"
             };
-
-            return (prov, loc);
+            return remitentes[r.Next(remitentes.Length)];
         }
 
-        // prueba 
+        private static string RandomDestinatario(Random r)
+        {
+            string[] destinatarios =
+            {
+                "Juan Pérez", "María Gómez", "Lucía Díaz", "Carlos Ruiz",
+                "Sofía Romero", "Hernán Torres", "Paula Rivas"
+            };
+            return destinatarios[r.Next(destinatarios.Length)];
+        }
+
         private static TEnum RandomEnum<TEnum>(Random r) where TEnum : struct, Enum
         {
             var values = (TEnum[])Enum.GetValues(typeof(TEnum));

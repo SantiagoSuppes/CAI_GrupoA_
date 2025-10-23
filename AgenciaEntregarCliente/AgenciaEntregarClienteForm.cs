@@ -2,8 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
-using CAI_GrupoA_.Entidades;                 // <-- Usa tus entidades reales
-using CAI_GrupoA_.AgenciaEntregarCliente;    // <-- Usa tu modelo
+using CAI_GrupoA_.AgenciaEntregarCliente;
 
 namespace CAI_GrupoA_.AgenciaEntregarCliente
 {
@@ -15,18 +14,18 @@ namespace CAI_GrupoA_.AgenciaEntregarCliente
         {
             InitializeComponent();
         }
-        //hola
+
         private void AgenciaEntregarClienteForm_Load(object sender, EventArgs e)
         {
-            // Configuración del ListView
+            
             lvEncomiendas.View = View.Details;
             lvEncomiendas.FullRowSelect = true;
             lvEncomiendas.CheckBoxes = true;
             lvEncomiendas.Columns.Clear();
             lvEncomiendas.Columns.Add("# Guía", 120);
             lvEncomiendas.Columns.Add("Tamaño", 80);
-            lvEncomiendas.Columns.Add("Destino (Tipo)", 120);
-            lvEncomiendas.Columns.Add("Localidad / CP", 150);
+            lvEncomiendas.Columns.Add("Remitente", 150);
+            lvEncomiendas.Columns.Add("Destinatario", 150);
             lvEncomiendas.Columns.Add("Fecha Imposición", 120);
         }
 
@@ -39,11 +38,10 @@ namespace CAI_GrupoA_.AgenciaEntregarCliente
                 return;
             }
 
-            // El modelo valida rango (8 a 10 dígitos) y ya muestra el mensaje si es inválido
             if (!modelo.BuscarEncomiendas(dni))
                 return;
 
-            // Poblar la grilla
+           
             lvEncomiendas.Items.Clear();
             foreach (var guia in modelo.Guias)
             {
@@ -70,18 +68,15 @@ namespace CAI_GrupoA_.AgenciaEntregarCliente
             }
 
             var guiasSeleccionadas = itemsSeleccionados
-                .Select(i => i.Tag as GuiaEnt)
+                .Select(i => i.Tag as Guia)
                 .Where(g => g != null)
                 .ToList();
 
             if (!modelo.Entregar(guiasSeleccionadas))
                 return;
 
-            // Quitar SOLO los seleccionados
             foreach (var item in itemsSeleccionados)
-            {
                 lvEncomiendas.Items.Remove(item);
-            }
 
             MessageBox.Show(
                 "Se ha completado la entrega al cliente seleccionado",
@@ -91,22 +86,19 @@ namespace CAI_GrupoA_.AgenciaEntregarCliente
             );
         }
 
-        // ---------------------------
-        // Helper de mapeo a ListView
-        // ---------------------------
-        private ListViewItem ItemFromGuia(GuiaEnt g)
+        private ListViewItem ItemFromGuia(Guia g)
         {
-            string tipoDestino = g.Destino?.TipoPunto.ToString() ?? "(s/d)";
-            string locCp = $"{g.Destino?.Localidad ?? "(s/d)"} / CP {((g.Destino?.CodigoPostal > 0) ? g.Destino.CodigoPostal.ToString() : "(s/d)")}";
-            string fecha = g.FechaImposicion.ToShortDateString();
-
             var item = new ListViewItem(g.NumeroGuia ?? "(sin nro)");
             item.SubItems.Add(g.TamañoCaja.ToString());
-            item.SubItems.Add(tipoDestino);
-            item.SubItems.Add(locCp);
-            item.SubItems.Add(fecha);
-            item.Tag = g; // Para recuperar la entidad al confirmar
+            item.SubItems.Add(g.Remitente ?? "(s/d)");
+            item.SubItems.Add(g.Destinatario ?? "(s/d)");
+            item.SubItems.Add(g.FechaImposicion.ToShortDateString());
+            item.Tag = g;
             return item;
+        }
+
+        private void lvEncomiendas_SelectedIndexChanged(object sender, EventArgs e)
+        {
         }
     }
 }
